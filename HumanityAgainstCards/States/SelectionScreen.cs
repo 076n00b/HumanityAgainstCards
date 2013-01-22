@@ -79,7 +79,7 @@ namespace HumanityAgainstCards.States
 			title.Color = Color.White;
 			rt.Draw(title);
 
-			Text blackCardText = Utility.Wrap(Client.CurrentBlackCard.Info.Value, Assets.LoadFont(Program.DefaultFont), 24, GameOptions.Width / 2.0f);
+			Text blackCardText = GameUtility.Wrap(Client.CurrentBlackCard.Info.Value, Assets.LoadFont(Program.DefaultFont), 24, GameOptions.Width / 2.0f);
 			blackCardText.Position = new Vector2f(GameOptions.Width / 2.0f, 48.0f + 16.0f);
 			blackCardText.CharacterSize = 24;
 			blackCardText.Color = Color.White;

@@ -70,6 +70,7 @@
     <Compile Include="Entities\MenuButton.cs" />
     <Compile Include="Entities\MenuTextbox.cs" />
     <Compile Include="Entities\Player.cs" />
+    <Compile Include="GameUtility.cs" />
     <Compile Include="Json.cs" />
     <Compile Include="Network\Client.cs" />
     <Compile Include="Network\Network.cs" />

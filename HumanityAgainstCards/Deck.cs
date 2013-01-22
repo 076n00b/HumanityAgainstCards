@@ -16,7 +16,7 @@ namespace HumanityAgainstCards
 
 			// Shuffle deck
 			List<CardInfo> shuffledCards = CardLoader.Cards.Where(t => t.Type == Type).ToList();
-			Utility.Shuffle(shuffledCards);
+			GameUtility.Shuffle(shuffledCards);
 
 			foreach (CardInfo card in shuffledCards)
 				Cards.Push(card);

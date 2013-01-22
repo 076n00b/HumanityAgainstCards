@@ -6,7 +6,7 @@ namespace HumanityAgainstCards
 	class Program
 	{
 		public const string DefaultFont = "arial.ttf";
-		public const string Version = "1.81";
+		public const string Version = "1.82";
 		public static bool HandleNetworking;
 
 		public static void Main(string[] args)

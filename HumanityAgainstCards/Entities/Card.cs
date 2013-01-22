@@ -51,7 +51,7 @@ namespace HumanityAgainstCards.Entities
 			rt.Draw(sprite);
 
 			// Draw text
-			Text text = Utility.Wrap(Info.Value, Assets.LoadFont("arialbd.ttf"), (uint)Math.Floor(24.0f * Scale.X),
+			Text text = GameUtility.Wrap(Info.Value, Assets.LoadFont("arialbd.ttf"), (uint)Math.Floor(24.0f * Scale.X),
 									 Math.Floor(192.0f * Scale.X));
 
 			text.Color = Info.Type == CardType.White ? Color.Black : Color.White;

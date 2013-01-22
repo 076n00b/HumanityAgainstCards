@@ -55,7 +55,7 @@ namespace HumanityAgainstCards.Entities
 					rt.Draw(crown);
 				}
 
-				Text nameText = Utility.Wrap(showMessage ? chatMessage : Name, Assets.LoadFont(Program.DefaultFont), 18,
+				Text nameText = GameUtility.Wrap(showMessage ? chatMessage : Name, Assets.LoadFont(Program.DefaultFont), 18,
 				                             128.0 + 32.0 - 8.0);
 				nameText.Position = Position + new Vector2f(0.0f, 16.0f);
 				nameText.CharacterSize = 18;

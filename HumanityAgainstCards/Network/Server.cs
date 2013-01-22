@@ -271,7 +271,7 @@ namespace HumanityAgainstCards.Network
 				// Get cards from everyone except czar
 				List<Tuple<ushort, List<string>>> cards = Clients.Where(sc => sc.Id != CurrentCardCzar).Select(sc => new Tuple<ushort, List<string>>(sc.Id, sc.SelectedCards)).ToList();
 				cards.RemoveAll(c => c.Item2.Count == 0);
-				Utility.Shuffle(cards);
+				GameUtility.Shuffle(cards);
 
 				if (cards.Count == 0)
 				{

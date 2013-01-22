@@ -35,7 +35,7 @@ namespace HumanityAgainstCards.States
 						if (winnerCombo[0] != '_')
 							blackValue = blackValue.ToLower();
 
-						winnerCombo = Utility.ReplaceFirst(winnerCombo, "_", blackValue);
+						winnerCombo = GameUtility.ReplaceFirst(winnerCombo, "_", blackValue);
 					}
 				}
 			}
@@ -74,7 +74,7 @@ namespace HumanityAgainstCards.States
 			title.Color = Color.White;
 			rt.Draw(title);
 
-			Text blackCardText = Utility.Wrap(winnerCombo, Assets.LoadFont(Program.DefaultFont), 36, GameOptions.Width * 0.6f);
+			Text blackCardText = GameUtility.Wrap(winnerCombo, Assets.LoadFont(Program.DefaultFont), 36, GameOptions.Width * 0.6f);
 			blackCardText.Position = new Vector2f(GameOptions.Width / 2.0f, GameOptions.Height / 2.0f - 128.0f);
 			blackCardText.CharacterSize = 36;
 			blackCardText.Color = Color.White;
