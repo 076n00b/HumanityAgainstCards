@@ -79,6 +79,20 @@ namespace HumanityAgainstCards.Entities
 
 			rt.Draw(button);
 
+			// Hover
+			if (mouseIn)
+			{
+				RectangleShape buttonHover = new RectangleShape(new Vector2f(ButtonWidth - 8, ButtonHeight - 8))
+				{
+					Position = Position + new Vector2f(4f, 4f),
+					FillColor = Color.Black,
+					OutlineColor = Color.White,
+					OutlineThickness = 2f
+				};
+
+				rt.Draw(buttonHover);
+			}
+
 			Text text = new Text(value, Assets.LoadFont(Program.DefaultFont))
 			{
 				Position = Position + Size / 2.0f,
