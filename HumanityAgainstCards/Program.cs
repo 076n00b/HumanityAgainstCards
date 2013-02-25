@@ -1,22 +1,22 @@
 ﻿using System;
 using Californium;
 
-namespace HumanityAgainstCards
+namespace ManateesAgainstCards
 {
 	class Program
 	{
 		public const string DefaultFont = "arial.ttf";
-		public const string Version = "1.82";
+		public const string Version = "1.9";
 		public static bool HandleNetworking;
 
 		public static void Main(string[] args)
 		{
 			HandleNetworking = true;
 
-			Console.WriteLine("Cards Against Humanity; Version {0}", Version);
+			Console.WriteLine("Manatees Against Humanity; Version {0}", Version);
 
 			// Set window resolution
-			GameOptions.Caption = "Humanity Against Cards";
+			GameOptions.Caption = "Manatees Against Cards";
 			GameOptions.Icon = "Icon.png";
 			GameOptions.Width = 1280; // 1280
 			GameOptions.Height = 720; // 720

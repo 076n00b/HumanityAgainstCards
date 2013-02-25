@@ -1,10 +1,9 @@
-﻿using System;
-using Californium;
-using HumanityAgainstCards.Entities;
+﻿using Californium;
+using ManateesAgainstCards.Entities;
 using SFML.Graphics;
 using SFML.Window;
 
-namespace HumanityAgainstCards.States
+namespace ManateesAgainstCards.States
 {
 	class ErrorMessageScreen : State
 	{
@@ -30,7 +29,7 @@ namespace HumanityAgainstCards.States
 			};
 
 			title.Center();
-			title.Origin = new Vector2f((float)Math.Round(title.Origin.X), (float)Math.Round(title.Origin.Y));
+			title.Round();
 			rt.Draw(title);
 
 			Text blackCardText = new Text(value, Assets.LoadFont(Program.DefaultFont))
@@ -41,7 +40,7 @@ namespace HumanityAgainstCards.States
 			};
 
 			blackCardText.Center();
-			blackCardText.Origin = new Vector2f((float)Math.Round(blackCardText.Origin.X), (float)Math.Round(blackCardText.Origin.Y));
+			blackCardText.Round();
 			rt.Draw(blackCardText);
 
 			base.Draw(rt);

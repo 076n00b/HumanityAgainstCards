@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using SFML.Graphics;
 
-namespace HumanityAgainstCards
+namespace ManateesAgainstCards
 {
 	static class GameUtility
 	{

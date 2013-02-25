@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using HumanityAgainstCards.Network.Packets;
 using Lidgren.Network;
+using ManateesAgainstCards.Network.Packets;
 
-namespace HumanityAgainstCards.Network
+namespace ManateesAgainstCards.Network
 {
 	class ServerClient
 	{

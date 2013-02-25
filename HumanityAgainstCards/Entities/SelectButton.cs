@@ -1,9 +1,8 @@
-﻿using System;
-using Californium;
+﻿using Californium;
 using SFML.Graphics;
 using SFML.Window;
 
-namespace HumanityAgainstCards.Entities
+namespace ManateesAgainstCards.Entities
 {
 	class SelectButton : Entity
 	{
@@ -67,6 +66,20 @@ namespace HumanityAgainstCards.Entities
 
 			rt.Draw(button);
 
+			// Hover
+			if (mouseIn)
+			{
+				RectangleShape buttonHover = new RectangleShape(new Vector2f(ButtonWidth - 8, ButtonHeight - 8))
+				{
+					Position = Position + new Vector2f(4f, 4f),
+					FillColor = Color.Black,
+					OutlineColor = Color.White,
+					OutlineThickness = 2f
+				};
+
+				rt.Draw(buttonHover);
+			}
+
 			Text text = new Text(value, Assets.LoadFont(Program.DefaultFont))
 			{
 				Position = Position + Size / 2.0f,
@@ -74,7 +87,7 @@ namespace HumanityAgainstCards.Entities
 			};
 
 			text.Center();
-			text.Origin = new Vector2f((float)Math.Round(text.Origin.X), (float)Math.Round(text.Origin.Y));
+			text.Round();
 
 			text.Position += new Vector2f(1, 1);
 			text.Color = Color.Black;

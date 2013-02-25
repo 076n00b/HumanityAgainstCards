@@ -2,7 +2,7 @@
 using System.IO;
 using Newtonsoft.Json;
 
-namespace HumanityAgainstCards
+namespace ManateesAgainstCards
 {
 	class Json
 	{

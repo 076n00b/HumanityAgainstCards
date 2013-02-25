@@ -1,11 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Californium;
-using HumanityAgainstCards.Entities;
+using ManateesAgainstCards.Entities;
 using SFML.Graphics;
 using SFML.Window;
 
-namespace HumanityAgainstCards.States
+namespace ManateesAgainstCards.States
 {
 	class GameOverScreen : State
 	{
@@ -34,7 +33,7 @@ namespace HumanityAgainstCards.States
 			};
 
 			title.Center();
-			title.Origin = new Vector2f((float)Math.Round(title.Origin.X), (float)Math.Round(title.Origin.Y));
+			title.Round();
 			rt.Draw(title);
 
 			Text winnerTitle = new Text(GetWinnerText(), Assets.LoadFont(Program.DefaultFont))
@@ -45,7 +44,7 @@ namespace HumanityAgainstCards.States
 			};
 
 			winnerTitle.Center();
-			winnerTitle.Origin = new Vector2f((float)Math.Round(winnerTitle.Origin.X), (float)Math.Round(winnerTitle.Origin.Y));
+			winnerTitle.Round();
 			rt.Draw(winnerTitle);
 
 			base.Draw(rt);

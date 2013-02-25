@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Californium;
-using HumanityAgainstCards.Entities;
-using HumanityAgainstCards.Network;
-using HumanityAgainstCards.Network.Packets;
+using ManateesAgainstCards.Entities;
+using ManateesAgainstCards.Network;
+using ManateesAgainstCards.Network.Packets;
 using SFML.Graphics;
 using SFML.Window;
 
-namespace HumanityAgainstCards.States
+namespace ManateesAgainstCards.States
 {
 	class InGame : State
 	{
@@ -137,7 +137,7 @@ namespace HumanityAgainstCards.States
 			};
 
 			text.Center();
-			text.Origin = new Vector2f((float)Math.Round(text.Origin.X), (float)Math.Round(text.Origin.Y));
+			text.Round();
 			text.Color = Color.White;
 			rt.Draw(text);
 

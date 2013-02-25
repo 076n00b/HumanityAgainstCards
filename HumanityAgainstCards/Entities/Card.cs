@@ -1,12 +1,12 @@
 ﻿using System;
 using Californium;
-using HumanityAgainstCards.Network;
-using HumanityAgainstCards.States;
 using System.Linq;
+using ManateesAgainstCards.Network;
+using ManateesAgainstCards.States;
 using SFML.Graphics;
 using SFML.Window;
 
-namespace HumanityAgainstCards.Entities
+namespace ManateesAgainstCards.Entities
 {
 	internal class Card : Entity
 	{
@@ -56,7 +56,7 @@ namespace HumanityAgainstCards.Entities
 
 			text.Color = Info.Type == CardType.White ? Color.Black : Color.White;
 			text.Position = actualPosition + new Vector2f(17.0f * Scale.X, 10.0f * Scale.Y);
-			text.Position = new Vector2f((float)Math.Round(text.Position.X), (float)Math.Round(text.Position.Y));
+			text.Round();
 			rt.Draw(text);
 
 			// Draw decorations

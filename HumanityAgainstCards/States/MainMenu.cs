@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Californium;
-using HumanityAgainstCards.Entities;
-using HumanityAgainstCards.Network;
+using ManateesAgainstCards.Entities;
+using ManateesAgainstCards.Network;
 using SFML.Graphics;
 using SFML.Window;
 
-namespace HumanityAgainstCards.States
+namespace ManateesAgainstCards.States
 {
 	class MainMenu : State
 	{
@@ -54,6 +54,7 @@ namespace HumanityAgainstCards.States
 				Style = Text.Styles.Bold
 			};
 
+			sloganText.Round();
 			rt.Draw(sloganText);
 
 			// Draw version and anti-sue-hammer strings
@@ -66,6 +67,7 @@ namespace HumanityAgainstCards.States
 
 			versionText.Position -= new Vector2f(versionText.GetLocalBounds().Width, 0.0f);
 
+			versionText.Round();
 			rt.Draw(versionText);
 
 			Text originalText = new Text("A shameless rip-off of \"Cards Against Humanity\".", Assets.LoadFont(Program.DefaultFont))
@@ -75,6 +77,7 @@ namespace HumanityAgainstCards.States
 				Color = Color.Black
 			};
 
+			originalText.Round();
 			rt.Draw(originalText);
 
 			base.Draw(rt);

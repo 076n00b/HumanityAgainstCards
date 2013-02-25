@@ -1,9 +1,8 @@
-﻿using System;
-using Californium;
+﻿using Californium;
 using SFML.Graphics;
 using SFML.Window;
 
-namespace HumanityAgainstCards.Entities
+namespace ManateesAgainstCards.Entities
 {
 	class MenuButton : Entity
 	{
@@ -101,14 +100,7 @@ namespace HumanityAgainstCards.Entities
 			};
 
 			text.Center();
-			text.Origin = new Vector2f((float)Math.Round(text.Origin.X), (float)Math.Round(text.Origin.Y));
-
-			text.Position += new Vector2f(1, 1);
-			text.Color = Color.Black;
-			rt.Draw(text);
-
-			text.Position -= new Vector2f(1, 1);
-			text.Color = Color.White;
+			text.Round();
 			rt.Draw(text);
 
 			base.Draw(rt);

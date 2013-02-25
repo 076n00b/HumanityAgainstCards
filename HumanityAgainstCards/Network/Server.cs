@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
-using Californium;
-using HumanityAgainstCards.Network.Packets;
 using Lidgren.Network;
+using ManateesAgainstCards.Network.Packets;
 
-namespace HumanityAgainstCards.Network
+namespace ManateesAgainstCards.Network
 {
 	static class Server
 	{

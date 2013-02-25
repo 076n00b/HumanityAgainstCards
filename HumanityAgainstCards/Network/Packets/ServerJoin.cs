@@ -1,6 +1,6 @@
 ﻿using Lidgren.Network;
 
-namespace HumanityAgainstCards.Network.Packets
+namespace ManateesAgainstCards.Network.Packets
 {
 	public class ServerJoin : Packet
 	{

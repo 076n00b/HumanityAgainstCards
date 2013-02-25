@@ -6,7 +6,7 @@ using Californium;
 using SFML.Graphics;
 using SFML.Window;
 
-namespace HumanityAgainstCards.Entities
+namespace ManateesAgainstCards.Entities
 {
 	class MenuTextbox : Entity
 	{

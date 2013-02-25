@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Californium;
 
-namespace HumanityAgainstCards
+namespace ManateesAgainstCards
 {
 	class Deck
 	{

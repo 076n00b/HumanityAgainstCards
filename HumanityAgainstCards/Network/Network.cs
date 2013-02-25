@@ -1,4 +1,4 @@
-﻿namespace HumanityAgainstCards.Network
+﻿namespace ManateesAgainstCards.Network
 {
 	public static class Constants
 	{

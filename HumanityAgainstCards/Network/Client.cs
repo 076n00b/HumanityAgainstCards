@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Californium;
-using HumanityAgainstCards.Entities;
-using HumanityAgainstCards.Network.Packets;
-using HumanityAgainstCards.States;
 using Lidgren.Network;
+using ManateesAgainstCards.Entities;
+using ManateesAgainstCards.Network.Packets;
+using ManateesAgainstCards.States;
 using SFML.Window;
 
-namespace HumanityAgainstCards.Network
+namespace ManateesAgainstCards.Network
 {
 	class Client
 	{
@@ -210,7 +210,12 @@ namespace HumanityAgainstCards.Network
 
 						foreach (CardInfo c in whiteCards.Cards)
 						{
-							Card card = new Card(c) { Scale = new Vector2f(0.643f * 0.8f, 0.643f * 0.8f) };
+							Card card = new Card(c)
+							{
+								Position = new Vector2f(-1024.0f, -1024.0f),
+								Scale = new Vector2f(0.643f * 0.8f, 0.643f * 0.8f)
+							};
+
 							Hand.Add(card);
 							Game.PeekFirstState().Entities.Add(card);
 						}

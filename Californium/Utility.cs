@@ -49,28 +49,34 @@ namespace Californium
 
         public static void Center(this Text text, bool horizontal = true, bool vertical = true)
         {
-            text.Origin = new Vector2f();
+			text.Origin = new Vector2f();
 
-            var bounds = text.GetGlobalBounds();
-            bounds.Left -= text.Position.X;
-            bounds.Top -= text.Position.Y;
+			var bounds = text.GetGlobalBounds();
+			bounds.Left -= text.Position.X;
+			bounds.Top -= text.Position.Y;
 
-            text.Origin = new Vector2f(bounds.Left / text.Scale.X, bounds.Top / text.Scale.Y);
-            
-            if (horizontal)
-                text.Origin += new Vector2f((bounds.Width / text.Scale.X) / 2, 0);
+			var x = 0f;
+			var y = 0f;
 
-            if (vertical)
-                text.Origin += new Vector2f(0, (bounds.Height / text.Scale.Y) / 2);
+			if (horizontal)
+			{
+				x = bounds.Left / text.Scale.X;
+				x += (bounds.Width / text.Scale.X) / 2;
+			}
 
-            text.Origin.Round();
+			if (vertical)
+			{
+				y = bounds.Top / text.Scale.Y;
+				y += (bounds.Height / text.Scale.Y) / 2;
+			}
+
+			text.Origin = new Vector2f(x, y);
         }
 
-        public static Vector2f Round(this Vector2f vec)
-        {
-            vec.X = (float)Math.Round(vec.X);
-            vec.Y = (float)Math.Round(vec.Y);
-            return vec;
-        }
+		public static void Round(this Transformable trans)
+		{
+			trans.Position = new Vector2f((float)Math.Round(trans.Position.X), (float)Math.Round(trans.Position.Y));
+			trans.Origin = new Vector2f((float)Math.Round(trans.Origin.X), (float)Math.Round(trans.Origin.Y));
+		}
     }
 }

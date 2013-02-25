@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Californium;
-using HumanityAgainstCards.Entities;
-using HumanityAgainstCards.Network;
-using HumanityAgainstCards.Network.Packets;
+using ManateesAgainstCards.Entities;
+using ManateesAgainstCards.Network;
+using ManateesAgainstCards.Network.Packets;
 using SFML.Graphics;
 using SFML.Window;
 
-namespace HumanityAgainstCards.States
+namespace ManateesAgainstCards.States
 {
 	class SelectionScreen : State
 	{
@@ -69,7 +69,7 @@ namespace HumanityAgainstCards.States
 			};
 
 			title.Center();
-			title.Origin = new Vector2f((float)Math.Round(title.Origin.X), (float)Math.Round(title.Origin.Y));
+			title.Round();
 
 			title.Position += new Vector2f(1, 1);
 			title.Color = Color.Black;
@@ -85,7 +85,8 @@ namespace HumanityAgainstCards.States
 			blackCardText.Color = Color.White;
 
 			blackCardText.Center();
-			blackCardText.Origin = new Vector2f((float)Math.Round(blackCardText.Origin.X), 0.0f);
+			blackCardText.Origin = new Vector2f(blackCardText.Origin.X, 0.0f);
+			blackCardText.Round();
 
 			blackCardText.Position += new Vector2f(1, 1);
 			blackCardText.Color = Color.Black;

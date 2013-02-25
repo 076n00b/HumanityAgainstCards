@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Lidgren.Network;
 
-namespace HumanityAgainstCards.Network
+namespace ManateesAgainstCards.Network
 {
 	public abstract class Packet
 	{

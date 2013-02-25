@@ -1,11 +1,10 @@
-﻿using System;
-using Californium;
-using HumanityAgainstCards.Network;
-using HumanityAgainstCards.States;
+﻿using Californium;
+using ManateesAgainstCards.Network;
+using ManateesAgainstCards.States;
 using SFML.Graphics;
 using SFML.Window;
 
-namespace HumanityAgainstCards.Entities
+namespace ManateesAgainstCards.Entities
 {
 	class Player : Entity
 	{
@@ -62,7 +61,7 @@ namespace HumanityAgainstCards.Entities
 				nameText.Color = Color.Black;
 				
 				nameText.Center();
-				nameText.Origin = new Vector2f((float)Math.Round(nameText.Origin.X), (float)Math.Round(nameText.Origin.Y));
+				nameText.Round();
 				rt.Draw(nameText);
 
 				// Draw hand
@@ -97,6 +96,7 @@ namespace HumanityAgainstCards.Entities
 				};
 
 				nameText.Position -= new Vector2f(0.0f, nameText.GetLocalBounds().Height / 2.0f);
+				nameText.Round();
 
 				rt.Draw(nameText);
 			}
