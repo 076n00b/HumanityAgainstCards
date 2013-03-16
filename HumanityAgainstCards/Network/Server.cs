@@ -188,10 +188,6 @@ namespace ManateesAgainstCards.Network
 
 		public static NetSendResult SendMessage(this NetConnection connection, Packet packet, NetDeliveryMethod method = NetDeliveryMethod.ReliableOrdered)
 		{
-			// Here so we can ambiguously call Server.SendMessage and Client.SendMessage
-			if (server == null || connection == null)
-				return new NetSendResult();
-
 			var msg = server.CreateMessage();
 			Packet.WriteToMessage(msg, packet);
 
@@ -215,6 +211,10 @@ namespace ManateesAgainstCards.Network
 
 		public static void DeclareWinner(ushort id)
 		{
+            // Check if they're still in game
+            if (Clients.Where(c => c.Id == id).Count() == 0)
+                id = Clients[random.Next(Clients.Count)].Id;
+
 			List<string> cards = new List<string>();
 			foreach (ServerClient c in Clients.Where(c => c.Id == id))
 			{

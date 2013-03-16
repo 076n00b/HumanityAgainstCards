@@ -1,4 +1,5 @@
-﻿using Californium;
+﻿using System.Diagnostics;
+using Californium;
 using ManateesAgainstCards.Network;
 using ManateesAgainstCards.States;
 using SFML.Graphics;
@@ -16,8 +17,12 @@ namespace ManateesAgainstCards.Entities
 		private string chatMessage;
 		private bool showMessage;
 
+        private readonly Stopwatch messageTimer;
+
 		public Player(string name, bool localPlayer = false)
 		{
+            messageTimer = new Stopwatch();
+
 			IsLocalPlayer = localPlayer;
 			Name = name;
 
@@ -27,6 +32,17 @@ namespace ManateesAgainstCards.Entities
 			Czar = false;
 			Thinking = true;
 		}
+
+        public override void Update()
+        {
+            if (messageTimer.ElapsedMilliseconds >= 5000)
+            {
+                showMessage = false;
+                messageTimer.Restart();
+            }
+
+            base.Update();
+        }
 
 		public override void Draw(RenderTarget rt)
 		{
@@ -128,7 +144,7 @@ namespace ManateesAgainstCards.Entities
 
 		public void SetMessage(string value)
 		{
-			Timer.After(5.0f, () => { showMessage = false; });
+            messageTimer.Restart();
 			
 			chatMessage = "\"" + value + "\"";
 			showMessage = true;
