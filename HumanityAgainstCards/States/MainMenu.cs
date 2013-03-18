@@ -25,10 +25,12 @@ namespace ManateesAgainstCards.States
 		};
 
 		private readonly string personValue;
+		private string persistentDisplayName;
 
 		public MainMenu()
 		{
 			ClearColor = Color.White;
+			persistentDisplayName = "";
 
 			personValue = slogans[new Random(DateTime.Now.Millisecond).Next(slogans.Count)];
 			MenuMain();
@@ -129,7 +131,8 @@ namespace ManateesAgainstCards.States
 				Position =
 					new Vector2f(GameOptions.Width / 2.0f - GameOptions.Width / 3.0f,
 									250.0f + 128.0f + 16.0f),
-				Selected = true
+				Selected = true,
+				Value = persistentDisplayName
 			};
 
 			nameTextbox.OnReturn += a =>
@@ -140,7 +143,15 @@ namespace ManateesAgainstCards.States
 
 			Entities.Add(nameTextbox);
 
-			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 128.0f + 12.0f), "Next",
+			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 128.0f + 12.0f), "Settings",
+				() =>
+				{
+					persistentDisplayName = nameTextbox.Value;
+					return MenuHostSettings();
+				}
+			);
+
+			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 128.0f + 12.0f + 64.0f), "Next",
 				() =>
 				{
 					if (nameTextbox.Value != "")
@@ -150,7 +161,12 @@ namespace ManateesAgainstCards.States
 				}
 			);
 
-			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 288.0f), "Back", MenuPlay);
+			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 288.0f), "Back",
+				() =>
+				{
+					persistentDisplayName = nameTextbox.Value;
+					return MenuPlay();
+				});
 
 			return true;
 		}
@@ -174,7 +190,8 @@ namespace ManateesAgainstCards.States
 			{
 				Position =
 					new Vector2f(GameOptions.Width / 2.0f - GameOptions.Width / 3.0f,
-									250.0f + 128.0f + 84.0f + 16.0f)
+									250.0f + 128.0f + 84.0f + 16.0f),
+				Value = persistentDisplayName
 			};
 
 			nameTextbox.OnReturn += a =>
@@ -196,7 +213,21 @@ namespace ManateesAgainstCards.States
 				}
 			);
 
-			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 288.0f), "Back", MenuPlay);
+			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 288.0f), "Back",
+				() =>
+				{
+					persistentDisplayName = nameTextbox.Value;
+					return MenuPlay();
+				});
+
+			return true;
+		}
+
+		private bool MenuHostSettings()
+		{
+			Entities.Clear();
+
+			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 288.0f), "Back", MenuHost);
 
 			return true;
 		}

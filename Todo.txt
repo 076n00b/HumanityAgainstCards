@@ -1,0 +1,13 @@
+[X] Fix sound playing when end turn results in nothing
+[X] Fix in game chat
+[ ] Make black card deck shrink
+[ ] Host game settings
+	[ ] Point Cap
+	[ ] Select card packs
+	[ ] Allow late joins
+	[ ] Game Modes
+	[ ] Max turn time
+[ ] Global server list
+[X] Control + V to paste
+[X] Fix unicode
+[X] Keep "Brain Tumor" sound from playing every round

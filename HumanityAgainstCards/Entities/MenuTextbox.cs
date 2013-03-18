@@ -13,7 +13,7 @@ namespace ManateesAgainstCards.Entities
 		public delegate void OnReturnHandler(string value);
 		public event OnReturnHandler OnReturn;
 
-		public string Value { get; private set; }
+		public string Value;
 		public bool Selected { get; set; }
 
 		private readonly string label;

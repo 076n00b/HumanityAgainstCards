@@ -23,6 +23,7 @@ namespace ManateesAgainstCards.Network
 		private static NetClient client;
 		private static NetConnectionStatus lastStatus;
 		private static readonly Random random;
+		private static bool gotBrainTumorOnce;
 
 		public static bool Connected
 		{
@@ -33,6 +34,7 @@ namespace ManateesAgainstCards.Network
 		{
 			Hand = new List<Card>();
 			CurrentBlackCard = null;
+			gotBrainTumorOnce = false;
 			InMatch = false;
 
 			lastStatus = NetConnectionStatus.None;
@@ -227,8 +229,11 @@ namespace ManateesAgainstCards.Network
 								haveBrainTumor = true;
 						}
 
-						if (haveBrainTumor)
+						if (haveBrainTumor && !gotBrainTumorOnce)
+						{
 							Assets.PlaySound("BrainTumorCardStart.wav");
+							gotBrainTumorOnce = true;
+						}
 						else if (random.Next(100) < 5)
 							Assets.PlaySound("NoBrainTumorCardStart5.wav");
 
@@ -278,11 +283,7 @@ namespace ManateesAgainstCards.Network
 						if (Game.PeekState().GetType() == typeof(Lobby))
 							((Lobby)Game.PeekState()).ChatBacklog.Add(chatMessage.Value);
 						else
-						{
 							((InGame)Game.PeekState()).ChatBacklog.Add(chatMessage.Value);
-							//players[chatMessage.Id].SetMessage(chatMessage.Value);
-							//Console.WriteLine("{0} {1}", chatMessage.Id, players[chatMessage.Id].Name);
-						}
 
 						Assets.PlaySound("Bubble.wav");
 						break;

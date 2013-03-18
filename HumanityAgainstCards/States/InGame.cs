@@ -15,7 +15,6 @@ namespace ManateesAgainstCards.States
 		private const int ChatBacklogItems = 20;
 
 		private string chatValue;
-
 		private readonly MenuButton endTurnButton;
 
 		public List<string> ChatBacklog;
@@ -70,9 +69,6 @@ namespace ManateesAgainstCards.States
 			endTurnButton = new MenuButton(new Vector2f(GameOptions.Width - 132.0f, GameOptions.Height - 244.0f), "End Turn");
 			endTurnButton.OnClick += () =>
 			{
-				if (Game.PeekState().GetType() != typeof(InGame))
-					return false;
-
 				if (SelectedCards.Count != Client.CurrentBlackCard.Info.PickCount || !Client.InMatch)
 					return false;
 
@@ -152,15 +148,10 @@ namespace ManateesAgainstCards.States
 			rt.Draw(text);
 
 			// Draw decks
-			/*rt.Draw(new Sprite(Assets.LoadTexture("Decks.png"))
+			rt.Draw(new Sprite(Assets.LoadTexture("Decks.png"))
 					{
 						Position = new Vector2f(GameOptions.Width / 2.0f - 31.0f - 128.0f - 70.0f, GameOptions.Height / 2.0f - 44.0f - 89.0f - 22.0f)
-					});*/
-
-			/*for (int i = 0; i < blackDeckCards; ++i)
-			{
-
-			}*/
+					});
 
 			// Draw chat backlog
 			float y = 0.0f;
