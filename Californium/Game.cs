@@ -121,9 +121,11 @@ namespace Californium
             }
         }
 
-        public static void Exit()
+        public static bool Exit()
         {
             Window.Close();
+
+	        return true;
         }
 
         public static void SetState(State state)

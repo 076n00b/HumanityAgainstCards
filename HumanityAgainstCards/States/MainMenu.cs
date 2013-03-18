@@ -91,28 +91,36 @@ namespace ManateesAgainstCards.States
 			Entities.Add(button);
 		}
 
-		private void MenuMain()
+		private bool MenuMain()
 		{
 			Entities.Clear();
 
 			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 64.0f), "Play", MenuPlay);
 
 			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 128.0f), "Original Game",
-				() => Process.Start("http://www.cardsagainsthumanity.com"));
+				() =>
+				{
+					Process.Start("http://www.cardsagainsthumanity.com");
+					return true;
+				});
 
 			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 288.0f), "Exit", Game.Exit);
+
+			return true;
 		}
 
-		private void MenuPlay()
+		private bool MenuPlay()
 		{
 			Entities.Clear();
 
 			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 64.0f), "Host", MenuHost);
 			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 128.0f), "Join", MenuJoin);
 			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 288.0f), "Back", MenuMain);
+
+			return true;
 		}
 
-		private void MenuHost()
+		private bool MenuHost()
 		{
 			Entities.Clear();
 
@@ -137,13 +145,17 @@ namespace ManateesAgainstCards.States
 				{
 					if (nameTextbox.Value != "")
 						Game.SetState(new Lobby(SessionRole.Server, "", nameTextbox.Value));
+
+					return true;
 				}
 			);
 
 			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 288.0f), "Back", MenuPlay);
+
+			return true;
 		}
 
-		private void MenuJoin()
+		private bool MenuJoin()
 		{
 			Entities.Clear();
 
@@ -179,10 +191,14 @@ namespace ManateesAgainstCards.States
 				{
 					if (nameTextbox.Value != "" && ipTextbox.Value != "")
 						Game.SetState(new Lobby(SessionRole.Client, ipTextbox.Value, nameTextbox.Value));
+
+					return true;
 				}
 			);
 
 			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 288.0f), "Back", MenuPlay);
+
+			return true;
 		}
 	}
 }

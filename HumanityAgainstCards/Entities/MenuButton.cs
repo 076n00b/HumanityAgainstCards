@@ -9,7 +9,7 @@ namespace ManateesAgainstCards.Entities
 		private const float ButtonWidth = 222.0f;
 		private const float ButtonHeight = 52.0f;
 
-		public delegate void OnClickHandler();
+		public delegate bool OnClickHandler();
 		public event OnClickHandler OnClick;
 
 		private readonly string value;
@@ -53,8 +53,8 @@ namespace ManateesAgainstCards.Entities
 
 				if (OnClick != null)
 				{
-					Assets.PlaySound("Click.wav");
-					OnClick();
+					if (OnClick())
+						Assets.PlaySound("Click.wav");
 				}
 
 				return true;

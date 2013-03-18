@@ -12,10 +12,13 @@ namespace ManateesAgainstCards.States
 {
 	class InGame : State
 	{
+		private const int ChatBacklogItems = 20;
+
 		private string chatValue;
-		private bool chatVisible;
 
 		private readonly MenuButton endTurnButton;
+
+		public List<string> ChatBacklog;
 
 		public List<Player> Players
 		{
@@ -43,9 +46,9 @@ namespace ManateesAgainstCards.States
 
 		public InGame(IEnumerable<Player> players)
 		{
-			Input.Text = InputText;
+			ChatBacklog = new List<string>();
 
-			chatVisible = false;
+			Input.Text = InputText;
 			chatValue = "";
 
 			// Add every player from lobby
@@ -68,15 +71,17 @@ namespace ManateesAgainstCards.States
 			endTurnButton.OnClick += () =>
 			{
 				if (Game.PeekState().GetType() != typeof(InGame))
-					return;
+					return false;
 
 				if (SelectedCards.Count != Client.CurrentBlackCard.Info.PickCount || !Client.InMatch)
-					return;
+					return false;
 
 				LocalPlayer.Thinking = false;
 				Client.InMatch = false;
 				Client.SendMessage(new EndTurn(SelectedCards));
 				RemoveSelectedWhiteCards();
+
+				return true;
 			};
 
 			Entities.Add(endTurnButton);
@@ -102,6 +107,7 @@ namespace ManateesAgainstCards.States
 
 		public override void Draw(RenderTarget rt)
 		{
+			// Outline
 			rt.Draw(new RectangleShape(new Vector2f(GameOptions.Width - 16, GameOptions.Height - 16))
 					{
 						Position = new Vector2f(8, 8),
@@ -110,24 +116,28 @@ namespace ManateesAgainstCards.States
 						OutlineThickness = 8
 					});
 
+			// White card table
 			rt.Draw(new RectangleShape(new Vector2f(1264.0f, 202.0f))
 					{
 						Position = new Vector2f(8.0f, GameOptions.Height - 194.0f - 16.0f),
 						FillColor = Color.Black
 					});
 
+			// Timer table
 			rt.Draw(new RectangleShape(new Vector2f(256.0f, 63.0f))
 					{
 						Position = new Vector2f(GameOptions.Width - 256.0f - 8.0f, 8.0f),
 						FillColor = Color.Black
 					});
 
+			// Table border
 			rt.Draw(new RectangleShape(new Vector2f(8.0f, 502.0f))
 					{
 						Position = new Vector2f(GameOptions.Width - 256.0f - 8.0f, 8.0f),
 						FillColor = Color.Black
 					});
 
+			// Timer text
 			string timerValue = String.Format("{0}:{1}", (Client.SecondsLeft / 60).ToString("D"),
 											  (Client.SecondsLeft % 60).ToString("D").PadLeft(2, '0'));
 			Text text = new Text(timerValue, Assets.LoadFont("QuartzMS.ttf"))
@@ -142,30 +152,48 @@ namespace ManateesAgainstCards.States
 			rt.Draw(text);
 
 			// Draw decks
-			rt.Draw(new Sprite(Assets.LoadTexture("Decks.png"))
+			/*rt.Draw(new Sprite(Assets.LoadTexture("Decks.png"))
 					{
 						Position = new Vector2f(GameOptions.Width / 2.0f - 31.0f - 128.0f - 70.0f, GameOptions.Height / 2.0f - 44.0f - 89.0f - 22.0f)
-					});
+					});*/
 
-			if (chatVisible)
+			/*for (int i = 0; i < blackDeckCards; ++i)
 			{
-				RectangleShape chatMessageBacking = new RectangleShape(new Vector2f(GameOptions.Width - 256.0f - 16.0f, 12.0f + 5.0f))
+
+			}*/
+
+			// Draw chat backlog
+			float y = 0.0f;
+			for (int i = ChatBacklog.Count - 1; i > ChatBacklog.Count - ChatBacklogItems && i != -1; --i)
+			{
+				Text itemText = new Text(ChatBacklog[i], Assets.LoadFont(Program.DefaultFont))
 				{
-					FillColor = new Color(0, 0, 0, 128),
-					Position = new Vector2f(8.0f, 8.0f)
+					Position = new Vector2f(16, GameOptions.Height - 226.0f - 24.0f - 24.0f + y),
+					CharacterSize = 22,
+					Color = Color.Black
 				};
 
-				rt.Draw(chatMessageBacking);
+				y -= 24.0f;
 
-				Text chatMessageText = new Text(chatValue + "|", Assets.LoadFont(Program.DefaultFont))
-				{
-					Position = new Vector2f(8.0f + 6.0f, 8.0f),
-					Color = Color.White,
-					CharacterSize = 12
-				};
-
-				rt.Draw(chatMessageText);
+				rt.Draw(itemText);
 			}
+
+			//RectangleShape chatMessageBacking = new RectangleShape(new Vector2f(GameOptions.Width - 256.0f - 16.0f, 12.0f + 5.0f))
+			//{
+			//    FillColor = new Color(0, 0, 0, 128),
+			//    Position = new Vector2f(8.0f, 8.0f)
+			//};
+
+			//rt.Draw(chatMessageBacking);
+
+			Text chatMessageText = new Text(chatValue + "|", Assets.LoadFont(Program.DefaultFont))
+			{
+				Position = new Vector2f(8.0f + 6.0f, GameOptions.Height - 220.0f - 24.0f),
+				Color = Color.Black,
+				CharacterSize = 22
+			};
+
+			rt.Draw(chatMessageText);
 
 			base.Draw(rt);
 		}
@@ -189,41 +217,33 @@ namespace ManateesAgainstCards.States
 
 		private bool InputText(TextInputArgs args)
 		{
-			if (chatVisible)
+			if (args.Text == "\b")
 			{
-				if (args.Text == "\b")
-				{
-					if (chatValue.Length == 0)
-						return true;
-
-					chatValue = chatValue.Remove(chatValue.Length - 1);
+				if (chatValue.Length == 0)
 					return true;
-				}
 
-				if (args.Text == "\r")
-				{
-					if (chatValue != "")
-					{
-						ChatMessage message = new ChatMessage(chatValue);
-						Client.SendMessage(message);
-
-						LocalPlayer.SetMessage(chatValue);
-						chatValue = "";
-					}
-
-					chatVisible = false;
-					return true;
-				}
-
-				if (chatValue.Length < 80)
-					chatValue += args.Text;
+				chatValue = chatValue.Remove(chatValue.Length - 1);
 				return true;
 			}
 
 			if (args.Text == "\r")
-				chatVisible = !chatVisible;
+			{
+				if (chatValue != "")
+				{
+					ChatMessage message = new ChatMessage(Client.Name + ": " + chatValue);
+					Client.SendMessage(message);
 
-			return false;
+					ChatBacklog.Add(LocalPlayer.Name + ": " + chatValue);
+					chatValue = "";
+				}
+
+				return true;
+			}
+
+			if (chatValue.Length < 80)
+				chatValue += args.Text;
+
+			return true;
 		}
 	}
 }

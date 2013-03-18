@@ -211,11 +211,13 @@ namespace ManateesAgainstCards.States
 							if (Players.Count < Constants.LeastAmountOfPlayersAllowed)
 							{
 								ChatBacklog.Add(String.Format("Cannot begin game with less than {0} people!", Constants.LeastAmountOfPlayersAllowed));
-								return;
+								return true;
 							}
 
 							// Begin game
 							Client.SendMessage(new BeginGame());
+
+							return true;
 						};
 
 						Entities.Add(startButton);

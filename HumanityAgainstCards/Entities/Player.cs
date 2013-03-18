@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Californium;
+﻿using Californium;
 using ManateesAgainstCards.Network;
 using ManateesAgainstCards.States;
 using SFML.Graphics;
@@ -13,36 +12,16 @@ namespace ManateesAgainstCards.Entities
 		public bool IsLocalPlayer { get; private set; }
 		public int Score;
 		public bool Czar, Thinking;
-		
-		private string chatMessage;
-		private bool showMessage;
-
-        private readonly Stopwatch messageTimer;
 
 		public Player(string name, bool localPlayer = false)
 		{
-            messageTimer = new Stopwatch();
-
 			IsLocalPlayer = localPlayer;
 			Name = name;
 
-			showMessage = false;
-			chatMessage = "";
 			Score = 0;
 			Czar = false;
 			Thinking = true;
 		}
-
-        public override void Update()
-        {
-            if (messageTimer.ElapsedMilliseconds >= 5000)
-            {
-                showMessage = false;
-                messageTimer.Restart();
-            }
-
-            base.Update();
-        }
 
 		public override void Draw(RenderTarget rt)
 		{
@@ -70,7 +49,7 @@ namespace ManateesAgainstCards.Entities
 					rt.Draw(crown);
 				}
 
-				Text nameText = GameUtility.Wrap(showMessage ? chatMessage : Name, Assets.LoadFont(Program.DefaultFont), 18,
+				Text nameText = GameUtility.Wrap(Name, Assets.LoadFont(Program.DefaultFont), 18,
 				                             128.0 + 32.0 - 8.0);
 				nameText.Position = Position + new Vector2f(0.0f, 16.0f);
 				nameText.CharacterSize = 18;
@@ -140,14 +119,6 @@ namespace ManateesAgainstCards.Entities
 			outlineText.Color = Color.White;
 			outlineText.Position = position;
 			rt.Draw(outlineText);
-		}
-
-		public void SetMessage(string value)
-		{
-            messageTimer.Restart();
-			
-			chatMessage = "\"" + value + "\"";
-			showMessage = true;
 		}
 	}
 }

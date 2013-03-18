@@ -279,8 +279,9 @@ namespace ManateesAgainstCards.Network
 							((Lobby)Game.PeekState()).ChatBacklog.Add(chatMessage.Value);
 						else
 						{
-							players[chatMessage.Id].SetMessage(chatMessage.Value);
-							Console.WriteLine("{0} {1}", chatMessage.Id, players[chatMessage.Id].Name);
+							((InGame)Game.PeekState()).ChatBacklog.Add(chatMessage.Value);
+							//players[chatMessage.Id].SetMessage(chatMessage.Value);
+							//Console.WriteLine("{0} {1}", chatMessage.Id, players[chatMessage.Id].Name);
 						}
 
 						Assets.PlaySound("Bubble.wav");

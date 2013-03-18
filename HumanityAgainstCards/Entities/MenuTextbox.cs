@@ -58,20 +58,17 @@ namespace ManateesAgainstCards.Entities
 				return true;
 			};
 
-			Input.MouseButton[Mouse.Button.Right] = args =>
-			{
-				if (!args.Pressed || !Selected)
-					return false;
-
-				Value += GetClipboardText();
-
-				return true;
-			};
-
 			Input.Text = args =>
 			{
 				if (!Selected)
 					return false;
+
+				// 0x16 is Control + V
+				if (args.Text[0] == 0x16)
+				{
+					Value += GetClipboardText();
+					return true;
+				}
 
 				if (args.Text == "\t")
 				{
@@ -102,7 +99,7 @@ namespace ManateesAgainstCards.Entities
 					return true;
 				}
 
-				if (Value.Length < 36)
+				if (!Char.IsControl(args.Text[0]) && Value.Length < 36)
 					Value += args.Text;
 
 				return true;
