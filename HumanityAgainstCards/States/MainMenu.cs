@@ -227,7 +227,19 @@ namespace ManateesAgainstCards.States
 		{
 			Entities.Clear();
 
-			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 288.0f), "Back", MenuHost);
+			MenuCheckbox checkboxAllowLateJoins = new MenuCheckbox("Allow late joins", Server.AllowLateJoins)
+			{
+				Position = new Vector2f(GameOptions.Width / 2.0f - GameOptions.Width / 3.0f, 250.0f + 128.0f + 16.0f)
+			};
+
+			Entities.Add(checkboxAllowLateJoins);
+
+			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 288.0f), "Back",
+				() =>
+				{
+					Server.AllowLateJoins = checkboxAllowLateJoins.Value;
+					return MenuHost();
+				});
 
 			return true;
 		}

@@ -9,7 +9,11 @@ namespace ManateesAgainstCards.Network
 {
 	static class Server
 	{
-		public const int SecondsPerTurn = 45;
+		public static int PointCap = 2;
+		public static int SecondsPerTurn = 45;
+
+		// TODO Fix late joining someday
+		public static bool AllowLateJoins = false;
 
 		private static readonly Random random;
 
@@ -103,7 +107,7 @@ namespace ManateesAgainstCards.Network
 							{
 								case NetConnectionStatus.Connected:
 									{
-										if (State == States.InGame)
+										if (State == States.InGame && !AllowLateJoins)
 										{
 											// Fuck off, no visitors
 											msg.SenderConnection.Disconnect("Already in game, fuck off.");
@@ -209,29 +213,6 @@ namespace ManateesAgainstCards.Network
 			return id;
 		}
 
-		public static void DeclareWinner(ushort id)
-		{
-            // Check if they're still in game
-            if (Clients.Where(c => c.Id == id).Count() == 0)
-                id = Clients[random.Next(Clients.Count)].Id;
-
-			List<string> cards = new List<string>();
-			foreach (ServerClient c in Clients.Where(c => c.Id == id))
-			{
-				cards = c.SelectedCards;
-				break;
-			}
-
-			// Pick random winner
-			SendMessageToAll(new WinnerPicked(id, cards));
-			CanDeal = true;
-
-			foreach (ServerClient c in Clients)
-				c.Ready = false;
-
-			CurrentCardCzar = 0;
-		}
-
 		private static void HandleGame()
 		{
 			if (State != States.InGame)
@@ -239,6 +220,13 @@ namespace ManateesAgainstCards.Network
 
 			// Kill games that only have a single player
 			if (Clients.Count < 2)
+			{
+				SendMessageToAll(new GameOver());
+				return;
+			}
+
+			// Check if someone got to the point cap
+			if (Clients.Any(c => c.Points >= PointCap))
 			{
 				SendMessageToAll(new GameOver());
 				return;
@@ -268,13 +256,15 @@ namespace ManateesAgainstCards.Network
 			if ((allReady && WaitingForAllReady) || (secondsLeft == 0 && inMatch))
 			{
 				// Get cards from everyone except czar
-				List<Tuple<ushort, List<string>>> cards = Clients.Where(sc => sc.Id != CurrentCardCzar).Select(sc => new Tuple<ushort, List<string>>(sc.Id, sc.SelectedCards)).ToList();
+				List<Tuple<ushort, List<string>>> cards =
+					Clients.Where(sc => sc.Id != CurrentCardCzar).Select(sc => new Tuple<ushort, List<string>>(sc.Id, sc.SelectedCards)).ToList();
+
 				cards.RemoveAll(c => c.Item2.Count == 0);
 				GameUtility.Shuffle(cards);
 
 				if (cards.Count == 0)
 				{
-					DeclareWinner(0x0000);
+					DeclareWinner(0);
 					StartMatch(true);
 				}
 				else
@@ -288,6 +278,7 @@ namespace ManateesAgainstCards.Network
 
 			if (CanDeal)
 			{
+				// Check if we're out of white cards
 				if (whiteDeck.Cards.Count == 0)
 				{
 					Console.WriteLine("No more white cards!");
@@ -303,6 +294,7 @@ namespace ManateesAgainstCards.Network
 						SendMessageToAll(new GameOver());
 				}
 
+				// Check if we're out of black cards
 				if (blackDeck.Cards.Count == 0)
 				{
 					Console.WriteLine("Game Over! No more black cards!");
@@ -310,6 +302,7 @@ namespace ManateesAgainstCards.Network
 					return;
 				}
 
+				// Deal new black card
 				SendMessageToAll(new BlackCard(blackDeck.Cards.Pop()));
 
 				// Deal out new white cards to everyone who needs them
@@ -335,6 +328,30 @@ namespace ManateesAgainstCards.Network
 				CanDeal = false;
 				WaitingForAllReady = true;
 			}
+		}
+
+		public static void DeclareWinner(ushort id)
+		{
+			// Check if they're still in game
+			if (Clients.Count(c => c.Id == id) == 0)
+				id = Clients[random.Next(Clients.Count)].Id;
+
+			List<string> cards = new List<string>();
+			foreach (ServerClient c in Clients.Where(c => c.Id == id))
+			{
+				++c.Points;
+				cards = c.SelectedCards;
+				break;
+			}
+
+			// Pick random winner
+			SendMessageToAll(new WinnerPicked(id, cards));
+			CanDeal = true;
+
+			foreach (ServerClient c in Clients)
+				c.Ready = false;
+
+			CurrentCardCzar = 0;
 		}
 
 		public static void StartMatch(bool cooldown)

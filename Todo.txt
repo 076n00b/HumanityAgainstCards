@@ -1,6 +1,7 @@
 [X] Fix sound playing when end turn results in nothing
 [X] Fix in game chat
-[ ] Make black card deck shrink
+[X] Rename "crown.png" to "hat.png"
+[X] Remove unneeded textures from release build
 [ ] Host game settings
 	[ ] Point Cap
 	[ ] Select card packs

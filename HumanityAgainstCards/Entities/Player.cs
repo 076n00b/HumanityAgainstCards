@@ -40,7 +40,7 @@ namespace ManateesAgainstCards.Entities
 				// Draw crown if czar
 				if (Czar)
 				{
-					Sprite crown = new Sprite(Assets.LoadTexture("Crown.png"))
+					Sprite crown = new Sprite(Assets.LoadTexture("Hat.png"))
 					{
 						Position = Position
 					};

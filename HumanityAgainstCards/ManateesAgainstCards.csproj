@@ -81,6 +81,8 @@
     <Compile Include="CardLoader.cs" />
     <Compile Include="Deck.cs" />
     <Compile Include="Entities\Card.cs" />
+    <Compile Include="Entities\MenuCheckbox.cs" />
+    <Compile Include="Entities\MenuNumberbox.cs" />
     <Compile Include="Entities\SelectButton.cs" />
     <Compile Include="Entities\MenuButton.cs" />
     <Compile Include="Entities\MenuTextbox.cs" />
@@ -182,19 +184,13 @@
     <Content Include="Assets\Texture\CardBlack.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Texture\CardBlackDeck.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Assets\Texture\CardWhite.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Texture\CardWhiteDeck.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Texture\Crown.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Assets\Texture\Decks.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Texture\Hat.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Texture\Icon.png">

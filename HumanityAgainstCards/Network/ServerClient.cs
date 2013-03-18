@@ -12,7 +12,7 @@ namespace ManateesAgainstCards.Network
 		public ushort Id { get; private set; }
 		public string Name { get; private set; }
 		public bool Verified { get; private set; }
-		public int CardCount;
+		public int CardCount, Points;
 		public bool Ready;
 		public List<string> SelectedCards { get; private set; }
 
@@ -23,6 +23,7 @@ namespace ManateesAgainstCards.Network
 
 			SelectedCards = new List<string>();
 			CardCount = 0;
+			Points = 0;
 			Ready = false;
 			Verified = false;
 		}

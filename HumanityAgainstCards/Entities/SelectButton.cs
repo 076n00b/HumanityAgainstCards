@@ -89,12 +89,6 @@ namespace ManateesAgainstCards.Entities
 			text.Center();
 			text.Round();
 
-			text.Position += new Vector2f(1, 1);
-			text.Color = Color.Black;
-			rt.Draw(text);
-
-			text.Position -= new Vector2f(1, 1);
-			text.Color = Color.White;
 			rt.Draw(text);
 
 			base.Draw(rt);

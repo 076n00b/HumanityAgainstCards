@@ -14,7 +14,7 @@ namespace ManateesAgainstCards.Entities
 		public event OnReturnHandler OnReturn;
 
 		public string Value;
-		public bool Selected { get; set; }
+		public bool Selected;
 
 		private readonly string label;
 		private bool mouseIn;
