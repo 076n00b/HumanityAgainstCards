@@ -9,7 +9,7 @@ namespace ManateesAgainstCards.Network
 {
 	static class Server
 	{
-		public static int PointCap = 2;
+		public static int PointCap = 20;
 		public static int SecondsPerTurn = 45;
 
 		// TODO Fix late joining someday

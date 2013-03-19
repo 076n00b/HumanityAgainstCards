@@ -227,17 +227,28 @@ namespace ManateesAgainstCards.States
 		{
 			Entities.Clear();
 
-			MenuCheckbox checkboxAllowLateJoins = new MenuCheckbox("Allow late joins", Server.AllowLateJoins)
+			MenuNumberbox numberboxPointCap = new MenuNumberbox("Point Cap", 99)
 			{
-				Position = new Vector2f(GameOptions.Width / 2.0f - GameOptions.Width / 3.0f, 250.0f + 128.0f + 16.0f)
+				Position = new Vector2f(GameOptions.Width / 2.0f - GameOptions.Width / 3.0f, 250.0f + 128.0f + 16.0f),
+				Value = Server.PointCap
 			};
 
-			Entities.Add(checkboxAllowLateJoins);
+			Entities.Add(numberboxPointCap);
+
+			MenuNumberbox numberSecondsPerTurn = new MenuNumberbox("Seconds Per Turn", 180)
+			{
+				Position = new Vector2f(GameOptions.Width / 2.0f + (GameOptions.Width / 8.0f), 250.0f + 128.0f + 16.0f),
+				Value = Server.SecondsPerTurn
+			};
+
+			Entities.Add(numberSecondsPerTurn);
 
 			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 288.0f), "Back",
 				() =>
 				{
-					Server.AllowLateJoins = checkboxAllowLateJoins.Value;
+					Server.PointCap = numberboxPointCap.Value;
+					Server.SecondsPerTurn = numberSecondsPerTurn.Value;
+
 					return MenuHost();
 				});
 

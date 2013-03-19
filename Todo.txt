@@ -2,12 +2,12 @@
 [X] Fix in game chat
 [X] Rename "crown.png" to "hat.png"
 [X] Remove unneeded textures from release build
-[ ] Host game settings
-	[ ] Point Cap
+[X] Host game settings
+	[X] Point Cap
 	[ ] Select card packs
 	[ ] Allow late joins
 	[ ] Game Modes
-	[ ] Max turn time
+	[X] Max turn time
 [ ] Global server list
 [X] Control + V to paste
 [X] Fix unicode

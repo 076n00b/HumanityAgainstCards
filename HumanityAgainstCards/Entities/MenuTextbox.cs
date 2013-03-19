@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Californium;
 using SFML.Graphics;
 using SFML.Window;
+using Timer = Californium.Timer;
 
 namespace ManateesAgainstCards.Entities
 {
@@ -17,19 +18,26 @@ namespace ManateesAgainstCards.Entities
 		public bool Selected;
 
 		private readonly string label;
-		private bool mouseIn;
+		private bool mouseIn, cursorVisible;
 
 		public MenuTextbox(string label)
 		{
 			OnReturn = null;
 			Selected = false;
 			mouseIn = false;
+			cursorVisible = true;
 
 			Value = "";
 
 			this.label = label;
 
 			Size = new Vector2f((GameOptions.Width / 3.0f) * 2.0f - 64.0f, 48.0f);
+
+			Timer.Every(0.75f, () =>
+			{
+				cursorVisible = !cursorVisible;
+				return false;
+			});
 
 			Input.MouseMove = args =>
 			{
@@ -123,17 +131,17 @@ namespace ManateesAgainstCards.Entities
 				Color = Color.Black
 			};
 
-			labelText.Position = new Vector2f((float) Math.Floor(labelText.Position.X), (float) Math.Floor(labelText.Position.Y));
+			labelText.Round();
 			rt.Draw(labelText);
 
-			Text messageText = new Text(Value + (Selected ? "|" : ""), Assets.LoadFont(Program.DefaultFont))
+			Text messageText = new Text(Value + (Selected && cursorVisible ? "_" : ""), Assets.LoadFont(Program.DefaultFont))
 			{
-				Position = Position + new Vector2f(8.0f, 8.0f + 4.0f),
-				CharacterSize = 22,
+				Position = Position + new Vector2f(8.0f, 8.0f),
+				CharacterSize = 28,
 				Color = Color.White
 			};
 
-			messageText.Position = new Vector2f((float)Math.Floor(messageText.Position.X), (float)Math.Floor(messageText.Position.Y));
+			messageText.Round();
 			rt.Draw(messageText);
 
 			base.Draw(rt);
