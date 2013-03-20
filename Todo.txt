@@ -12,3 +12,4 @@
 [X] Control + V to paste
 [X] Fix unicode
 [X] Keep "Brain Tumor" sound from playing every round
+[ ] Apply clickable fix to every UI element

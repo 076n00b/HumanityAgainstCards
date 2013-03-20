@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Californium;
 using ManateesAgainstCards.Entities;
+using ManateesAgainstCards.Entities.Ui;
 using ManateesAgainstCards.Network;
 using ManateesAgainstCards.Network.Packets;
 using SFML.Graphics;

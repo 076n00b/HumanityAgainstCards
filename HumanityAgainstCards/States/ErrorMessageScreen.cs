@@ -1,5 +1,5 @@
 ﻿using Californium;
-using ManateesAgainstCards.Entities;
+using ManateesAgainstCards.Entities.Ui;
 using SFML.Graphics;
 using SFML.Window;
 
@@ -13,10 +13,15 @@ namespace ManateesAgainstCards.States
 		{
 			ClearColor = Color.Black;
 			this.value = value;
+		}
 
-			MenuButton button = new MenuButton(new Vector2f(GameOptions.Width / 2.0f, GameOptions.Height - 52.0f - 48.0f), "End Game");
+		public override void Enter()
+		{
+			Button button = new Button(new Vector2f(GameOptions.Width / 2.0f, GameOptions.Height - 52.0f - 48.0f), "End Game");
 			button.OnClick += Game.Exit;
 			Entities.Add(button);
+
+			base.Enter();
 		}
 
 		public override void Draw(RenderTarget rt)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Californium;
 using ManateesAgainstCards.Entities;
+using ManateesAgainstCards.Entities.Ui;
 using ManateesAgainstCards.Network;
 using ManateesAgainstCards.Network.Packets;
 using SFML.Graphics;
@@ -15,7 +16,7 @@ namespace ManateesAgainstCards.States
 		private const int ChatBacklogItems = 20;
 
 		private string chatValue;
-		private readonly MenuButton endTurnButton;
+		private Button endTurnButton;
 
 		public List<string> ChatBacklog;
 
@@ -66,7 +67,14 @@ namespace ManateesAgainstCards.States
 				otherPosition += new Vector2f(128.0f + 32.0f, 0.0f);
 			}
 
-			endTurnButton = new MenuButton(new Vector2f(GameOptions.Width - 132.0f, GameOptions.Height - 244.0f), "End Turn");
+			// Play match start sound
+			string startSoundFilename = "Start" + new Random().Next(5).ToString("G") + ".wav";
+			Timer.NextFrame(() => Assets.PlaySound(startSoundFilename));
+		}
+
+		public override void Enter()
+		{
+			endTurnButton = new Button(new Vector2f(GameOptions.Width - 132.0f, GameOptions.Height - 244.0f), "End Turn");
 			endTurnButton.OnClick += () =>
 			{
 				if (SelectedCards.Count != Client.CurrentBlackCard.Info.PickCount || !Client.InMatch)
@@ -82,9 +90,7 @@ namespace ManateesAgainstCards.States
 
 			Entities.Add(endTurnButton);
 
-			// Play match start sound
-			string startSoundFilename = "Start" + new Random().Next(5).ToString("G") + ".wav";
-			Timer.NextFrame(() => Assets.PlaySound(startSoundFilename));
+			base.Enter();
 		}
 
 		public override void Update()

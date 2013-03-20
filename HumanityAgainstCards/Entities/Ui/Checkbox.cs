@@ -1,21 +1,20 @@
-﻿using System.Linq;
-using Californium;
+﻿using Californium;
 using SFML.Graphics;
 using SFML.Window;
 
-namespace ManateesAgainstCards.Entities
+namespace ManateesAgainstCards.Entities.Ui
 {
-	internal class MenuCheckbox : Entity
+	internal class Checkbox : Entity
 	{
 		public bool Value { get; private set; }
+		public string Label { get; private set; }
 
-		private readonly string label;
 		private bool mouseIn;
 
-		public MenuCheckbox(string label, bool defaultValue = false)
+		public Checkbox(string label, bool defaultValue = false)
 		{
 			Value = defaultValue;
-			this.label = label;
+			Label = label;
 
 			Size = new Vector2f(48.0f, 48.0f);
 
@@ -67,7 +66,7 @@ namespace ManateesAgainstCards.Entities
 				rt.Draw(checkboxHover);
 			}
 
-			Text labelText = new Text(label, Assets.LoadFont(Program.DefaultFont))
+			Text labelText = new Text(Label, Assets.LoadFont(Program.DefaultFont))
 			{
 				Position = Position + new Vector2f(48.0f + 16.0f, 24.0f + 2.0f),
 				CharacterSize = 32,

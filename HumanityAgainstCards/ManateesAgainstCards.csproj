@@ -81,11 +81,12 @@
     <Compile Include="CardLoader.cs" />
     <Compile Include="Deck.cs" />
     <Compile Include="Entities\Card.cs" />
-    <Compile Include="Entities\MenuCheckbox.cs" />
-    <Compile Include="Entities\MenuNumberbox.cs" />
-    <Compile Include="Entities\SelectButton.cs" />
-    <Compile Include="Entities\MenuButton.cs" />
-    <Compile Include="Entities\MenuTextbox.cs" />
+    <Compile Include="Entities\Ui\Checkbox.cs" />
+    <Compile Include="Entities\Ui\Numberbox.cs" />
+    <Compile Include="Entities\Ui\ScrollableArea.cs" />
+    <Compile Include="Entities\Ui\SelectButton.cs" />
+    <Compile Include="Entities\Ui\Button.cs" />
+    <Compile Include="Entities\Ui\MenuTextbox.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="GameUtility.cs" />
     <Compile Include="Json.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Network\ServerClient.cs" />
     <Compile Include="States\ErrorMessageScreen.cs" />
     <Compile Include="States\GameOverScreen.cs" />
+    <Compile Include="States\HostSettingsOverlay.cs" />
     <Compile Include="States\InGame.cs" />
     <Compile Include="States\Lobby.cs" />
     <Compile Include="States\MainMenu.cs" />
@@ -131,7 +133,7 @@
     <None Include="Assets\Font\QuartzMS.TTF">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Json\Cards.json">
+    <None Include="Assets\Json\Decks.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Json\Default.json">

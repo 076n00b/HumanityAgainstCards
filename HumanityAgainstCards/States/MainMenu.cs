@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Californium;
-using ManateesAgainstCards.Entities;
+using ManateesAgainstCards.Entities.Ui;
 using ManateesAgainstCards.Network;
 using SFML.Graphics;
 using SFML.Window;
@@ -13,7 +13,7 @@ namespace ManateesAgainstCards.States
 	{
 		private static readonly List<string> slogans = new List<string>
 		{
-			"wiglets",
+			"Wiglets",
 			"the Jews",
 			"Nick's Mom",
 			"the Westboro Baptist Church",
@@ -33,7 +33,12 @@ namespace ManateesAgainstCards.States
 			persistentDisplayName = "";
 
 			personValue = slogans[new Random(DateTime.Now.Millisecond).Next(slogans.Count)];
+		}
+
+		public override void Enter()
+		{
 			MenuMain();
+			base.Enter();
 		}
 
 		public override void Draw(RenderTarget rt)
@@ -85,9 +90,9 @@ namespace ManateesAgainstCards.States
 			base.Draw(rt);
 		}
 
-		private void AddButton(Vector2f position, string value, MenuButton.OnClickHandler handler)
+		private void AddButton(Vector2f position, string value, Button.OnClickHandler handler)
 		{
-			MenuButton button = new MenuButton(position, value);
+			Button button = new Button(position, value);
 			button.OnClick += handler;
 
 			Entities.Add(button);
@@ -135,10 +140,13 @@ namespace ManateesAgainstCards.States
 				Value = persistentDisplayName
 			};
 
-			nameTextbox.OnReturn += a =>
+			nameTextbox.OnReturn += value =>
 			{
 				if (nameTextbox.Value != "")
+				{
+					Server.LoadCards();
 					Game.SetState(new Lobby(SessionRole.Server, "", nameTextbox.Value));
+				}
 			};
 
 			Entities.Add(nameTextbox);
@@ -147,7 +155,8 @@ namespace ManateesAgainstCards.States
 				() =>
 				{
 					persistentDisplayName = nameTextbox.Value;
-					return MenuHostSettings();
+					Game.PushState(new HostSettingsOverlay());
+					return true;
 				}
 			);
 
@@ -155,7 +164,10 @@ namespace ManateesAgainstCards.States
 				() =>
 				{
 					if (nameTextbox.Value != "")
+					{
+						Server.LoadCards();
 						Game.SetState(new Lobby(SessionRole.Server, "", nameTextbox.Value));
+					}
 
 					return true;
 				}
@@ -218,38 +230,6 @@ namespace ManateesAgainstCards.States
 				{
 					persistentDisplayName = nameTextbox.Value;
 					return MenuPlay();
-				});
-
-			return true;
-		}
-
-		private bool MenuHostSettings()
-		{
-			Entities.Clear();
-
-			MenuNumberbox numberboxPointCap = new MenuNumberbox("Point Cap", 99)
-			{
-				Position = new Vector2f(GameOptions.Width / 2.0f - GameOptions.Width / 3.0f, 250.0f + 128.0f + 16.0f),
-				Value = Server.PointCap
-			};
-
-			Entities.Add(numberboxPointCap);
-
-			MenuNumberbox numberSecondsPerTurn = new MenuNumberbox("Seconds Per Turn", 180)
-			{
-				Position = new Vector2f(GameOptions.Width / 2.0f + (GameOptions.Width / 8.0f), 250.0f + 128.0f + 16.0f),
-				Value = Server.SecondsPerTurn
-			};
-
-			Entities.Add(numberSecondsPerTurn);
-
-			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 288.0f), "Back",
-				() =>
-				{
-					Server.PointCap = numberboxPointCap.Value;
-					Server.SecondsPerTurn = numberSecondsPerTurn.Value;
-
-					return MenuHost();
 				});
 
 			return true;

@@ -2,50 +2,63 @@
 using SFML.Graphics;
 using SFML.Window;
 
-namespace ManateesAgainstCards.Entities
+namespace ManateesAgainstCards.Entities.Ui
 {
-	class SelectButton : Entity
+	class Button : Entity
 	{
-		private const float ButtonWidth = 128.0f;
-		private const float ButtonHeight = 30.0f;
+		private const float ButtonWidth = 222.0f;
+		private const float ButtonHeight = 52.0f;
 
-		public delegate void OnClickHandler();
+		public delegate bool OnClickHandler();
 		public event OnClickHandler OnClick;
 
 		private readonly string value;
 		private bool mouseIn;
+		public bool Visible;
 
-		public SelectButton(Vector2f position, string value)
+		private readonly State myState;
+
+		private bool Clickable
+		{
+			get
+			{
+				return myState.Equals(Game.PeekState()) && Visible;
+			}
+		}
+
+		public Button(Vector2f position, string value)
 		{
 			Size = new Vector2f(ButtonWidth, ButtonHeight);
 			Position = position - Size / 2.0f;
+			Visible = true;
 			this.value = value;
 
 			mouseIn = false;
+
+			myState = Game.PeekState();
 
 			Input.MouseMove = args =>
 			{
 				if (!BoundingBox.Contains(args.Position.X, args.Position.Y))
 				{
-					if (mouseIn)
-						mouseIn = false;
+					mouseIn = false;
 
 					return false;
 				}
 
 				mouseIn = true;
-				return true;
+				return false;
 			};
 
 			Input.MouseButton[Mouse.Button.Left] = args =>
 			{
-				if (!mouseIn || !args.Pressed)
+				if (!mouseIn || !args.Pressed || !Clickable)
 					return false;
 
 				if (OnClick != null)
 				{
-					Assets.PlaySound("Click.wav");
-					OnClick();
+					if (OnClick())
+						Assets.PlaySound("Click.wav");
 				}
 
 				return true;
@@ -58,6 +71,9 @@ namespace ManateesAgainstCards.Entities
 
 		public override void Draw(RenderTarget rt)
 		{
+			if (!Visible)
+				return;
+
 			RectangleShape button = new RectangleShape(new Vector2f(ButtonWidth, ButtonHeight))
 			{
 				Position = Position,
@@ -83,12 +99,12 @@ namespace ManateesAgainstCards.Entities
 			Text text = new Text(value, Assets.LoadFont(Program.DefaultFont))
 			{
 				Position = Position + Size / 2.0f,
-				CharacterSize = 18
+				CharacterSize = 24,
+				Style = Text.Styles.Bold
 			};
 
 			text.Center();
 			text.Round();
-
 			rt.Draw(text);
 
 			base.Draw(rt);

@@ -4,9 +4,9 @@ using Californium;
 using SFML.Graphics;
 using SFML.Window;
 
-namespace ManateesAgainstCards.Entities
+namespace ManateesAgainstCards.Entities.Ui
 {
-	class MenuNumberbox : Entity
+	class Numberbox : Entity
 	{
 		public int MaxValue { get; private set; }
 		public int Value
@@ -30,13 +30,21 @@ namespace ManateesAgainstCards.Entities
 			}
 		}
 
+		public float FullWidth
+		{
+			get
+			{
+				return Size.X + new Text(label, Assets.LoadFont(Program.DefaultFont)).GetLocalBounds().Width + 16.0f;
+			}
+		}
+
 		public bool Selected;
 
 		private readonly string label;
 		private string stringValue;
 		private bool mouseIn;
 
-		public MenuNumberbox(string label, int maxValue)
+		public Numberbox(string label, int maxValue)
 		{
 			this.label = label;
 			MaxValue = maxValue;
@@ -65,7 +73,7 @@ namespace ManateesAgainstCards.Entities
 				if (!mouseIn || !args.Pressed)
 					return false;
 
-				foreach (var numberbox in Parent.Entities.OfType<MenuNumberbox>())
+				foreach (var numberbox in Parent.Entities.OfType<Numberbox>())
 					numberbox.Selected = false;
 
 				Selected = !Selected;

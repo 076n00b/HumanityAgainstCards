@@ -25,7 +25,7 @@ namespace ManateesAgainstCards
 			Console.WriteLine("Loading cards...");
 
 			// Load cards
-			CardLoader.LoadCards();
+			CardLoader.LoadDecks();
 
 			// Prepare network loop
 			Timer.EveryFrame(() =>

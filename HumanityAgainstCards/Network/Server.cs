@@ -31,8 +31,8 @@ namespace ManateesAgainstCards.Network
 		public static ushort CurrentCardCzar;
 		private static int currentCarzIndex;
 
-		private static readonly Deck whiteDeck;
-		private static readonly Deck blackDeck;
+		private static Deck whiteDeck;
+		private static Deck blackDeck;
 
 		private static readonly Stopwatch timer;
 		private static int secondsLeft;
@@ -367,6 +367,13 @@ namespace ManateesAgainstCards.Network
 			secondsLeft = SecondsPerTurn + (cooldown ? 4 : 0);
 			timer.Restart();
 			SendMessageToAll(new ServerTime(SecondsPerTurn));
+		}
+
+		public static void LoadCards()
+		{
+			CardLoader.LoadCards();
+			whiteDeck = new Deck(CardType.White);
+			blackDeck = new Deck(CardType.Black);
 		}
 	}
 }

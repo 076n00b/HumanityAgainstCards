@@ -141,8 +141,8 @@ namespace Californium
 
         public static void PushState(State state)
         {
+			states.Add(state);
             state.Enter();
-            states.Add(state);
         }
 
         public static void PopState()

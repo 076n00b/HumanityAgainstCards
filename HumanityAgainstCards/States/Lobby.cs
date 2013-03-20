@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Californium;
 using ManateesAgainstCards.Entities;
+using ManateesAgainstCards.Entities.Ui;
 using ManateesAgainstCards.Network;
 using ManateesAgainstCards.Network.Packets;
 using SFML.Graphics;
@@ -16,6 +17,8 @@ namespace ManateesAgainstCards.States
 
 		public List<string> ChatBacklog;
 		private string chatValue;
+		private readonly string sessionIp;
+		private readonly SessionRole sessionRole;
 
 		public List<Player> Players
 		{
@@ -42,12 +45,19 @@ namespace ManateesAgainstCards.States
 			chatValue = "";
 
 			Client.Name = username;
+			sessionRole = role;
+			sessionIp = ip;
+		}
 
+		public override void Enter()
+		{
 			// Add local player
-			Entities.Add(new Player(username, true));
+			Entities.Add(new Player(Client.Name, true));
 
 			// Initialize session
-			InitializeSession(role, ip);
+			InitializeSession(sessionRole, sessionIp);
+
+			base.Enter();
 		}
 
 		public override void Update()
@@ -204,7 +214,7 @@ namespace ManateesAgainstCards.States
 						}
 
 						// Add start button
-						MenuButton startButton = new MenuButton(new Vector2f(GameOptions.Width - 222.0f / 2.0f - 8.0f - 64.0f + 8.0f, 52.0f / 2.0f + 8.0f + 32.0f + 8.0f), "Begin Game");
+						Button startButton = new Button(new Vector2f(GameOptions.Width - 222.0f / 2.0f - 8.0f - 64.0f + 8.0f, 52.0f / 2.0f + 8.0f + 32.0f + 8.0f), "Begin Game");
 						startButton.OnClick += () =>
 						{
 							// Do not start unless we have enough players

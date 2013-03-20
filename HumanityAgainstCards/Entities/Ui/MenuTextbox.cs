@@ -7,7 +7,7 @@ using SFML.Graphics;
 using SFML.Window;
 using Timer = Californium.Timer;
 
-namespace ManateesAgainstCards.Entities
+namespace ManateesAgainstCards.Entities.Ui
 {
 	class MenuTextbox : Entity
 	{
