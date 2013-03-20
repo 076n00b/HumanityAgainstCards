@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Californium;
-using ManateesAgainstCards.Entities;
 using ManateesAgainstCards.Entities.Ui;
 using ManateesAgainstCards.Network;
 using SFML.Graphics;
@@ -33,7 +32,7 @@ namespace ManateesAgainstCards.States
 
 			Entities.Add(numberboxPointCap);
 
-			numberboxPointCap.Position.X -= numberboxPointCap.FullWidth;
+			numberboxPointCap.Position.X -= numberboxPointCap.Width;
 
 			Entities.Add(numberSecondsPerTurn);
 

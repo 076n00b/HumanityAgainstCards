@@ -32,11 +32,8 @@ namespace ManateesAgainstCards
 
 		public static void LoadCards()
 		{
-			foreach (CardDeck deck in Decks)
+			foreach (CardDeck deck in Decks.Where(deck => deck.Include))
 			{
-				if (!deck.Include)
-					continue;
-
 				foreach (string value in deck.BlackCards)
 					Cards.Add(new CardInfo(CardType.Black, value));
 
@@ -44,23 +41,6 @@ namespace ManateesAgainstCards
 					Cards.Add(new CardInfo(CardType.White, value));
 			}
 		}
-
-		/*public static void LoadCards(List<CardDeck> decks)
-		{
-			foreach (CardDeck deck in decks)
-			{
-				foreach(string value in deck.BlackCards)
-					Cards.Add(new CardInfo(CardType.Black, value));
-
-				foreach(string value in deck.WhiteCards)
-					Cards.Add(new CardInfo(CardType.White, value));
-			}
-		}
-
-		public static void LoadAllCards()
-		{
-			LoadCards(Decks);
-		}*/
 
 		internal class CardDeck
 		{

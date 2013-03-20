@@ -372,6 +372,7 @@ namespace ManateesAgainstCards.Network
 		public static void LoadCards()
 		{
 			CardLoader.LoadCards();
+
 			whiteDeck = new Deck(CardType.White);
 			blackDeck = new Deck(CardType.Black);
 		}

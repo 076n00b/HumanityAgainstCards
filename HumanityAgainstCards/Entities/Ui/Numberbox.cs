@@ -30,7 +30,7 @@ namespace ManateesAgainstCards.Entities.Ui
 			}
 		}
 
-		public float FullWidth
+		public float Width
 		{
 			get
 			{

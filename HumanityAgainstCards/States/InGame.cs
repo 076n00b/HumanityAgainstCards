@@ -175,14 +175,6 @@ namespace ManateesAgainstCards.States
 				rt.Draw(itemText);
 			}
 
-			//RectangleShape chatMessageBacking = new RectangleShape(new Vector2f(GameOptions.Width - 256.0f - 16.0f, 12.0f + 5.0f))
-			//{
-			//    FillColor = new Color(0, 0, 0, 128),
-			//    Position = new Vector2f(8.0f, 8.0f)
-			//};
-
-			//rt.Draw(chatMessageBacking);
-
 			Text chatMessageText = new Text(chatValue + "|", Assets.LoadFont(Program.DefaultFont))
 			{
 				Position = new Vector2f(8.0f + 6.0f, GameOptions.Height - 220.0f - 24.0f),
@@ -230,7 +222,7 @@ namespace ManateesAgainstCards.States
 					ChatMessage message = new ChatMessage(Client.Name + ": " + chatValue);
 					Client.SendMessage(message);
 
-					ChatBacklog.Add(LocalPlayer.Name + ": " + chatValue);
+					ChatBacklog.Add(Client.Name + ": " + chatValue);
 					chatValue = "";
 				}
 

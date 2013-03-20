@@ -191,6 +191,9 @@ namespace ManateesAgainstCards.States
 			{
 				case SessionRole.Server:
 					{
+						// Load cards if we're the server
+						Server.LoadCards();
+
 						// Initialize server
 						try
 						{

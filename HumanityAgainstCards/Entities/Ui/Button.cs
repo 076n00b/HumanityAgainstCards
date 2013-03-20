@@ -57,8 +57,8 @@ namespace ManateesAgainstCards.Entities.Ui
 
 				if (OnClick != null)
 				{
-					if (OnClick())
-						Assets.PlaySound("Click.wav");
+					OnClick();
+					Assets.PlaySound("Click.wav");
 				}
 
 				return true;

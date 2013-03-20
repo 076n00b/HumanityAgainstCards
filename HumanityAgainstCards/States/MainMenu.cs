@@ -142,11 +142,8 @@ namespace ManateesAgainstCards.States
 
 			nameTextbox.OnReturn += value =>
 			{
-				if (nameTextbox.Value != "")
-				{
-					Server.LoadCards();
+				if (!String.IsNullOrEmpty(nameTextbox.Value))
 					Game.SetState(new Lobby(SessionRole.Server, "", nameTextbox.Value));
-				}
 			};
 
 			Entities.Add(nameTextbox);
@@ -163,11 +160,8 @@ namespace ManateesAgainstCards.States
 			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 128.0f + 12.0f + 64.0f), "Next",
 				() =>
 				{
-					if (nameTextbox.Value != "")
-					{
-						Server.LoadCards();
+					if (!String.IsNullOrEmpty(nameTextbox.Value))
 						Game.SetState(new Lobby(SessionRole.Server, "", nameTextbox.Value));
-					}
 
 					return true;
 				}
@@ -208,7 +202,7 @@ namespace ManateesAgainstCards.States
 
 			nameTextbox.OnReturn += a =>
 			{
-				if (nameTextbox.Value != "" && ipTextbox.Value != "")
+				if (!String.IsNullOrEmpty(nameTextbox.Value) && !String.IsNullOrEmpty(ipTextbox.Value))
 					Game.SetState(new Lobby(SessionRole.Client, ipTextbox.Value, nameTextbox.Value));
 			};
 
@@ -218,7 +212,7 @@ namespace ManateesAgainstCards.States
 			AddButton(new Vector2f(GameOptions.Width / 2.0f, 250.0f + 128.0f + 84.0f + 16.0f + 96.0f), "Next",
 				() =>
 				{
-					if (nameTextbox.Value != "" && ipTextbox.Value != "")
+					if (!String.IsNullOrEmpty(nameTextbox.Value) && !String.IsNullOrEmpty(ipTextbox.Value))
 						Game.SetState(new Lobby(SessionRole.Client, ipTextbox.Value, nameTextbox.Value));
 
 					return true;
