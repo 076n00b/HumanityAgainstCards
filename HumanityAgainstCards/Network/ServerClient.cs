@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Lidgren.Network;
 using ManateesAgainstCards.Network.Packets;
 
@@ -55,11 +56,12 @@ namespace ManateesAgainstCards.Network
 					Server.SendMessageToAll(new BeginGame());
 					Server.State = Server.States.InGame;
 					Server.StartMatch(false);
+
+					Server.Greet();
 					break;
 
 				case PacketType.ServerJoin:
 					{
-						Console.WriteLine("ServerJoin recvd");
 						ServerJoin serverJoin = (ServerJoin)msg;
 
 						// Check version

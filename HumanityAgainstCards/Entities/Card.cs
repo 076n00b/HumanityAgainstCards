@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Californium;
 using System.Linq;
 using ManateesAgainstCards.Network;
@@ -41,7 +42,7 @@ namespace ManateesAgainstCards.Entities
 
 		public override void Draw(RenderTarget rt)
 		{
-			Vector2f actualPosition = Position + ((Selected) ? new Vector2f(0, -12.0f) : new Vector2f(0.0f, 0.0f));
+			Vector2f actualPosition = Position + ((Selected) ? new Vector2f(0, -12.0f - 5.0f * GetSelectedIndex()) : new Vector2f(0.0f, 0.0f));
 
 			// Draw card
 			Sprite sprite = new Sprite(Assets.LoadTexture(Info.Type == CardType.White ? "CardWhite.png" : "CardBlack.png"));
@@ -103,6 +104,19 @@ namespace ManateesAgainstCards.Entities
 				Assets.PlaySound("Bubble.wav");
 
 			return true;
+		}
+
+		private int GetSelectedIndex()
+		{
+			List<Card> cards = Parent.Entities.OfType<Card>().Where(c => c.Selected).OrderByDescending(c => c.Index).ToList();
+
+			for (int i = 0; i < cards.Count; ++i)
+			{
+				if (cards[i].Equals(this))
+					return i;
+			}
+
+			return 0;
 		}
 	}
 }

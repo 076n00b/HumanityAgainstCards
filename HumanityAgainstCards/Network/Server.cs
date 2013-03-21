@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using System.Text;
 using Lidgren.Network;
 using ManateesAgainstCards.Network.Packets;
 
@@ -9,6 +10,8 @@ namespace ManateesAgainstCards.Network
 {
 	static class Server
 	{
+		public const int MaxPlayers = 6;
+
 		public static int PointCap = 20;
 		public static int SecondsPerTurn = 45;
 
@@ -37,6 +40,21 @@ namespace ManateesAgainstCards.Network
 		private static readonly Stopwatch timer;
 		private static int secondsLeft;
 		private static bool inMatch;
+
+		private static readonly List<string> greetings = new List<string>
+		{
+			"{0} is a special fucking snowflake, I hope they win.",
+			"Fuck you, {0}. I hope you lose.",
+			"Y'all qtp2ts have fun now.",
+			"glhf bros.",
+			"Oh god, you all make me sick.",
+			"I hope guys all die in a fire.",
+			"Good luck, and if all fails you can get your friends to vote for your cards!",
+			"I was told to wish you good luck, so... go fuck yourselves.",
+			"Have fun, because you won't be this funny in real life.",
+			"Remember! It's ok to cheat if no one else finds out.",
+			"Austin's voice is 3 sexy 5 me."
+		};
 
 		static Server()
 		{
@@ -114,7 +132,7 @@ namespace ManateesAgainstCards.Network
 											break;
 										}
 
-										if (Clients.Count == 6)
+										if (Clients.Count == MaxPlayers)
 										{
 											msg.SenderConnection.Disconnect("Too crowded, fuck off.");
 											break;
@@ -226,7 +244,7 @@ namespace ManateesAgainstCards.Network
 			}
 
 			// Check if someone got to the point cap
-			if (Clients.Any(c => c.Points >= PointCap))
+			if (Clients.Any(c => c.Points >= PointCap) && PointCap != 0)
 			{
 				SendMessageToAll(new GameOver());
 				return;
@@ -284,7 +302,7 @@ namespace ManateesAgainstCards.Network
 					Console.WriteLine("No more white cards!");
 
 					bool noCards = true;
-					foreach(ServerClient sc in Clients)
+					foreach (ServerClient sc in Clients)
 					{
 						if (sc.CardCount != 0)
 							noCards = false;
@@ -359,7 +377,7 @@ namespace ManateesAgainstCards.Network
 			// Clear selected cards
 			foreach (ServerClient sc in Clients)
 				sc.SelectedCards.Clear();
-	
+
 			// We are now in a match
 			inMatch = true;
 
@@ -367,6 +385,29 @@ namespace ManateesAgainstCards.Network
 			secondsLeft = SecondsPerTurn + (cooldown ? 4 : 0);
 			timer.Restart();
 			SendMessageToAll(new ServerTime(SecondsPerTurn));
+		}
+
+		public static void Greet()
+		{
+			SendMessageToAll(PointCap != 0
+								 ? new ChatMessage(String.Format("First to {0} points wins!", PointCap))
+								 : new ChatMessage(String.Format("Highest score at the end of {0} rounds wins!",
+																 blackDeck.Cards.Count)));
+
+			StringBuilder builder = new StringBuilder();
+			builder.Append("Decks: ");
+			foreach (CardLoader.CardDeck deck in CardLoader.Decks.Where(d => d.Include))
+			{
+				builder.Append(deck.Name);
+				builder.Append(" ");
+			}
+
+			SendMessageToAll(new ChatMessage(builder.ToString()));
+
+			int i = random.Next(greetings.Count);
+			SendMessageToAll(i < 2
+								 ? new ChatMessage(String.Format(greetings[i], Clients[random.Next(Clients.Count)].Name))
+								 : new ChatMessage(greetings[i]));
 		}
 
 		public static void LoadCards()

@@ -8,19 +8,24 @@
 	[ ] Allow late joins
 	[ ] Game Modes
 	[X] Max turn time
+	[ ] Port
 [ ] Global server list
 	[ ] Password protected servers
 [X] Control + V to paste
 [X] Fix unicode
 [X] Keep "Brain Tumor" sound from playing every round
 [X] Apply clickable fix to every UI element
-[ ] Show card order
+[X] Show card order
 [ ] Fix wrapping
-[ ] Voice chat
-[ ] Moonbase Alpha TTS
 [ ] Popup error dialogs
 	[ ] For missing name
 	[ ] Missing IP
 	[ ] No decks selected
 	[ ] Lost connection to server?
 [ ] Fix that god damn uneven vert centering on text
+[ ] AoE style taunts
+[ ] Refactor packets
+[ ] Settings
+	[ ] Resolution
+	[ ] Sound Volume
+[ ] Fix fill ins for certian cards (Caps mixing, superfluous punctuation)
