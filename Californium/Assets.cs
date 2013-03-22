@@ -53,11 +53,19 @@ namespace Californium
         private static readonly List<Sound> Sounds = new List<Sound>();
         public static void PlaySound(string name)
         {
-            var s = new Sound(LoadSound(name))
-                    { Volume = GameOptions.SoundVolume };
-            
-            s.Play();
-            Sounds.Add(s);
+	        Sound s;
+
+			try
+			{
+				s = new Sound(LoadSound(name)) { Volume = GameOptions.SoundVolume };
+				s.Play();
+			}
+			catch
+			{
+				return;
+			}
+
+	        Sounds.Add(s);
 
             Sounds.RemoveAll(snd => snd.Status != SoundStatus.Playing);
         }

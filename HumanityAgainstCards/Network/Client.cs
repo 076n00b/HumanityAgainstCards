@@ -285,6 +285,8 @@ namespace ManateesAgainstCards.Network
 						else
 							((InGame)Game.PeekState()).ChatBacklog.Add(chatMessage.Value);
 
+						GameUtility.PlayTaunt(chatMessage.Value);
+
 						Assets.PlaySound("Bubble.wav");
 						break;
 					}

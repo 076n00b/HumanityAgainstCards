@@ -9,7 +9,7 @@ using Timer = Californium.Timer;
 
 namespace ManateesAgainstCards.Entities.Ui
 {
-	class MenuTextbox : Entity
+	class Textbox : Entity
 	{
 		public delegate void OnReturnHandler(string value);
 		public event OnReturnHandler OnReturn;
@@ -20,7 +20,7 @@ namespace ManateesAgainstCards.Entities.Ui
 		private readonly string label;
 		private bool mouseIn, cursorVisible;
 
-		public MenuTextbox(string label)
+		public Textbox(string label)
 		{
 			OnReturn = null;
 			Selected = false;
@@ -58,7 +58,7 @@ namespace ManateesAgainstCards.Entities.Ui
 				if (!mouseIn || !args.Pressed)
 					return false;
 
-				foreach (var textbox in Parent.Entities.OfType<MenuTextbox>())
+				foreach (var textbox in Parent.Entities.OfType<Textbox>())
 					textbox.Selected = false;
 
 				Selected = !Selected;
@@ -80,7 +80,7 @@ namespace ManateesAgainstCards.Entities.Ui
 
 				if (args.Text == "\t")
 				{
-					foreach (var textbox in Parent.Entities.OfType<MenuTextbox>())
+					foreach (var textbox in Parent.Entities.OfType<Textbox>())
 						textbox.Selected = !textbox.Selected;
 
 					return true;

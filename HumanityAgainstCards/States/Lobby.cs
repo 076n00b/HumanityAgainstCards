@@ -171,6 +171,7 @@ namespace ManateesAgainstCards.States
 					Client.SendMessage(message);
 
 					ChatBacklog.Add(LocalPlayer.Name + ": " + chatValue);
+					GameUtility.PlayTaunt(chatValue);
 					chatValue = "";
 
 					Assets.PlaySound("Bubble.wav");

@@ -46,16 +46,17 @@ namespace ManateesAgainstCards.States
 			// Draw header
 			rt.Draw(new RectangleShape(new Vector2f(GameOptions.Width, 350.0f)) { FillColor = Color.Black });
 
+			// GameOptions.Width / 6.0f
 			Sprite logoSprite = new Sprite(Assets.LoadTexture("Logo.png"))
 			{
-				Position = new Vector2f(GameOptions.Width / 6.0f, (350.0f - 256.0f) / 2.0f)
+				Position = new Vector2f(128.0f, (350.0f - 256.0f) / 2.0f)
 			};
 
 			rt.Draw(logoSprite);
 
 			Text sloganText = new Text("A free party game for\n" + personValue, Assets.LoadFont(Program.DefaultFont))
 			{
-				Position = new Vector2f(GameOptions.Width / 6.0f, (350 - 256) / 2.0f + 189.0f),
+				Position = new Vector2f(128.0f, (350 - 256) / 2.0f + 189.0f),
 				Color = Color.White,
 				CharacterSize = 26,
 				Style = Text.Styles.Bold
@@ -131,7 +132,7 @@ namespace ManateesAgainstCards.States
 		{
 			Entities.Clear();
 
-			MenuTextbox nameTextbox = new MenuTextbox("Display Name")
+			Textbox nameTextbox = new Textbox("Display Name")
 			{
 				Position =
 					new Vector2f(GameOptions.Width / 2.0f - GameOptions.Width / 3.0f,
@@ -144,6 +145,8 @@ namespace ManateesAgainstCards.States
 			{
 				if (!String.IsNullOrEmpty(nameTextbox.Value))
 					Game.SetState(new Lobby(SessionRole.Server, "", nameTextbox.Value));
+				else
+					Game.PushState(new PopupOverlay("You must enter a name before hosting a game."));
 			};
 
 			Entities.Add(nameTextbox);
@@ -162,6 +165,8 @@ namespace ManateesAgainstCards.States
 				{
 					if (!String.IsNullOrEmpty(nameTextbox.Value))
 						Game.SetState(new Lobby(SessionRole.Server, "", nameTextbox.Value));
+					else
+						Game.PushState(new PopupOverlay("You must enter a name before hosting a game."));
 
 					return true;
 				}
@@ -182,7 +187,7 @@ namespace ManateesAgainstCards.States
 			Entities.Clear();
 
 			// IP Address textbox
-			MenuTextbox ipTextbox = new MenuTextbox("IP Address")
+			Textbox ipTextbox = new Textbox("IP Address")
 			{
 				Position =
 					new Vector2f(GameOptions.Width / 2.0f - GameOptions.Width / 3.0f, 250.0f + 128.0f + 16.0f),
@@ -192,7 +197,7 @@ namespace ManateesAgainstCards.States
 			Entities.Add(ipTextbox);
 
 			// Display Name textbox
-			MenuTextbox nameTextbox = new MenuTextbox("Display Name")
+			Textbox nameTextbox = new Textbox("Display Name")
 			{
 				Position =
 					new Vector2f(GameOptions.Width / 2.0f - GameOptions.Width / 3.0f,
@@ -204,6 +209,17 @@ namespace ManateesAgainstCards.States
 			{
 				if (!String.IsNullOrEmpty(nameTextbox.Value) && !String.IsNullOrEmpty(ipTextbox.Value))
 					Game.SetState(new Lobby(SessionRole.Client, ipTextbox.Value, nameTextbox.Value));
+				else
+				{
+					if (String.IsNullOrEmpty(nameTextbox.Value))
+					{
+						Game.PushState(new PopupOverlay("You must enter a name before joining a game."));
+						return;
+					}
+
+					if (String.IsNullOrEmpty(ipTextbox.Value))
+						Game.PushState(new PopupOverlay("You must enter an IP to join a game."));
+				}
 			};
 
 			Entities.Add(nameTextbox);
@@ -214,6 +230,17 @@ namespace ManateesAgainstCards.States
 				{
 					if (!String.IsNullOrEmpty(nameTextbox.Value) && !String.IsNullOrEmpty(ipTextbox.Value))
 						Game.SetState(new Lobby(SessionRole.Client, ipTextbox.Value, nameTextbox.Value));
+					else
+					{
+						if (String.IsNullOrEmpty(nameTextbox.Value))
+						{
+							Game.PushState(new PopupOverlay("You must enter a name before joining a game."));
+							return true;
+						}
+
+						if (String.IsNullOrEmpty(ipTextbox.Value))
+							Game.PushState(new PopupOverlay("You must enter an IP to join a game."));
+					}
 
 					return true;
 				}

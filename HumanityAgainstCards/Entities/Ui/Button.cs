@@ -103,7 +103,9 @@ namespace ManateesAgainstCards.Entities.Ui
 				Style = Text.Styles.Bold
 			};
 
-			text.Center();
+			FloatRect bounds = text.GetGlobalBounds();
+			text.Position -= new Vector2f(bounds.Width / 2.0f, bounds.Height / 2.0f + 4.0f);
+
 			text.Round();
 			rt.Draw(text);
 

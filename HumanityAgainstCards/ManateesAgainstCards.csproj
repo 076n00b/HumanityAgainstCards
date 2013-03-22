@@ -86,7 +86,7 @@
     <Compile Include="Entities\Ui\ScrollableArea.cs" />
     <Compile Include="Entities\Ui\SelectButton.cs" />
     <Compile Include="Entities\Ui\Button.cs" />
-    <Compile Include="Entities\Ui\MenuTextbox.cs" />
+    <Compile Include="Entities\Ui\Textbox.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="GameUtility.cs" />
     <Compile Include="Json.cs" />
@@ -117,6 +117,7 @@
     <Compile Include="States\InGame.cs" />
     <Compile Include="States\Lobby.cs" />
     <Compile Include="States\MainMenu.cs" />
+    <Compile Include="States\PopupOverlay.cs" />
     <Compile Include="States\SelectionScreen.cs" />
     <Compile Include="States\WinnerScreen.cs" />
   </ItemGroup>
@@ -178,6 +179,21 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Sound\Start4.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sound\Taunt\01 Yeah That%27s Ok.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sound\Taunt\02 Zach.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sound\Taunt\03 Nicks Mom.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sound\Taunt\04 Alert.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sound\Taunt\05 Get your bitch ass out of here.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Texture\Avatar.png">

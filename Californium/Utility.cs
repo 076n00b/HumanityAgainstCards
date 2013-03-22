@@ -61,13 +61,13 @@ namespace Californium
 			if (horizontal)
 			{
 				x = bounds.Left / text.Scale.X;
-				x += (bounds.Width / text.Scale.X) / 2;
+				x += (bounds.Width / text.Scale.X) / 2.0f;
 			}
 
 			if (vertical)
 			{
 				y = bounds.Top / text.Scale.Y;
-				y += (bounds.Height / text.Scale.Y) / 2;
+				y += (bounds.Height / text.Scale.Y) / 2.0f;
 			}
 
 			text.Origin = new Vector2f(x, y);

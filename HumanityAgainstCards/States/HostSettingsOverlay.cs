@@ -55,7 +55,10 @@ namespace ManateesAgainstCards.States
 			applyButton.OnClick += () =>
 			{
 				if (decks.Count(d => d.Value) == 0)
+				{
+					Game.PushState(new PopupOverlay("You must select at least one deck in order to host a game."));
 					return true;
+				}
 
 				Server.PointCap = numberboxPointCap.Value;
 				Server.SecondsPerTurn = numberSecondsPerTurn.Value;
@@ -81,7 +84,7 @@ namespace ManateesAgainstCards.States
 
 			rt.Draw(overylay);
 
-			RectangleShape window = new RectangleShape(new Vector2f(GameOptions.Width * (1.0f - PaddingVertical * 2.0f), GameOptions.Height * (1.0f - PaddingHorizontal * 2.0f)))
+			RectangleShape window = new RectangleShape(new Vector2f(GameOptions.Width * (1.0f - PaddingHorizontal * 2.0f), GameOptions.Height * (1.0f - PaddingVertical * 2.0f)))
 			{
 				Position = new Vector2f(GameOptions.Width * PaddingHorizontal, GameOptions.Height * PaddingVertical),
 				FillColor = Color.White,

@@ -223,6 +223,7 @@ namespace ManateesAgainstCards.States
 					Client.SendMessage(message);
 
 					ChatBacklog.Add(Client.Name + ": " + chatValue);
+					GameUtility.PlayTaunt(chatValue);
 					chatValue = "";
 				}
 

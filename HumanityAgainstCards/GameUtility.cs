@@ -1,13 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using Californium;
 using SFML.Graphics;
 
 namespace ManateesAgainstCards
 {
 	static class GameUtility
 	{
+		public static void PlayTaunt(string value)
+		{
+			string[] values = value.Split(new[] { ' ' });
+
+			foreach (string v in values)
+			{
+				Int32 number;
+
+				if (Int32.TryParse(v, out number) == false)
+					continue;
+
+				string[] files = Directory.GetFiles(GameOptions.SoundLocation + "Taunt");
+				foreach (string file in files.Select(Path.GetFileName))
+				{
+					Int32 fileNumber;
+					if (!Int32.TryParse(file.Remove(2, file.Length - 2), out fileNumber))
+						continue;
+
+					if (number != fileNumber)
+						continue;
+
+					Assets.PlaySound("Taunt\\" + file);
+					return;
+				}
+			}
+		}
+
 		public static void Shuffle<T>(List<T> set)
 		{
 			Random rng = new Random();
@@ -36,7 +65,7 @@ namespace ManateesAgainstCards
 
 		public static Text Wrap(string value, Font font, uint characterSize, double width)
 		{
-			string[] originalLines = value.Split(new[] { " " }, StringSplitOptions.None);
+			string[] originalLines = value.Split(new[] { ' ' }, StringSplitOptions.None);
 			List<string> wrappedLines = new List<string>();
 
 			StringBuilder actualLine = new StringBuilder();
@@ -49,7 +78,7 @@ namespace ManateesAgainstCards
 				item += " ";
 
 				Text formatted = new Text(item, font) { CharacterSize = characterSize };
-				double tmpWidth = formatted.GetLocalBounds().Width;
+				double tmpWidth = formatted.GetGlobalBounds().Width;
 
 				if (actualWidth + tmpWidth >= width)
 				{
@@ -68,7 +97,7 @@ namespace ManateesAgainstCards
 			if (actualLine.Length > 0)
 				wrappedLines.Add(actualLine.ToString());
 
-			if (wrappedLines.First() == "")
+			if (String.IsNullOrEmpty(wrappedLines.First()))
 				wrappedLines.RemoveAt(0);
 
 			return new Text(wrappedLines.Aggregate("", (current, line) => current + (line + "\n")), font)

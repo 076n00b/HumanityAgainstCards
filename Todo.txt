@@ -8,7 +8,6 @@
 	[ ] Allow late joins
 	[ ] Game Modes
 	[X] Max turn time
-	[ ] Port
 [ ] Global server list
 	[ ] Password protected servers
 [X] Control + V to paste
@@ -16,15 +15,15 @@
 [X] Keep "Brain Tumor" sound from playing every round
 [X] Apply clickable fix to every UI element
 [X] Show card order
-[ ] Fix wrapping
-[ ] Popup error dialogs
-	[ ] For missing name
-	[ ] Missing IP
-	[ ] No decks selected
-	[ ] Lost connection to server?
-[ ] Fix that god damn uneven vert centering on text
-[ ] AoE style taunts
-[ ] Refactor packets
+[X] Fix wrapping
+[X] Popup error dialogs
+	[X] For missing name
+	[X] Missing IP
+	[X] No decks selected
+	[-] Lost connection to server?
+[X] Fix that god damn uneven vert centering on text
+[X] AoE style taunts
+[ ] Refactor packets & MainMenu
 [ ] Settings
 	[ ] Resolution
 	[ ] Sound Volume
