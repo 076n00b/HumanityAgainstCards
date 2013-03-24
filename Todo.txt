@@ -28,3 +28,5 @@
 	[ ] Resolution
 	[ ] Sound Volume
 [ ] Fix fill ins for certian cards (Caps mixing, superfluous punctuation)
+[X] Bump minimum player count to 3
+[ ] Test game with laggy connections

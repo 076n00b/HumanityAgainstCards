@@ -222,9 +222,9 @@ namespace ManateesAgainstCards.States
 						startButton.OnClick += () =>
 						{
 							// Do not start unless we have enough players
-							if (Players.Count < Constants.LeastAmountOfPlayersAllowed)
+							if (Players.Count < Constants.MinimalPlayerCount)
 							{
-								ChatBacklog.Add(String.Format("Cannot begin game with less than {0} people!", Constants.LeastAmountOfPlayersAllowed));
+								ChatBacklog.Add(String.Format("Cannot begin game with less than {0} people!", Constants.MinimalPlayerCount));
 								return true;
 							}
 

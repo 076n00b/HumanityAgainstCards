@@ -222,14 +222,7 @@ namespace ManateesAgainstCards.Network
 							Game.PeekFirstState().Entities.Add(card);
 						}
 
-						bool haveBrainTumor = false;
-						foreach (Card c in Hand)
-						{
-							if (c.Info.Value.Contains("brain"))
-								haveBrainTumor = true;
-						}
-
-						if (haveBrainTumor && !gotBrainTumorOnce)
+						if (Hand.Any(c => c.Info.Value.Contains("brain")) && !gotBrainTumorOnce)
 						{
 							Assets.PlaySound("BrainTumorCardStart.wav");
 							gotBrainTumorOnce = true;

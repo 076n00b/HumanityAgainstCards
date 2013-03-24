@@ -120,6 +120,7 @@
     <Compile Include="States\PopupOverlay.cs" />
     <Compile Include="States\SelectionScreen.cs" />
     <Compile Include="States\WinnerScreen.cs" />
+    <Compile Include="States\WrapTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\Music\" />

@@ -29,13 +29,7 @@ namespace ManateesAgainstCards.Entities
 			Input.MouseButton[Mouse.Button.Left] = LeftMouseButton;
 			Input.MouseMove = args =>
 			{
-				if (!BoundingBox.Contains(args.Position.X, args.Position.Y))
-				{
-					mouseIn = false;
-					return false;
-				}
-
-				mouseIn = true;
+				mouseIn = BoundingBox.Contains(args.Position.X, args.Position.Y);
 				return false;
 			};
 		}
@@ -53,12 +47,21 @@ namespace ManateesAgainstCards.Entities
 
 			// Draw text
 			Text text = GameUtility.Wrap(Info.Value, Assets.LoadFont("arialbd.ttf"), (uint)Math.Floor(24.0f * Scale.X),
-									 Math.Floor(192.0f * Scale.X));
+									 Math.Floor(207.0f * Scale.X));
 
 			text.Color = Info.Type == CardType.White ? Color.Black : Color.White;
-			text.Position = actualPosition + new Vector2f(17.0f * Scale.X, 10.0f * Scale.Y);
+			text.Position = actualPosition + new Vector2f(16.0f * Scale.X, 10.0f * Scale.Y);
 			text.Round();
 			rt.Draw(text);
+
+			// Draw debug info
+			//RectangleShape line = new RectangleShape(new Vector2f((float)Math.Floor(207.0f * Scale.X), 2.0f))
+			//{
+			//    FillColor = Color.Magenta,
+			//    Position = Position + new Vector2f(16.0f * Scale.X, 10.0f * Scale.Y)
+			//};
+
+			//rt.Draw(line);
 
 			// Draw decorations
 			if (Info.PickCount > 1)

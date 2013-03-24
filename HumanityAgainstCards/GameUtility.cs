@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Californium;
 using SFML.Graphics;
 
@@ -44,9 +45,7 @@ namespace ManateesAgainstCards
 
 			while (n > 1)
 			{
-				--n;
-
-				int k = rng.Next(n + 1);
+				int k = rng.Next(--n + 1);
 				T value = set[k];
 				set[k] = set[n];
 				set[n] = value;
@@ -56,34 +55,39 @@ namespace ManateesAgainstCards
 		public static string ReplaceFirst(string text, string search, string replace)
 		{
 			int pos = text.IndexOf(search, StringComparison.InvariantCulture);
-			if (pos < 0)
-			{
-				return text;
-			}
-			return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
+			return pos < 0 ? text : text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
 		}
 
 		public static Text Wrap(string value, Font font, uint characterSize, double width)
 		{
-			string[] originalLines = value.Split(new[] { ' ' }, StringSplitOptions.None);
+			float spaceWidth = font.GetGlyph((uint)Char.ConvertToUtf32("_", 0), characterSize, false).Advance;
+
+			string[] originalLines = Regex.Split(value, "(?<=[ \n])");
 			List<string> wrappedLines = new List<string>();
 
 			StringBuilder actualLine = new StringBuilder();
-			double actualWidth = 0;
+			double actualWidth = 0.0;
 
 			foreach (var tmpItem in originalLines)
 			{
 				string item = tmpItem;
 				item = item.Replace("_", "______________");
-				item += " ";
 
 				Text formatted = new Text(item, font) { CharacterSize = characterSize };
-				double tmpWidth = formatted.GetGlobalBounds().Width;
+				double tmpWidth = formatted.GetGlobalBounds().Width + spaceWidth;
 
-				if (actualWidth + tmpWidth >= width)
+				if (actualWidth + tmpWidth < width && item.Contains("\n"))
+				{
+					actualLine.Append(item.Trim(new[] { '\n' }));
+					wrappedLines.Add(actualLine.ToString());
+					actualLine.Clear();
+					actualWidth = 0;
+				}
+				else if (actualWidth + tmpWidth >= width)
 				{
 					wrappedLines.Add(actualLine.ToString());
 					actualLine.Clear();
+
 					actualLine.Append(item);
 					actualWidth = tmpWidth;
 				}
