@@ -283,7 +283,7 @@ namespace ManateesAgainstCards.Network
 						if (Game.PeekState().GetType() == typeof(Lobby))
 							((Lobby)Game.PeekState()).ChatBacklog.Add(chatMessage.Value);
 						else
-							((InGame)Game.PeekState()).ChatBacklog.Add(chatMessage.Value);
+							((InGame)Game.PeekFirstState()).ChatBacklog.Add(chatMessage.Value);
 
 						GameUtility.PlayTaunt(chatMessage.Value);
 
