@@ -55,19 +55,7 @@ namespace ManateesAgainstCards.States
 				new Button(new Vector2f(GameOptions.Width / 2.0f, GameOptions.Height / 2.0f + GameOptions.Height / 3.0f + 16.0f), "Apply");
 			applyButton.OnClick += () =>
 			{
-				if (decks.Count(d => d.Value) == 0)
-				{
-					Game.PushState(new PopupOverlay("You must select at least one deck in order to host a game."));
-					return true;
-				}
-
-				Server.PointCap = numberboxPointCap.Value;
-				Server.SecondsPerTurn = numberSecondsPerTurn.Value;
-
-				foreach (Checkbox deck in decks)
-					CardLoader.Decks.First(d => d.Name == deck.Label).Include = deck.Value;
-
-				Game.PopState();
+				Apply(decks, numberboxPointCap, numberSecondsPerTurn);
 				return true;
 			};
 
@@ -131,6 +119,23 @@ namespace ManateesAgainstCards.States
 			rt.Draw(portLabel);
 
 			base.Draw(rt);
+		}
+
+		private void Apply(List<Checkbox> decks, Numberbox numberboxPointCap, Numberbox numberSecondsPerTurn)
+		{
+			if (decks.Count(d => d.Value) == 0)
+			{
+				Game.PushState(new PopupOverlay("You must select at least one deck in order to host a game."));
+				return;
+			}
+
+			Server.PointCap = numberboxPointCap.Value;
+			Server.SecondsPerTurn = numberSecondsPerTurn.Value;
+
+			foreach (Checkbox deck in decks)
+				CardLoader.Decks.First(d => d.Name == deck.Label).Include = deck.Value;
+
+			Game.PopState();
 		}
 	}
 }

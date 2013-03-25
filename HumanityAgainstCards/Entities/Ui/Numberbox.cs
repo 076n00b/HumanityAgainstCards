@@ -107,6 +107,14 @@ namespace ManateesAgainstCards.Entities.Ui
 					return true;
 				}
 
+				if (args.Text == "\t")
+				{
+					foreach (var textbox in Parent.Entities.OfType<Numberbox>())
+						textbox.Selected = !textbox.Selected;
+
+					return true;
+				}
+
 				if (Char.IsDigit(args.Text[0]))
 				{
 					stringValue += args.Text;
