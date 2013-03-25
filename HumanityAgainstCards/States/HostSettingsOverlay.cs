@@ -21,7 +21,8 @@ namespace ManateesAgainstCards.States
 			Numberbox numberSecondsPerTurn = new Numberbox("Seconds Per Turn", 180)
 			{
 				Position = new Vector2f(boundingX, boundingY),
-				Value = Server.SecondsPerTurn
+				Value = Server.SecondsPerTurn,
+				MinimumValue = 30
 			};
 
 			Numberbox numberboxPointCap = new Numberbox("Point Cap", 99)

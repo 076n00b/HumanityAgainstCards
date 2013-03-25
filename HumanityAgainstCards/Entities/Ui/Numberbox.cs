@@ -19,16 +19,20 @@ namespace ManateesAgainstCards.Entities.Ui
 				}
 				catch
 				{
-					return 0;
+					return MinimumValue;
 				}
 			}
 
 			set
 			{
-				if (value <= MaxValue)
+				if (value >= MinimumValue)
+					stringValue = value.ToString("G");
+				else if (value <= MaxValue)
 					stringValue = value.ToString("G");
 			}
 		}
+
+		public int MinimumValue;
 
 		public float Width
 		{
@@ -47,6 +51,7 @@ namespace ManateesAgainstCards.Entities.Ui
 		public Numberbox(string label, int maxValue)
 		{
 			this.label = label;
+			MinimumValue = 0;
 			MaxValue = maxValue;
 			stringValue = "";
 			Selected = false;
@@ -101,6 +106,9 @@ namespace ManateesAgainstCards.Entities.Ui
 
 					if (Value > maxValue && stringValue.Length != 0)
 						stringValue = stringValue.Remove(stringValue.Length - 1);
+
+					if (Value < MinimumValue)
+						stringValue = MinimumValue.ToString("G");
 				}
 
 				return true;

@@ -31,4 +31,4 @@
 [X] Bump minimum player count to 3
 [X] Test game with laggy connections
 [X] Post game, return to main menu instead of force closing game
-[ ] Minimal value on numberboxes
+[X] Minimal value on numberboxes
