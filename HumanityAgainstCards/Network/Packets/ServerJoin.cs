@@ -36,9 +36,7 @@ namespace ManateesAgainstCards.Network.Packets
 		public override void Read(NetIncomingMessage msg)
 		{
 			Name = msg.ReadString();
-
-			if (msg.PositionInBytes < msg.LengthBytes)
-				Version = msg.ReadString();
+			Version = msg.ReadString();
 		}
 	}
 }

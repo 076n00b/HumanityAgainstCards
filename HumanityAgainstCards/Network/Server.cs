@@ -30,8 +30,8 @@ namespace ManateesAgainstCards.Network
 		}
 
 		public static States State;
-		public static bool CanDeal, WaitingForAllReady;
-		public static ushort CurrentCardCzar;
+		private static bool canDeal, waitingForAllReady;
+		private static ushort currentCardCzar;
 		private static int currentCarzIndex;
 
 		private static Deck whiteDeck;
@@ -61,12 +61,6 @@ namespace ManateesAgainstCards.Network
 			whiteDeck = new Deck(CardType.White);
 			blackDeck = new Deck(CardType.Black);
 
-			State = States.Lobby;
-			CanDeal = true;
-			WaitingForAllReady = false;
-			CurrentCardCzar = 0;
-			currentCarzIndex = 0;
-
 			timer = new Stopwatch();
 			random = new Random();
 			server = null;
@@ -90,7 +84,25 @@ namespace ManateesAgainstCards.Network
 			server = new NetServer(config);
 			server.Start();
 
+			State = States.Lobby;
+			canDeal = true;
+			waitingForAllReady = false;
+			currentCardCzar = 0;
+			currentCarzIndex = 0;
+			inMatch = false;
+
 			Console.WriteLine("Server running...");
+		}
+
+		public static void Shutdown()
+		{
+			if (server == null)
+				return;
+
+			foreach(ServerClient c in Clients)
+				c.Disconnect("Host shutting down");
+
+			server.Shutdown("Fuck this shit, I'm out of this bitch.");
 		}
 
 		public static void UpdateNetwork()
@@ -159,7 +171,7 @@ namespace ManateesAgainstCards.Network
 											Clients.Remove(client);
 
 											// Card Czar left like the asshole he is
-											if (serverClient.Id == CurrentCardCzar)
+											if (serverClient.Id == currentCardCzar)
 												DeclareWinner(Clients[random.Next(Clients.Count)].Id);
 										}
 										break;
@@ -251,10 +263,10 @@ namespace ManateesAgainstCards.Network
 			}
 
 			// Select random new card czar
-			if (CurrentCardCzar == 0)
+			if (currentCardCzar == 0)
 			{
-				CurrentCardCzar = Clients[currentCarzIndex++ % Clients.Count].Id;
-				SendMessageToAll(new SelectCardCzar(CurrentCardCzar));
+				currentCardCzar = Clients[currentCarzIndex++ % Clients.Count].Id;
+				SendMessageToAll(new SelectCardCzar(currentCardCzar));
 			}
 
 			// Keep games in sync with timer
@@ -270,12 +282,12 @@ namespace ManateesAgainstCards.Network
 			}
 
 			// Check if we're waiting for everyone to be ready
-			bool allReady = Clients.Where(sc => sc.Id != CurrentCardCzar).All(sc => sc.Ready);
-			if ((allReady && WaitingForAllReady) || (secondsLeft == 0 && inMatch))
+			bool allReady = Clients.Where(sc => sc.Id != currentCardCzar).All(sc => sc.Ready);
+			if ((allReady && waitingForAllReady) || (secondsLeft == 0 && inMatch))
 			{
 				// Get cards from everyone except czar
 				List<Tuple<ushort, List<string>>> cards =
-					Clients.Where(sc => sc.Id != CurrentCardCzar).Select(sc => new Tuple<ushort, List<string>>(sc.Id, sc.SelectedCards)).ToList();
+					Clients.Where(sc => sc.Id != currentCardCzar).Select(sc => new Tuple<ushort, List<string>>(sc.Id, sc.SelectedCards)).ToList();
 
 				cards.RemoveAll(c => c.Item2.Count == 0);
 				GameUtility.Shuffle(cards);
@@ -291,10 +303,10 @@ namespace ManateesAgainstCards.Network
 					inMatch = false;
 				}
 
-				WaitingForAllReady = false;
+				waitingForAllReady = false;
 			}
 
-			if (CanDeal)
+			if (canDeal)
 			{
 				// Check if we're out of white cards
 				if (whiteDeck.Cards.Count == 0)
@@ -343,8 +355,8 @@ namespace ManateesAgainstCards.Network
 					}
 				}
 
-				CanDeal = false;
-				WaitingForAllReady = true;
+				canDeal = false;
+				waitingForAllReady = true;
 			}
 		}
 
@@ -364,12 +376,12 @@ namespace ManateesAgainstCards.Network
 
 			// Pick random winner
 			SendMessageToAll(new WinnerPicked(id, cards));
-			CanDeal = true;
+			canDeal = true;
 
 			foreach (ServerClient c in Clients)
 				c.Ready = false;
 
-			CurrentCardCzar = 0;
+			currentCardCzar = 0;
 		}
 
 		public static void StartMatch(bool cooldown)

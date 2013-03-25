@@ -30,11 +30,12 @@ namespace ManateesAgainstCards.States
 				{
 					foreach (string whiteCard in whiteCards)
 					{
-						string blackValue = whiteCard.Replace(".", null);
-						if (winnerCombo[0] != '_')
-							blackValue = blackValue.ToLower();
+						string value = whiteCard.Replace(".", null).Replace("!", null);
 
-						winnerCombo = GameUtility.ReplaceFirst(winnerCombo, "_", blackValue);
+						if (winnerCombo[0] != '_')
+							value = winnerCombo.ToUpper() == winnerCombo ? value.ToUpper() : value.ToLower();
+
+						winnerCombo = GameUtility.ReplaceFirst(winnerCombo, "_", value);
 					}
 				}
 			}

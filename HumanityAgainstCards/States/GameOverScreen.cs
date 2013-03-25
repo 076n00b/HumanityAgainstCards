@@ -2,6 +2,7 @@
 using Californium;
 using ManateesAgainstCards.Entities;
 using ManateesAgainstCards.Entities.Ui;
+using ManateesAgainstCards.Network;
 using SFML.Graphics;
 using SFML.Window;
 
@@ -12,14 +13,25 @@ namespace ManateesAgainstCards.States
 		public GameOverScreen()
 		{
 			Program.HandleNetworking = false;
+			Timer.NextFrame(() =>
+			{
+				Client.Disconnect();
+				Server.Shutdown();
+			});
 
 			Assets.PlaySound("Applause.wav");
 		}
 
 		public override void Enter()
 		{
-			Button button = new Button(new Vector2f(GameOptions.Width / 2.0f, GameOptions.Height - 52.0f - 48.0f), "End Game");
-			button.OnClick += Game.Exit;
+			Button button = new Button(new Vector2f(GameOptions.Width / 2.0f, GameOptions.Height - 52.0f - 48.0f), "Main Menu");
+			button.OnClick += () =>
+			{
+				//Game.PopState();
+				Game.SetState(new MainMenu());
+				return true;
+			};
+
 			Entities.Add(button);
 
 			base.Enter();
@@ -27,8 +39,7 @@ namespace ManateesAgainstCards.States
 
 		public override void Draw(RenderTarget rt)
 		{
-			RectangleShape bgOverlay = new RectangleShape(new Vector2f(GameOptions.Width, GameOptions.Height))
-			                           { FillColor = Color.Black };
+			RectangleShape bgOverlay = new RectangleShape(new Vector2f(GameOptions.Width, GameOptions.Height)) { FillColor = Color.Black };
 			rt.Draw(bgOverlay);
 
 			Text title = new Text("Game Over", Assets.LoadFont(Program.DefaultFont))
@@ -58,10 +69,10 @@ namespace ManateesAgainstCards.States
 
 		private string GetWinnerText()
 		{
-			InGame inGame = (InGame) Game.PeekFirstState();
+			InGame inGame = (InGame)Game.PeekFirstState();
 			int highestScore = -1;
 			string highestName = "";
-			
+
 			foreach (Player p in inGame.Players)
 			{
 				if (p.Score > highestScore)

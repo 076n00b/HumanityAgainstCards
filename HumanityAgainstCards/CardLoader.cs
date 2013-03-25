@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ManateesAgainstCards
@@ -16,8 +17,17 @@ namespace ManateesAgainstCards
 			Cards = new List<CardInfo>();
 		}
 
+		public static void Reset()
+		{
+			Decks.Clear();
+			Cards.Clear();
+			LoadDecks();
+		}
+
 		public static void LoadDecks()
 		{
+			Console.WriteLine("Loading decks...");
+
 			List<string> decks = Json.Load<List<string>>(JsonCards);
 			foreach (string deckName in decks)
 			{

@@ -167,7 +167,7 @@ namespace ManateesAgainstCards.States
 			{
 				if (chatValue != "")
 				{
-					ChatMessage message = new ChatMessage(LocalPlayer.Name, chatValue);
+					ChatMessage message = new ChatMessage(LocalPlayer.Name + ": " + chatValue);
 					Client.SendMessage(message);
 
 					ChatBacklog.Add(LocalPlayer.Name + ": " + chatValue);

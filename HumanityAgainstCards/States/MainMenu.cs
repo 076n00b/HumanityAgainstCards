@@ -29,6 +29,9 @@ namespace ManateesAgainstCards.States
 
 		public MainMenu()
 		{
+			Program.HandleNetworking = true;
+			CardLoader.Reset();
+
 			ClearColor = Color.White;
 			persistentDisplayName = "";
 
@@ -110,7 +113,8 @@ namespace ManateesAgainstCards.States
 				{
 					Process.Start("http://www.cardsagainsthumanity.com");
 					return true;
-				});
+				}
+			);
 
 			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 288.0f), "Exit", Game.Exit);
 
@@ -141,14 +145,7 @@ namespace ManateesAgainstCards.States
 				Value = persistentDisplayName
 			};
 
-			nameTextbox.OnReturn += value =>
-			{
-				if (!String.IsNullOrEmpty(nameTextbox.Value))
-					Game.SetState(new Lobby(SessionRole.Server, "", nameTextbox.Value));
-				else
-					Game.PushState(new PopupOverlay("You must enter a name before hosting a game."));
-			};
-
+			nameTextbox.OnReturn += value => HostNext(nameTextbox.Value);
 			Entities.Add(nameTextbox);
 
 			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 128.0f + 12.0f), "Settings",
@@ -163,11 +160,7 @@ namespace ManateesAgainstCards.States
 			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 128.0f + 12.0f + 64.0f), "Next",
 				() =>
 				{
-					if (!String.IsNullOrEmpty(nameTextbox.Value))
-						Game.SetState(new Lobby(SessionRole.Server, "", nameTextbox.Value));
-					else
-						Game.PushState(new PopupOverlay("You must enter a name before hosting a game."));
-
+					HostNext(nameTextbox.Value);
 					return true;
 				}
 			);
@@ -177,7 +170,8 @@ namespace ManateesAgainstCards.States
 				{
 					persistentDisplayName = nameTextbox.Value;
 					return MenuPlay();
-				});
+				}
+			);
 
 			return true;
 		}
@@ -205,22 +199,7 @@ namespace ManateesAgainstCards.States
 				Value = persistentDisplayName
 			};
 
-			nameTextbox.OnReturn += a =>
-			{
-				if (!String.IsNullOrEmpty(nameTextbox.Value) && !String.IsNullOrEmpty(ipTextbox.Value))
-					Game.SetState(new Lobby(SessionRole.Client, ipTextbox.Value, nameTextbox.Value));
-				else
-				{
-					if (String.IsNullOrEmpty(nameTextbox.Value))
-					{
-						Game.PushState(new PopupOverlay("You must enter a name before joining a game."));
-						return;
-					}
-
-					if (String.IsNullOrEmpty(ipTextbox.Value))
-						Game.PushState(new PopupOverlay("You must enter an IP to join a game."));
-				}
-			};
+			nameTextbox.OnReturn += a => JoinNext(nameTextbox.Value, ipTextbox.Value);
 
 			Entities.Add(nameTextbox);
 
@@ -228,20 +207,7 @@ namespace ManateesAgainstCards.States
 			AddButton(new Vector2f(GameOptions.Width / 2.0f, 250.0f + 128.0f + 84.0f + 16.0f + 96.0f), "Next",
 				() =>
 				{
-					if (!String.IsNullOrEmpty(nameTextbox.Value) && !String.IsNullOrEmpty(ipTextbox.Value))
-						Game.SetState(new Lobby(SessionRole.Client, ipTextbox.Value, nameTextbox.Value));
-					else
-					{
-						if (String.IsNullOrEmpty(nameTextbox.Value))
-						{
-							Game.PushState(new PopupOverlay("You must enter a name before joining a game."));
-							return true;
-						}
-
-						if (String.IsNullOrEmpty(ipTextbox.Value))
-							Game.PushState(new PopupOverlay("You must enter an IP to join a game."));
-					}
-
+					JoinNext(nameTextbox.Value, ipTextbox.Value);
 					return true;
 				}
 			);
@@ -251,9 +217,35 @@ namespace ManateesAgainstCards.States
 				{
 					persistentDisplayName = nameTextbox.Value;
 					return MenuPlay();
-				});
+				}
+			);
 
 			return true;
+		}
+
+		private void JoinNext(string name, string ip)
+		{
+			if (!String.IsNullOrEmpty(name) && !String.IsNullOrEmpty(ip))
+				Game.SetState(new Lobby(SessionRole.Client, ip, name));
+			else
+			{
+				if (String.IsNullOrEmpty(name))
+				{
+					Game.PushState(new PopupOverlay("You must enter a name before joining a game."));
+					return;
+				}
+
+				if (String.IsNullOrEmpty(ip))
+					Game.PushState(new PopupOverlay("You must enter an IP to join a game."));
+			}
+		}
+
+		private void HostNext(string name)
+		{
+			if (!String.IsNullOrEmpty(name))
+				Game.SetState(new Lobby(SessionRole.Server, "", name));
+			else
+				Game.PushState(new PopupOverlay("You must enter a name before hosting a game."));
 		}
 	}
 }

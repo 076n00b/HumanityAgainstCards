@@ -86,7 +86,7 @@ namespace ManateesAgainstCards.Network
 				{
 					ChatMessage chatMessage = (ChatMessage) msg;
 
-					Server.SendMessageToAllExcept(new ChatMessage(Id, chatMessage.Value), Id);
+					Server.SendMessageToAllExcept(new ChatMessage(chatMessage.Value), Id);
 					break;
 				}
 

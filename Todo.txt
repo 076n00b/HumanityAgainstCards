@@ -23,10 +23,12 @@
 	[-] Lost connection to server?
 [X] Fix that god damn uneven vert centering on text
 [X] AoE style taunts
-[ ] Refactor packets & MainMenu
+[X] Refactor packets & MainMenu
 [ ] Settings
 	[ ] Resolution
 	[ ] Sound Volume
-[ ] Fix fill ins for certian cards (Caps mixing, superfluous punctuation)
+[X] Fix fill ins for certian cards (Caps mixing, superfluous punctuation)
 [X] Bump minimum player count to 3
-[ ] Test game with laggy connections
+[X] Test game with laggy connections
+[X] Post game, return to main menu instead of force closing game
+[ ] Minimal value on numberboxes

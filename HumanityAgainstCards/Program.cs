@@ -14,27 +14,22 @@ namespace ManateesAgainstCards
 			HandleNetworking = true;
 
 			Console.WriteLine("Manatees Against Humanity; Version {0}", Version);
-
+			
 			// Set window resolution
 			GameOptions.Caption = "Manatees Against Cards";
 			GameOptions.Icon = "Icon.png";
 			GameOptions.Width = 1280; // 1280
 			GameOptions.Height = 720; // 720
 			GameOptions.Resizable = false;
-			
-			Console.WriteLine("Loading cards...");
-
-			// Load cards
-			CardLoader.LoadDecks();
 
 			// Prepare network loop
 			Timer.EveryFrame(() =>
 			{
-				if (!HandleNetworking)
-					return true;
-
-				Network.Client.UpdateNetwork();
-                Network.Server.UpdateNetwork();
+				if (HandleNetworking)
+				{
+					Network.Client.UpdateNetwork();
+					Network.Server.UpdateNetwork();
+				}
 
 				return false;
 			});

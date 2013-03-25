@@ -32,12 +32,6 @@ namespace ManateesAgainstCards.Network
 
 		static Client()
 		{
-			Hand = new List<Card>();
-			CurrentBlackCard = null;
-			gotBrainTumorOnce = false;
-			InMatch = false;
-
-			lastStatus = NetConnectionStatus.None;
 			players = new Dictionary<ushort, Player>();
 			Name = "Missingno";
 			client = null;
@@ -50,6 +44,9 @@ namespace ManateesAgainstCards.Network
 			if (client != null)
 				Disconnect();
 
+			lastStatus = NetConnectionStatus.None;
+			players.Clear();
+
 			NetPeerConfiguration config = new NetPeerConfiguration("HumanityAgainstCards")
 			{
 				MaximumHandshakeAttempts = 1,
@@ -61,12 +58,21 @@ namespace ManateesAgainstCards.Network
 			client.Start();
 			client.Connect(host, port);
 
+			Hand = new List<Card>();
+			CurrentBlackCard = null;
+			gotBrainTumorOnce = false;
+			InMatch = false;
+
 			Console.WriteLine("Client running...");
 		}
 
 		public static void Disconnect()
 		{
+			if (client == null)
+				return;
+
 			client.Disconnect("Disconnected");
+			client.Shutdown("Done");
 			client = null;
 		}
 
