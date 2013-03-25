@@ -46,7 +46,7 @@ namespace ManateesAgainstCards.Entities.Ui
 
 		private readonly string label;
 		private string stringValue;
-		private bool mouseIn;
+		private bool mouseIn, cursorVisible;
 
 		public Numberbox(string label, int maxValue)
 		{
@@ -56,8 +56,15 @@ namespace ManateesAgainstCards.Entities.Ui
 			stringValue = "";
 			Selected = false;
 			mouseIn = false;
+			cursorVisible = true;
 
 			Size = new Vector2f(64.0f, 48.0f);
+
+			Timer.Every(0.65f, () =>
+			{
+				cursorVisible = !cursorVisible;
+				return false;
+			});
 
 			Input.MouseMove = args =>
 			{
@@ -138,7 +145,7 @@ namespace ManateesAgainstCards.Entities.Ui
 				rt.Draw(checkboxHover);
 			}
 
-			Text valueText = new Text(stringValue + (Selected ? "_" : ""), Assets.LoadFont(Program.DefaultFont))
+			Text valueText = new Text(stringValue, Assets.LoadFont(Program.DefaultFont))
 			{
 				Position = Position + new Vector2f(8.0f, 8.0f),
 				CharacterSize = 28,
@@ -147,6 +154,18 @@ namespace ManateesAgainstCards.Entities.Ui
 
 			valueText.Round();
 			rt.Draw(valueText);
+
+			if (Selected && cursorVisible)
+			{
+				RectangleShape cursor = new RectangleShape(new Vector2f(2.0f, Size.Y - 16.0f))
+				{
+					Position = Position + new Vector2f(valueText.GetGlobalBounds().Width + 8.0f + 4.0f, 8.0f),
+					FillColor = Color.White
+				};
+
+				cursor.Round();
+				rt.Draw(cursor);
+			}
 
 			Text labelText = new Text(label, Assets.LoadFont(Program.DefaultFont))
 			{

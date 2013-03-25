@@ -167,11 +167,12 @@ namespace ManateesAgainstCards.States
 			{
 				if (chatValue != "")
 				{
-					ChatMessage message = new ChatMessage(LocalPlayer.Name + ": " + chatValue);
+					string value = LocalPlayer.Name + ": " + chatValue;
+					ChatMessage message = new ChatMessage(value);
 					Client.SendMessage(message);
 
-					ChatBacklog.Add(LocalPlayer.Name + ": " + chatValue);
-					GameUtility.PlayTaunt(chatValue);
+					ChatBacklog.Add(value);
+					GameUtility.PlayTaunt(value);
 					chatValue = "";
 
 					Assets.PlaySound("Bubble.wav");
@@ -192,9 +193,6 @@ namespace ManateesAgainstCards.States
 			{
 				case SessionRole.Server:
 					{
-						// Load cards if we're the server
-						Server.LoadCards();
-
 						// Initialize server
 						try
 						{
@@ -218,7 +216,7 @@ namespace ManateesAgainstCards.States
 						}
 
 						// Add start button
-						Button startButton = new Button(new Vector2f(GameOptions.Width - 222.0f / 2.0f - 8.0f - 64.0f + 8.0f, 52.0f / 2.0f + 8.0f + 32.0f + 8.0f), "Begin Game");
+						Button startButton = new Button(new Vector2f(GameOptions.Width - 222.0f / 2.0f - 8.0f - 64.0f + 8.0f, Button.Height / 2.0f + 8.0f + 32.0f + 8.0f), "Begin Game");
 						startButton.OnClick += () =>
 						{
 							// Do not start unless we have enough players
@@ -228,13 +226,26 @@ namespace ManateesAgainstCards.States
 								return true;
 							}
 
+							// Load cards if we're the server
+							Server.LoadCards();
+
 							// Begin game
 							Client.SendMessage(new BeginGame());
-
+							
 							return true;
 						};
 
 						Entities.Add(startButton);
+
+						// Add settings button
+						Button settingsButton = new Button(new Vector2f(GameOptions.Width - Button.Width / 2.0f - 8.0f - 64.0f + 8.0f - Button.Width - 4.0f, Button.Height / 2.0f + 8.0f + 32.0f + 8.0f), "Settings");
+						settingsButton.OnClick += () =>
+						{
+							Game.PushState(new HostSettingsOverlay());
+							return true;
+						};
+
+						Entities.Add(settingsButton);
 
 						break;
 					}

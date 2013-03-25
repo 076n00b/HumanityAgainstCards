@@ -7,7 +7,7 @@ namespace ManateesAgainstCards.States
 {
 	class WrapTest : State
 	{
-		private readonly Deck blackDeck, whiteDeck;
+		private readonly Deck blackDeck;
 		private Card card;
 
 		public WrapTest()
@@ -20,7 +20,6 @@ namespace ManateesAgainstCards.States
 			CardLoader.LoadCards();
 
 			blackDeck = new Deck(CardType.Black);
-			whiteDeck = new Deck(CardType.White);
 
 			card = null;
 
@@ -33,10 +32,11 @@ namespace ManateesAgainstCards.States
 					Entities.Remove(card);
 
 				card = blackDeck.Cards.Count == 0 ? null : new Card(blackDeck.Cards.Pop());
-				card.Position = new Vector2f(GameOptions.Width / 2.0f - 256.0f, GameOptions.Height / 2.0f - 256.0f);
-
 				if (card != null)
+				{
+					card.Position = new Vector2f(GameOptions.Width / 2.0f - 256.0f, GameOptions.Height / 2.0f - 256.0f);
 					Entities.Add(card);
+				}
 
 				return true;
 			});

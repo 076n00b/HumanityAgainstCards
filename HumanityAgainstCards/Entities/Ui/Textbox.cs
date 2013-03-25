@@ -33,7 +33,7 @@ namespace ManateesAgainstCards.Entities.Ui
 
 			Size = new Vector2f((GameOptions.Width / 3.0f) * 2.0f - 64.0f, 48.0f);
 
-			Timer.Every(0.75f, () =>
+			Timer.Every(0.65f, () =>
 			{
 				cursorVisible = !cursorVisible;
 				return false;
@@ -134,7 +134,7 @@ namespace ManateesAgainstCards.Entities.Ui
 			labelText.Round();
 			rt.Draw(labelText);
 
-			Text messageText = new Text(Value + (Selected && cursorVisible ? "_" : ""), Assets.LoadFont(Program.DefaultFont))
+			Text messageText = new Text(Value, Assets.LoadFont(Program.DefaultFont))
 			{
 				Position = Position + new Vector2f(8.0f, 8.0f),
 				CharacterSize = 28,
@@ -143,6 +143,18 @@ namespace ManateesAgainstCards.Entities.Ui
 
 			messageText.Round();
 			rt.Draw(messageText);
+
+			if (Selected && cursorVisible)
+			{
+				RectangleShape cursor = new RectangleShape(new Vector2f(2.0f, Size.Y - 16.0f))
+				{
+					Position = Position + new Vector2f(messageText.GetGlobalBounds().Width + 8.0f + 4.0f, 8.0f),
+					FillColor = Color.White
+				};
+
+				cursor.Round();
+				rt.Draw(cursor);
+			}
 
 			base.Draw(rt);
 		}

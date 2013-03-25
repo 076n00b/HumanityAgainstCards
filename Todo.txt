@@ -5,8 +5,8 @@
 [X] Host game settings
 	[X] Point Cap
 	[X] Select card packs
-	[ ] Allow late joins
-	[ ] Game Modes
+	[-] Allow late joins
+	[-] Game Modes
 	[X] Max turn time
 [ ] Global server list
 	[ ] Password protected servers
@@ -24,11 +24,10 @@
 [X] Fix that god damn uneven vert centering on text
 [X] AoE style taunts
 [X] Refactor packets & MainMenu
-[ ] Settings
-	[ ] Resolution
-	[ ] Sound Volume
 [X] Fix fill ins for certian cards (Caps mixing, superfluous punctuation)
 [X] Bump minimum player count to 3
 [X] Test game with laggy connections
 [X] Post game, return to main menu instead of force closing game
 [X] Minimal value on numberboxes
+[X] Allow settings to be edited from the lobby
+[X] Let hosts know what port the server will listen on somehow

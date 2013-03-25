@@ -6,8 +6,8 @@ namespace ManateesAgainstCards.Entities.Ui
 {
 	class Button : Entity
 	{
-		private const float ButtonWidth = 222.0f;
-		private const float ButtonHeight = 52.0f;
+		public const float Width = 222.0f;
+		public const float Height = 52.0f;
 
 		public delegate bool OnClickHandler();
 		public event OnClickHandler OnClick;
@@ -28,7 +28,7 @@ namespace ManateesAgainstCards.Entities.Ui
 
 		public Button(Vector2f position, string value)
 		{
-			Size = new Vector2f(ButtonWidth, ButtonHeight);
+			Size = new Vector2f(Width, Height);
 			Position = position - Size / 2.0f;
 			Visible = true;
 			this.value = value;
@@ -74,7 +74,7 @@ namespace ManateesAgainstCards.Entities.Ui
 			if (!Visible)
 				return;
 
-			RectangleShape button = new RectangleShape(new Vector2f(ButtonWidth, ButtonHeight))
+			RectangleShape button = new RectangleShape(new Vector2f(Width, Height))
 			{
 				Position = Position,
 				FillColor = Color.Black
@@ -85,7 +85,7 @@ namespace ManateesAgainstCards.Entities.Ui
 			// Hover
 			if (mouseIn)
 			{
-				RectangleShape buttonHover = new RectangleShape(new Vector2f(ButtonWidth - 8, ButtonHeight - 8))
+				RectangleShape buttonHover = new RectangleShape(new Vector2f(Width - 8, Height - 8))
 				{
 					Position = Position + new Vector2f(4f, 4f),
 					FillColor = Color.Black,

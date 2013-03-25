@@ -219,11 +219,13 @@ namespace ManateesAgainstCards.States
 			{
 				if (chatValue != "")
 				{
-					ChatMessage message = new ChatMessage(Client.Name + ": " + chatValue);
+					string value = Client.Name + ": " + chatValue;
+
+					ChatMessage message = new ChatMessage(value);
 					Client.SendMessage(message);
 
-					ChatBacklog.Add(Client.Name + ": " + chatValue);
-					GameUtility.PlayTaunt(chatValue);
+					ChatBacklog.Add(value);
+					GameUtility.PlayTaunt(value);
 					chatValue = "";
 				}
 

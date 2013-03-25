@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
-using System.Text;
 using Lidgren.Network;
 using ManateesAgainstCards.Network.Packets;
 
@@ -405,16 +404,6 @@ namespace ManateesAgainstCards.Network
 								 ? new ChatMessage(String.Format("First to {0} points wins!", PointCap))
 								 : new ChatMessage(String.Format("Highest score at the end of {0} rounds wins!",
 																 blackDeck.Cards.Count)));
-
-			StringBuilder builder = new StringBuilder();
-			builder.Append("Decks: ");
-			foreach (CardLoader.CardDeck deck in CardLoader.Decks.Where(d => d.Include))
-			{
-				builder.Append(deck.Name);
-				builder.Append(" ");
-			}
-
-			SendMessageToAll(new ChatMessage(builder.ToString()));
 
 			int i = random.Next(greetings.Count);
 			SendMessageToAll(i < 2

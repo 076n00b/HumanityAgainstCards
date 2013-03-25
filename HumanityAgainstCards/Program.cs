@@ -1,5 +1,7 @@
 ﻿using System;
 using Californium;
+using SFML.Graphics;
+using SFML.Window;
 
 namespace ManateesAgainstCards
 {

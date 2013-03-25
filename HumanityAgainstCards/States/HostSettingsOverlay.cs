@@ -37,7 +37,7 @@ namespace ManateesAgainstCards.States
 
 			Entities.Add(numberSecondsPerTurn);
 
-			List<Checkbox> decks = new List<Checkbox>(); 
+			List<Checkbox> decks = new List<Checkbox>();
 			for (int i = 0; i < CardLoader.Decks.Count; i++)
 			{
 				CardLoader.CardDeck deck = CardLoader.Decks[i];
@@ -64,7 +64,7 @@ namespace ManateesAgainstCards.States
 				Server.PointCap = numberboxPointCap.Value;
 				Server.SecondsPerTurn = numberSecondsPerTurn.Value;
 
-				foreach(Checkbox deck in decks)
+				foreach (Checkbox deck in decks)
 					CardLoader.Decks.First(d => d.Name == deck.Label).Include = deck.Value;
 
 				Game.PopState();
@@ -117,6 +117,18 @@ namespace ManateesAgainstCards.States
 			labelDecks.Center();
 			labelDecks.Round();
 			rt.Draw(labelDecks);
+
+			Text portLabel = new Text("Forward port 1890.", Assets.LoadFont(Program.DefaultFont))
+			{
+				Position = new Vector2f(GameOptions.Width / 2.0f,
+					GameOptions.Height * (1.0f - PaddingVertical * 2.0f) + GameOptions.Height * PaddingVertical - 20.0f),
+				CharacterSize = 16,
+				Color = Color.Black
+			};
+
+			portLabel.Center();
+			portLabel.Round();
+			rt.Draw(portLabel);
 
 			base.Draw(rt);
 		}

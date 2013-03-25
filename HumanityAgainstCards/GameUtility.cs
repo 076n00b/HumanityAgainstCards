@@ -15,6 +15,9 @@ namespace ManateesAgainstCards
 		{
 			string[] values = value.Split(new[] { ' ' });
 
+			if (values.Length == 0 || !values[0].Contains(":"))
+				return;
+
 			foreach (string v in values)
 			{
 				Int32 number;
