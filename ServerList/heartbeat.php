@@ -55,7 +55,7 @@ else
 			$reason = 'Database error!';
 			break;
 		case ServerList::ErrorNoServer:
-			$reason = 'No server of that name.';
+			$reason = 'No server with that name.';
 			break;
 	}
 	

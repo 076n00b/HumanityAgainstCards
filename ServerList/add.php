@@ -54,7 +54,7 @@ else
 	switch($result)
 	{
 		case ServerList::ErrorNameTaken:
-			$reason = 'Server of that name already exists!';
+			$reason = 'Server with that name already exists.';
 			break;
 		
 		case ServerList::ErrorDatabase:
