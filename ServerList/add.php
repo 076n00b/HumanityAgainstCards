@@ -12,39 +12,30 @@
 
 require_once('serverlist.php');
 
-$name = @$_REQUEST['name'];
-$ipAddress = @$_SERVER['REMOTE_ADDR'];
-
-if (!isset($name) || !isset($ipAddress) ||
-	trim($name) != $name)
+if(empty($_GET['name']))
 {
-	die(
-		json_encode(
-			array(
-				'status'	=> 'failure',
-				'reason'	=> 'Unsanitary input.'
-			)
-		)
-	);
+	echo(json_encode(array(
+		"status"	=> "failure",
+		"reason"	=> "No name provided."
+	)));
+	
+	die();
 }
 
 $serverList = new ServerList($database);
 
-$result = $serverList->Add($name, $ipAddress);
+$result = $serverList->Add($_GET['name'], $_SERVER['REMOTE_ADDR']);
 
 if ($result == ServerList::ErrorSuccess)
 {
-	echo(
-		json_encode(
-			array(
-				'status'		=> 'success'
-			)
-		)
-	);
+	echo(json_encode(array(
+		'status'	=> 'success'
+	)));
 }
 else
 {
 	$reason = 'Unknown';
+	
 	switch($result)
 	{
 		case ServerList::ErrorNameTaken:
@@ -56,12 +47,8 @@ else
 			break;
 	}
 	
-	echo(
-		json_encode(
-			array(
-				'status'		=> 'failure',
-				'reason'		=> $reason
-			)
-		)
-	);
+	echo(json_encode(array(
+		'status'	=> 'failure',
+		'reason'	=> $reason
+	)));
 }

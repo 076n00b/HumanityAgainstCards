@@ -12,8 +12,4 @@ require_once("serverlist.php");
 
 $serverList = new ServerList($database);
 
-echo(
-	json_encode(
-		$serverList->Get()
-	)
-);
+echo(json_encode($serverList->Get()));

@@ -12,33 +12,25 @@
 
 require_once('serverlist.php');
 
-$name = @$_REQUEST['name'];
-
-if (!isset($name) || trim($name) != $name)
+if(empty($_GET['name']))
 {
-	die(
-		json_encode(
-			array(
-				'status'	=> 'failure',
-				'reason'	=> 'Unsanitary input.'
-			)
-		)
-	);
+	echo(json_encode(array(
+		"status"	=> "failure",
+		"reason"	=> "No name provided."
+	)));
+	
+	die();
 }
 
 $serverList = new ServerList($database);
 
-$result = $serverList->Remove($name);
+$result = $serverList->Remove($_GET['name']);
 
 if ($result == ServerList::ErrorSuccess)
 {
-	echo(
-		json_encode(
-			array(
-				'status'	=> 'success'
-			)
-		)
-	);
+	echo(json_encode(array(
+		'status'	=> 'success'
+	)));
 }
 else
 {
@@ -49,18 +41,13 @@ else
 		case ServerList::ErrorDatabase:
 			$reason = 'Database error!';
 			break;
-		
 		case ServerList::ErrorNoServer:
 			$reason = 'No server with that name.';
 			break;
 	}
 	
-	echo(
-		json_encode(
-			array(
-				'status'	=> 'failure',
-				'reason'	=> $reason
-			)
-		)
-	);
+	echo(json_encode(array(
+		'status'	=> 'failure',
+		'reason'	=> $reason
+	)));
 }
