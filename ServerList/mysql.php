@@ -4,19 +4,17 @@
  * MySQL Driver
  */
 
+require_once("config.php");
+
 class MySQL
 {
-	const MYSQL_SERVER   = '';
-	const MYSQL_DATABASE = '';
-	const MYSQL_USERNAME = '';
-	const MYSQL_PASSWORD = '';
-	
 	private $mysqlHandle, $result;
 	
 	function __construct()
 	{
-		$this->mysqlHandle = mysql_connect(self::MYSQL_SERVER, self::MYSQL_USERNAME, self::MYSQL_PASSWORD);
-		mysql_select_db(self::MYSQL_DATABASE);
+		global $mysql_config;
+		$this->mysqlHandle = mysql_connect($mysql_config["host"], $mysql_config["username"], $mysql_config["password"]);
+		mysql_select_db($mysql_config["database"]);
 	}
 	
 	function __destruct()
