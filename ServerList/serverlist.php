@@ -158,5 +158,3 @@ class ServerList
 		return $sterilizedString;
 	}
 }
-
-?>

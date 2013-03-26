@@ -20,5 +20,3 @@ echo(
 		$serverList->Get()
 	)
 );
-
-?>

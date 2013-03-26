@@ -43,5 +43,3 @@ class MySQL
 		return mysql_fetch_array($this->result);
 	}
 }
-
-?>
