@@ -54,6 +54,9 @@ else
 		case ServerList::ErrorDatabase:
 			$reason = 'Database error!';
 			break;
+		case ServerList::ErrorNoServer:
+			$reason = 'No server of that name.';
+			break;
 	}
 	
 	// Send failure result
