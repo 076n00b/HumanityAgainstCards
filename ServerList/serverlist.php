@@ -54,13 +54,13 @@ class ServerList
 		
 		if($statement->rowCount() > 0)
 		{
-			return self::ErrorNameTaken;
+			return ServerList::ErrorNameTaken;
 		}
 		
 		$statement = $this->database->prepare("INSERT INTO `servers` (`name`, `ipAddress`, `lastHeartbeat`) VALUES (:Name, :Ip, :Time)");
 		$result = $statement->execute(array(":Name" => $name, ":Ip" => $ipAddress, ":Time" => time()));
 		
-		return $result ? self::ErrorSuccess : self::ErrorDatabase;
+		return $result ? ServerList::ErrorSuccess : ServerList::ErrorDatabase;
 	}
 	
 	public function Remove($name)
@@ -70,10 +70,10 @@ class ServerList
 		
 		if($result === true && $statement->rowCount() == 0)
 		{
-			return self::ErrorNoServer;
+			return ServerList::ErrorNoServer;
 		}
 		
-		return $result ? self::ErrorSuccess : self::ErrorDatabase;
+		return $result ? ServerList::ErrorSuccess : ServerList::ErrorDatabase;
 	}
 	
 	public function Heartbeat($name)
@@ -88,10 +88,10 @@ class ServerList
 		
 		if($result === true && $statement->rowCount() == 0)
 		{
-			return self::ErrorNoServer;
+			return ServerList::ErrorNoServer;
 		}
 		
-		return $result ? self::ErrorSuccess : self::ErrorDatabase;
+		return $result ? ServerList::ErrorSuccess : ServerList::ErrorDatabase;
 	}
 	
 	private function CleanServerList()
@@ -99,6 +99,6 @@ class ServerList
 		$statement = $this->database->prepare("DELETE FROM `servers` WHERE `lastHeartbeat` < unix_timestamp(NOW()) - 150");
 		$result = $statement->execute();
 		
-		return $result ? self::ErrorDatabase : self::ErrorSuccess;
+		return $result ? ServerList::ErrorDatabase : ServerList::ErrorSuccess;
 	}
 }
