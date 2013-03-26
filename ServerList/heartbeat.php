@@ -37,7 +37,7 @@ if ($result == ServerList::ErrorSuccess)
 	echo(
 		json_encode(
 			array(
-				'status'		=> 'success'
+				'status'	=> 'success'
 			)
 		)
 	);
@@ -45,6 +45,7 @@ if ($result == ServerList::ErrorSuccess)
 else
 {
 	$reason = 'Unknown';
+	
 	switch($result)
 	{
 		case ServerList::ErrorDatabase:
@@ -58,8 +59,8 @@ else
 	echo(
 		json_encode(
 			array(
-				'status'		=> 'failure',
-				'reason'		=> $reason
+				'status'	=> 'failure',
+				'reason'	=> $reason
 			)
 		)
 	);
