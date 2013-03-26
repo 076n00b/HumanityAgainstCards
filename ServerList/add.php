@@ -12,11 +12,9 @@
 
 require_once('serverlist.php');
 
-// Grab variables
 $name = @$_REQUEST['name'];
 $ipAddress = @$_SERVER['REMOTE_ADDR'];
 
-// Verify these are sanitary
 if (!isset($name) || !isset($ipAddress) ||
 	trim($name) != $name)
 {
@@ -30,15 +28,12 @@ if (!isset($name) || !isset($ipAddress) ||
 	);
 }
 
-// Allocate server list object
 $serverList = new ServerList($database);
 
-// Attempt to add entry to server list
 $result = $serverList->Add($name, $ipAddress);
 
 if ($result == ServerList::ErrorSuccess)
 {
-	// Send successful result
 	echo(
 		json_encode(
 			array(
@@ -49,7 +44,6 @@ if ($result == ServerList::ErrorSuccess)
 }
 else
 {
-	// Figure out what went wrong
 	$reason = 'Unknown';
 	switch($result)
 	{
@@ -62,7 +56,6 @@ else
 			break;
 	}
 	
-	// Send failure result
 	echo(
 		json_encode(
 			array(

@@ -12,10 +12,8 @@
 
 require_once('serverlist.php');
 
-// Grab variables
 $name = @$_REQUEST['name'];
 
-// Verify these are sanitary
 if (!isset($name) || trim($name) != $name)
 {
 	die(
@@ -28,15 +26,14 @@ if (!isset($name) || trim($name) != $name)
 	);
 }
 
-// Allocate server list object
 $serverList = new ServerList($database);
 
-// Attempt to heartbeat server on server list
+/* Update the timestamp on the server entry, so that it is clear that it
+ * is still active. */
 $result = $serverList->Heartbeat($name);
 
 if ($result == ServerList::ErrorSuccess)
 {
-	// Send successful result
 	echo(
 		json_encode(
 			array(
@@ -47,7 +44,6 @@ if ($result == ServerList::ErrorSuccess)
 }
 else
 {
-	// Figure out what went wrong
 	$reason = 'Unknown';
 	switch($result)
 	{
@@ -59,7 +55,6 @@ else
 			break;
 	}
 	
-	// Send failure result
 	echo(
 		json_encode(
 			array(
