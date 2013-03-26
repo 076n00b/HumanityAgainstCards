@@ -10,15 +10,6 @@
 
 require_once("serverlist.php");
 
-// Query server list
-$mysql = new MySQL();
-$serverList = new ServerList($mysql);
+$serverList = new ServerList($database);
 
-// Return it
-echo(
-	json_encode(
-		$serverList->Get()
-	)
-);
-
-?>
+echo(json_encode($serverList->Get()));
