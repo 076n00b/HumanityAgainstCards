@@ -31,8 +31,7 @@ if (!isset($name) || !isset($ipAddress) ||
 }
 
 // Allocate server list object
-$mysql = new MySQL();
-$serverList = new ServerList($mysql);
+$serverList = new ServerList($database);
 
 // Attempt to add entry to server list
 $result = $serverList->Add($name, $ipAddress);

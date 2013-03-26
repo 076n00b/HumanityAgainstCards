@@ -29,8 +29,7 @@ if (!isset($name) || trim($name) != $name)
 }
 
 // Allocate server list object
-$mysql = new MySQL();
-$serverList = new ServerList($mysql);
+$serverList = new ServerList($database);
 
 // Attempt to remove entry from server list
 $result = $serverList->Remove($name);
