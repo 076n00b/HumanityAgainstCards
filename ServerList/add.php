@@ -12,50 +12,34 @@
 
 require_once('serverlist.php');
 
-// Grab variables
-$name = @$_REQUEST['name'];
-$ipAddress = @$_SERVER['REMOTE_ADDR'];
-
-// Verify these are sanitary
-if (!isset($name) || !isset($ipAddress) ||
-	trim($name) != $name)
+if(empty($_GET['name']))
 {
-	die(
-		json_encode(
-			array(
-				'status'	=> 'failure',
-				'reason'	=> 'Unsanitary input.'
-			)
-		)
-	);
+	echo(json_encode(array(
+		"status"	=> "failure",
+		"reason"	=> "No name provided."
+	)));
+	
+	die();
 }
 
-// Allocate server list object
-$mysql = new MySQL();
-$serverList = new ServerList($mysql);
+$serverList = new ServerList($database);
 
-// Attempt to add entry to server list
-$result = $serverList->Add($name, $ipAddress);
+$result = $serverList->Add($_GET['name'], $_SERVER['REMOTE_ADDR']);
 
 if ($result == ServerList::ErrorSuccess)
 {
-	// Send successful result
-	echo(
-		json_encode(
-			array(
-				'status'		=> 'success'
-			)
-		)
-	);
+	echo(json_encode(array(
+		'status'	=> 'success'
+	)));
 }
 else
 {
-	// Figure out what went wrong
 	$reason = 'Unknown';
+	
 	switch($result)
 	{
 		case ServerList::ErrorNameTaken:
-			$reason = 'Server of that name already exists!';
+			$reason = 'Server with that name already exists.';
 			break;
 		
 		case ServerList::ErrorDatabase:
@@ -63,15 +47,8 @@ else
 			break;
 	}
 	
-	// Send failure result
-	echo(
-		json_encode(
-			array(
-				'status'		=> 'failure',
-				'reason'		=> $reason
-			)
-		)
-	);
+	echo(json_encode(array(
+		'status'	=> 'failure',
+		'reason'	=> $reason
+	)));
 }
-
-?>

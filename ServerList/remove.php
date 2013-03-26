@@ -12,64 +12,42 @@
 
 require_once('serverlist.php');
 
-// Grab variables
-$name = @$_REQUEST['name'];
-
-// Verify these are sanitary
-if (!isset($name) || trim($name) != $name)
+if(empty($_GET['name']))
 {
-	die(
-		json_encode(
-			array(
-				'status'	=> 'failure',
-				'reason'	=> 'Unsanitary input.'
-			)
-		)
-	);
+	echo(json_encode(array(
+		"status"	=> "failure",
+		"reason"	=> "No name provided."
+	)));
+	
+	die();
 }
 
-// Allocate server list object
-$mysql = new MySQL();
-$serverList = new ServerList($mysql);
+$serverList = new ServerList($database);
 
-// Attempt to remove entry from server list
-$result = $serverList->Remove($name);
+$result = $serverList->Remove($_GET['name']);
 
 if ($result == ServerList::ErrorSuccess)
 {
-	// Send successful result
-	echo(
-		json_encode(
-			array(
-				'status'		=> 'success'
-			)
-		)
-	);
+	echo(json_encode(array(
+		'status'	=> 'success'
+	)));
 }
 else
 {
-	// Figure out what went wrong
 	$reason = 'Unknown';
+	
 	switch($result)
 	{
 		case ServerList::ErrorDatabase:
 			$reason = 'Database error!';
 			break;
-		
 		case ServerList::ErrorNoServer:
-			$reason = 'No server of that name.';
+			$reason = 'No server with that name.';
 			break;
 	}
 	
-	// Send failure result
-	echo(
-		json_encode(
-			array(
-				'status'		=> 'failure',
-				'reason'		=> $reason
-			)
-		)
-	);
+	echo(json_encode(array(
+		'status'	=> 'failure',
+		'reason'	=> $reason
+	)));
 }
-
-?>
