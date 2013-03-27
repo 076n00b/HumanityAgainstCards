@@ -1,5 +1,6 @@
 [X] Fix sound playing when end turn results in nothing
 [X] Fix in game chat
+	[ ] Fix it again (Wrapping issues)
 [X] Rename "crown.png" to "hat.png"
 [X] Remove unneeded textures from release build
 [X] Host game settings

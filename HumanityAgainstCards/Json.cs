@@ -27,6 +27,24 @@ namespace ManateesAgainstCards
 			return obj;
 		}
 
+		public static T LoadStream<T>(string stream)
+		{
+			JsonSerializerSettings s = new JsonSerializerSettings
+			{
+				Error = (sender, arg) =>
+				{
+					throw new Exception(arg.ToString());
+				}
+			};
+
+			T obj = JsonConvert.DeserializeObject<T>(stream, s);
+
+			if (obj.Equals(null))
+				throw new Exception("Empty JSON stream");
+
+			return obj;
+		}
+
 		public static void Save<T>(string name, T obj)
 		{
 			File.WriteAllText(JsonLocation + name + ResourceExt, JsonConvert.SerializeObject(obj));

@@ -8,7 +8,7 @@ namespace ManateesAgainstCards
 	{
 		private const string JsonCards = "Decks";
 
-		public static List<CardDeck> Decks { get; private set; } 
+		public static List<CardDeck> Decks { get; private set; }
 		public static List<CardInfo> Cards { get; private set; }
 
 		static CardLoader()
@@ -28,13 +28,20 @@ namespace ManateesAgainstCards
 		{
 			Console.WriteLine("Loading decks...");
 
-			List<string> decks = Json.Load<List<string>>(JsonCards);
-			foreach (string deckName in decks)
+			try
 			{
-				CardDeck cardDeck = Json.Load<CardDeck>(deckName);
-				cardDeck.Name = deckName;
+				List<string> decks = Json.Load<List<string>>(JsonCards);
+				foreach (string deckName in decks)
+				{
+					CardDeck cardDeck = Json.Load<CardDeck>(deckName);
+					cardDeck.Name = deckName;
 
-				Decks.Add(cardDeck);
+					Decks.Add(cardDeck);
+				}
+			}
+			catch (Exception)
+			{
+				Console.WriteLine("Empty deck!");
 			}
 
 			Decks.First().Include = true;

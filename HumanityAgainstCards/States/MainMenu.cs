@@ -207,7 +207,8 @@ namespace ManateesAgainstCards.States
 			AddButton(new Vector2f(GameOptions.Width / 2.0f, 250.0f + 128.0f + 84.0f + 16.0f + 96.0f), "Next",
 				() =>
 				{
-					JoinNext(nameTextbox.Value, ipTextbox.Value);
+					Game.PushState(new ServerListOverlay());
+					//JoinNext(nameTextbox.Value, ipTextbox.Value);
 					return true;
 				}
 			);

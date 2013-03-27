@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{25E0AC52-EC52-4463-9A08-CA42AF91231E}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ManateesAgainstCards</RootNamespace>
     <AssemblyName>ManateesAgainstCards</AssemblyName>
@@ -119,6 +119,7 @@
     <Compile Include="States\MainMenu.cs" />
     <Compile Include="States\PopupOverlay.cs" />
     <Compile Include="States\SelectionScreen.cs" />
+    <Compile Include="States\ServerListOverlay.cs" />
     <Compile Include="States\WinnerScreen.cs" />
     <Compile Include="States\WrapTest.cs" />
   </ItemGroup>
