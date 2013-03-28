@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using Californium;
 using ManateesAgainstCards.Entities.Ui;
+using ManateesAgainstCards.Network;
 using SFML.Graphics;
 using SFML.Window;
 
@@ -12,8 +13,6 @@ namespace ManateesAgainstCards.States
 {
 	class ServerListOverlay : State
 	{
-		private const string RemoteAddress = "http://www.x2048.com/mac/get.php";
-
 		private const float PaddingHorizontal = 0.05f;
 		private const float PaddingVertical = 0.05f;
 
@@ -71,6 +70,9 @@ namespace ManateesAgainstCards.States
 				if (selectedIndex >= servers.Count)
 					selectedIndex = -1;
 
+				if (SelectedServer != null)
+					JoinNext(SelectedServer.IpAddress);
+
 				return false;
 			};
 		}
@@ -87,15 +89,15 @@ namespace ManateesAgainstCards.States
 
 			Entities.Add(refreshButton);
 
-			Button acceptButton =
-				new Button(new Vector2f(GameOptions.Width - GameOptions.Width * (PaddingHorizontal * 2.5f) - Button.Width / 2.0f, GameOptions.Height / 2.0f + GameOptions.Height / 3.0f + 16.0f), "Accept");
-			acceptButton.OnClick += () =>
+			Button backButton =
+				new Button(new Vector2f(GameOptions.Width - GameOptions.Width * (PaddingHorizontal * 2.5f) - Button.Width / 2.0f, GameOptions.Height / 2.0f + GameOptions.Height / 3.0f + 16.0f), "Back");
+			backButton.OnClick += () =>
 			{
 				Game.PopState();
 				return true;
 			};
 
-			Entities.Add(acceptButton);
+			Entities.Add(backButton);
 
 			base.Enter();
 		}
@@ -204,7 +206,7 @@ namespace ManateesAgainstCards.States
 
 			// Get server list data
 			WebClient client = new WebClient();
-			string jsonStream = Encoding.ASCII.GetString(client.DownloadData(RemoteAddress));
+			string jsonStream = Encoding.ASCII.GetString(client.DownloadData(Constants.RemoteServerListAddress + "get.php"));
 			client.Dispose();
 
 			// Decode JSON stream
@@ -218,6 +220,23 @@ namespace ManateesAgainstCards.States
 			}
 
 			refreshing = false;
+		}
+
+		private void JoinNext(string ip)
+		{
+			if (!String.IsNullOrEmpty(Client.Name) && !String.IsNullOrEmpty(ip))
+				Game.SetState(new Lobby(SessionRole.Client, ip, Client.Name));
+			else
+			{
+				if (String.IsNullOrEmpty(Client.Name))
+				{
+					Game.PushState(new PopupOverlay("You must enter a name before joining a game."));
+					return;
+				}
+
+				if (String.IsNullOrEmpty(ip))
+					Game.PushState(new PopupOverlay("You must enter an IP to join a game."));
+			}
 		}
 
 		internal class Server

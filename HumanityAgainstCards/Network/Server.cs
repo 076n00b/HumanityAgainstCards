@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using System.Net;
+using System.Text;
+using System.Threading;
 using Lidgren.Network;
 using ManateesAgainstCards.Network.Packets;
 
@@ -417,6 +420,62 @@ namespace ManateesAgainstCards.Network
 
 			whiteDeck = new Deck(CardType.White);
 			blackDeck = new Deck(CardType.Black);
+		}
+
+		public static void AddServer()
+		{
+			new Thread(ServerListCommand).Start("add");
+
+			Californium.Timer.Every(30.0f, () =>
+			{
+				if (State == States.Lobby)
+				{
+					new Thread(ServerListCommand).Start("heartbeat");
+					return false;
+				}
+
+				new Thread(ServerListCommand).Start("remove");
+				return true;
+			});
+		}
+
+		public static void RemoveServer()
+		{
+			new Thread(ServerListCommand).Start("remove");
+		}
+
+		private static void ServerListCommand(object command)
+		{
+			ServerListResponse response = new ServerListResponse();
+			string address = Constants.RemoteServerListAddress + (string)command + ".php?name=" + Client.Name;
+
+			WebClient client = new WebClient();
+			string jsonStream = Encoding.ASCII.GetString(client.DownloadData(address));
+			client.Dispose();
+
+			// Decode JSON stream
+			try
+			{
+				response = Json.LoadStream<ServerListResponse>(jsonStream);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("ServerList error: {0}", e.Message);
+			}
+
+			Console.WriteLine("Status: {0}; Reason: {1}", response.Status, response.Reason);
+		}
+
+		internal class ServerListResponse
+		{
+			public string Status;
+			public string Reason;
+
+			public ServerListResponse()
+			{
+				Status = "";
+				Reason = "";
+			}
 		}
 	}
 }

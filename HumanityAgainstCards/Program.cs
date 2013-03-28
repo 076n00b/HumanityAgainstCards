@@ -1,14 +1,12 @@
 ﻿using System;
 using Californium;
-using SFML.Graphics;
-using SFML.Window;
 
 namespace ManateesAgainstCards
 {
 	class Program
 	{
 		public const string DefaultFont = "arial.ttf";
-		public const string Version = "1.97";
+		public const string Version = "1.98";
 		public static bool HandleNetworking;
 
 		public static void Main(string[] args)

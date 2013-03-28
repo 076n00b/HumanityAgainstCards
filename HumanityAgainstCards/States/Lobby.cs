@@ -247,6 +247,8 @@ namespace ManateesAgainstCards.States
 
 						Entities.Add(settingsButton);
 
+						Server.AddServer();
+
 						break;
 					}
 

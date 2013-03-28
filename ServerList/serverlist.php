@@ -84,8 +84,6 @@ class ServerList
 		$statement = $this->database->prepare("UPDATE `servers` SET `lastHeartbeat` = :Time WHERE `name` = :Name");
 		$result = $statement->execute(array(":Time" => time(), ":Name" => $name));
 		
-		var_dump($result);
-		
 		if($result === true && $statement->rowCount() == 0)
 		{
 			return ServerList::ErrorNoServer;

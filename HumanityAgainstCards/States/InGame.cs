@@ -70,6 +70,8 @@ namespace ManateesAgainstCards.States
 			// Play match start sound
 			string startSoundFilename = "Start" + new Random().Next(5).ToString("G") + ".wav";
 			Timer.NextFrame(() => Assets.PlaySound(startSoundFilename));
+
+			Server.RemoveServer();
 		}
 
 		public override void Enter()

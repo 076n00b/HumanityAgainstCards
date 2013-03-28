@@ -9,7 +9,7 @@
 	[-] Allow late joins
 	[-] Game Modes
 	[X] Max turn time
-[ ] Global server list
+[X] Global server list
 	[ ] Password protected servers
 [X] Control + V to paste
 [X] Fix unicode
