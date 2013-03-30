@@ -1,11 +1,11 @@
 <?php
 /*
- *	heartbeat.php
+ *	update.php
  *	Manatees Against Cars Global Server List
- *	Update the last heartbeat for a server
+ *	Update metadata for server
  *
  *	Parameters:
- *		name			Display name of server
+ *		token			Private token of server
  *	Returns:
  *		JSON stream
  */
@@ -22,11 +22,21 @@ if(empty($_GET['token']))
 	die();
 }
 
+if(!isset($_GET['playerCount']))
+{
+	echo(json_encode(array(
+		"status"	=> "failure",
+		"reason"	=> "No playerCount provided."
+	)));
+	
+	die();
+}
+
 $serverList = new ServerList($database);
 
 /* Update the timestamp on the server entry, so that it is clear that it
  * is still active. */
-$result = $serverList->Heartbeat($_GET['token']);
+$result = $serverList->Update($_GET['token'], $_GET['playerCount']);
 
 if ($result == ServerList::ErrorSuccess)
 {

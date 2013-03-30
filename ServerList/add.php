@@ -22,21 +22,32 @@ if(empty($_GET['name']))
 	die();
 }
 
-$serverList = new ServerList($database);
-
-$result = $serverList->Add($_GET['name'], $_SERVER['REMOTE_ADDR']);
-
-if ($result == ServerList::ErrorSuccess)
+if (!isset($_GET['passwordProtected']))
 {
 	echo(json_encode(array(
-		'status'	=> 'success'
+		"status"	=> "failure",
+		"reason"	=> "No passwordProtected provided."
+	)));
+	
+	die();
+}
+
+$serverList = new ServerList($database);
+
+$result = $serverList->Add($_GET['name'], $_SERVER['REMOTE_ADDR'], $_GET['passwordProtected']);
+
+if ($result["errorCode"] == ServerList::ErrorSuccess)
+{
+	echo(json_encode(array(
+		'status'	=> 'success',
+		'token'		=> $result['token']
 	)));
 }
 else
 {
 	$reason = 'Unknown';
 	
-	switch($result)
+	switch($result['errorCode'])
 	{
 		case ServerList::ErrorNameTaken:
 			$reason = 'Server with that name already exists.';

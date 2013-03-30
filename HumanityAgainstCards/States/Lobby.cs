@@ -154,6 +154,16 @@ namespace ManateesAgainstCards.States
 
 		private bool TextInput(TextInputArgs args)
 		{
+			// 0x16 is Control + V
+			if (args.Text[0] == 0x16)
+			{
+				chatValue += GameUtility.GetClipboardText();
+				if (chatValue.Length >= 80)
+					chatValue = chatValue.Remove(80, chatValue.Length - 80);
+
+				return true;
+			}
+
 			if (args.Text == "\b")
 			{
 				if (chatValue.Length == 0)
@@ -247,7 +257,7 @@ namespace ManateesAgainstCards.States
 
 						Entities.Add(settingsButton);
 
-						Server.AddServer();
+						ServerList.Add();
 
 						break;
 					}

@@ -71,7 +71,7 @@ namespace ManateesAgainstCards.States
 			string startSoundFilename = "Start" + new Random().Next(5).ToString("G") + ".wav";
 			Timer.NextFrame(() => Assets.PlaySound(startSoundFilename));
 
-			Server.RemoveServer();
+			ServerList.Remove();
 		}
 
 		public override void Enter()
@@ -208,6 +208,16 @@ namespace ManateesAgainstCards.States
 
 		private bool InputText(TextInputArgs args)
 		{
+			// 0x16 is Control + V
+			if (args.Text[0] == 0x16)
+			{
+				chatValue += GameUtility.GetClipboardText();
+				if (chatValue.Length >= 80)
+					chatValue = chatValue.Remove(80, chatValue.Length - 80);
+
+				return true;
+			}
+
 			if (args.Text == "\b")
 			{
 				if (chatValue.Length == 0)

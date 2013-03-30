@@ -1,6 +1,7 @@
 [X] Fix sound playing when end turn results in nothing
 [X] Fix in game chat
-	[ ] Fix it again (Wrapping issues)
+	[X] Fix it again (Wrapping issues)
+	[ ] Polish
 [X] Rename "crown.png" to "hat.png"
 [X] Remove unneeded textures from release build
 [X] Host game settings
@@ -10,7 +11,8 @@
 	[-] Game Modes
 	[X] Max turn time
 [X] Global server list
-	[ ] Password protected servers
+	[X] Password protected servers
+	[X] Player count
 [X] Control + V to paste
 [X] Fix unicode
 [X] Keep "Brain Tumor" sound from playing every round
@@ -32,3 +34,5 @@
 [X] Minimal value on numberboxes
 [X] Allow settings to be edited from the lobby
 [X] Let hosts know what port the server will listen on somehow
+[X] Control + V for all text boxes
+[X] Let people know when players join via lobby message

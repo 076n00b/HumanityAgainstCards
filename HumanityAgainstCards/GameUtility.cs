@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Windows.Forms;
 using Californium;
 using SFML.Graphics;
 
@@ -11,6 +13,32 @@ namespace ManateesAgainstCards
 {
 	static class GameUtility
 	{
+		public static string GetClipboardText()
+		{
+			string value = "";
+
+			ThreadStart threadMethod =
+			delegate
+			{
+				try
+				{
+					value = Clipboard.GetText(TextDataFormat.Text);
+				}
+				catch (Exception)
+				{
+					Console.WriteLine("Cannot get clipboard text!");
+				}
+			};
+
+			Thread staThread = new Thread(threadMethod);
+			staThread.SetApartmentState(ApartmentState.STA);
+			staThread.Start();
+			staThread.Join();
+			staThread.Abort();
+
+			return value;
+		}
+
 		public static void PlayTaunt(string value)
 		{
 			string[] values = value.Split(new[] { ' ' });

@@ -108,6 +108,7 @@
     <Compile Include="Network\Packets\SetStatus.cs" />
     <Compile Include="Network\Packets\WhiteCard.cs" />
     <Compile Include="Network\Packets\WinnerPicked.cs" />
+    <Compile Include="Network\ServerList.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Network\Server.cs" />
     <Compile Include="Network\ServerClient.cs" />

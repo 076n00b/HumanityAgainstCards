@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
-using System.Net;
-using System.Text;
-using System.Threading;
 using Lidgren.Network;
 using ManateesAgainstCards.Network.Packets;
 
@@ -12,10 +9,9 @@ namespace ManateesAgainstCards.Network
 {
 	static class Server
 	{
-		public const int MaxPlayers = 6;
-
 		public static int PointCap = 20;
 		public static int SecondsPerTurn = 45;
+		public static string Password = "";
 
 		// TODO Fix late joining someday
 		public static bool AllowLateJoins = false;
@@ -146,7 +142,7 @@ namespace ManateesAgainstCards.Network
 											break;
 										}
 
-										if (Clients.Count == MaxPlayers)
+										if (Clients.Count == Constants.MaxPlayerCount)
 										{
 											msg.SenderConnection.Disconnect("Too crowded, fuck off.");
 											break;
@@ -155,6 +151,10 @@ namespace ManateesAgainstCards.Network
 										ServerClient client = new ServerClient(msg.SenderConnection, GenerateId());
 										msg.SenderConnection.Tag = client;
 										Clients.Add(client);
+
+										if (State == States.Lobby)
+											ServerList.Update();
+
 										break;
 									}
 
@@ -175,6 +175,9 @@ namespace ManateesAgainstCards.Network
 											// Card Czar left like the asshole he is
 											if (serverClient.Id == currentCardCzar)
 												DeclareWinner(Clients[random.Next(Clients.Count)].Id);
+
+											if (State == States.Lobby)
+												ServerList.Update();
 										}
 										break;
 									}
@@ -420,62 +423,6 @@ namespace ManateesAgainstCards.Network
 
 			whiteDeck = new Deck(CardType.White);
 			blackDeck = new Deck(CardType.Black);
-		}
-
-		public static void AddServer()
-		{
-			new Thread(ServerListCommand).Start("add");
-
-			Californium.Timer.Every(30.0f, () =>
-			{
-				if (State == States.Lobby)
-				{
-					new Thread(ServerListCommand).Start("heartbeat");
-					return false;
-				}
-
-				new Thread(ServerListCommand).Start("remove");
-				return true;
-			});
-		}
-
-		public static void RemoveServer()
-		{
-			new Thread(ServerListCommand).Start("remove");
-		}
-
-		private static void ServerListCommand(object command)
-		{
-			ServerListResponse response = new ServerListResponse();
-			string address = Constants.RemoteServerListAddress + (string)command + ".php?name=" + Client.Name;
-
-			WebClient client = new WebClient();
-			string jsonStream = Encoding.ASCII.GetString(client.DownloadData(address));
-			client.Dispose();
-
-			// Decode JSON stream
-			try
-			{
-				response = Json.LoadStream<ServerListResponse>(jsonStream);
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine("ServerList error: {0}", e.Message);
-			}
-
-			Console.WriteLine("Status: {0}; Reason: {1}", response.Status, response.Reason);
-		}
-
-		internal class ServerListResponse
-		{
-			public string Status;
-			public string Reason;
-
-			public ServerListResponse()
-			{
-				Status = "";
-				Reason = "";
-			}
 		}
 	}
 }

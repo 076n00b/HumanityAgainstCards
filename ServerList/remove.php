@@ -5,18 +5,18 @@
  *	Remove a server from the global server list
  *
  *	Parameters:
- *		name			Display name of server
+ *		token			Private server token
  *	Returns:
  *		JSON stream
  */
 
 require_once('serverlist.php');
 
-if(empty($_GET['name']))
+if(empty($_GET['token']))
 {
 	echo(json_encode(array(
 		"status"	=> "failure",
-		"reason"	=> "No name provided."
+		"reason"	=> "No token provided."
 	)));
 	
 	die();
@@ -24,7 +24,7 @@ if(empty($_GET['name']))
 
 $serverList = new ServerList($database);
 
-$result = $serverList->Remove($_GET['name']);
+$result = $serverList->Remove($_GET['token']);
 
 if ($result == ServerList::ErrorSuccess)
 {
@@ -42,7 +42,7 @@ else
 			$reason = 'Database error!';
 			break;
 		case ServerList::ErrorNoServer:
-			$reason = 'No server with that name.';
+			$reason = 'No server with that token.';
 			break;
 	}
 	

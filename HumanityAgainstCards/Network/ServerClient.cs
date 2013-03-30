@@ -78,6 +78,8 @@ namespace ManateesAgainstCards.Network
 
 						Verified = true;
 
+						Server.SendMessageToAllExcept(new ChatMessage(String.Format("{0} has joined the game!", Name)), Id);
+
 						break;
 					}
 

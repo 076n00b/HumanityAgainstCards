@@ -180,16 +180,6 @@ namespace ManateesAgainstCards.States
 		{
 			Entities.Clear();
 
-			// IP Address textbox
-			/*Textbox ipTextbox = new Textbox("IP Address")
-			{
-				Position =
-					new Vector2f(GameOptions.Width / 2.0f - GameOptions.Width / 3.0f, 250.0f + 128.0f + 16.0f),
-				Selected = true
-			};
-
-			Entities.Add(ipTextbox);*/
-
 			// Display Name textbox
 			Textbox nameTextbox = new Textbox("Display Name")
 			{
@@ -199,19 +189,6 @@ namespace ManateesAgainstCards.States
 				Value = persistentDisplayName,
 				Selected = true
 			};
-
-			//nameTextbox.OnReturn += a => JoinNext(nameTextbox.Value, ipTextbox.Value);
-			/*nameTextbox.OnReturn += a =>
-			{
-				if (String.IsNullOrEmpty(nameTextbox.Value))
-				{
-					Game.PushState(new PopupOverlay("You must enter a name before joining a game."));
-					return;
-				}
-
-				Client.Name = nameTextbox.Value;
-				Game.PushState(new ServerListOverlay());
-			};*/
 
 			Entities.Add(nameTextbox);
 
@@ -227,7 +204,7 @@ namespace ManateesAgainstCards.States
 
 					Client.Name = nameTextbox.Value;
 					Game.PushState(new ServerListOverlay());
-					//JoinNext(nameTextbox.Value, ipTextbox.Value);
+
 					return true;
 				}
 			);
@@ -241,23 +218,6 @@ namespace ManateesAgainstCards.States
 			);
 
 			return true;
-		}
-
-		public void JoinNext(string name, string ip)
-		{
-			if (!String.IsNullOrEmpty(name) && !String.IsNullOrEmpty(ip))
-				Game.SetState(new Lobby(SessionRole.Client, ip, name));
-			else
-			{
-				if (String.IsNullOrEmpty(name))
-				{
-					Game.PushState(new PopupOverlay("You must enter a name before joining a game."));
-					return;
-				}
-
-				if (String.IsNullOrEmpty(ip))
-					Game.PushState(new PopupOverlay("You must enter an IP to join a game."));
-			}
 		}
 
 		private void HostNext(string name)

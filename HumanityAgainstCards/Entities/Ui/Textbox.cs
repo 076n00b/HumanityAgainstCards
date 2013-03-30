@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
-using System.Windows.Forms;
 using Californium;
 using SFML.Graphics;
 using SFML.Window;
-using Timer = Californium.Timer;
 
 namespace ManateesAgainstCards.Entities.Ui
 {
@@ -74,7 +71,10 @@ namespace ManateesAgainstCards.Entities.Ui
 				// 0x16 is Control + V
 				if (args.Text[0] == 0x16)
 				{
-					Value += GetClipboardText();
+					Value += GameUtility.GetClipboardText();
+					if (Value.Length >= 36)
+						Value = Value.Remove(36, Value.Length - 36);
+
 					return true;
 				}
 
@@ -157,32 +157,6 @@ namespace ManateesAgainstCards.Entities.Ui
 			}
 
 			base.Draw(rt);
-		}
-
-		private string GetClipboardText()
-		{
-			string value = "";
-
-			ThreadStart threadMethod =
-			delegate
-			{
-				try
-				{
-					value = Clipboard.GetText(TextDataFormat.Text);
-				}
-				catch (Exception)
-				{
-					Console.WriteLine("Cannot get clipboard text!");
-				}
-			};
-
-			Thread staThread = new Thread(threadMethod);
-			staThread.SetApartmentState(ApartmentState.STA);
-			staThread.Start();
-			staThread.Join();
-			staThread.Abort();
-
-			return value;
 		}
 	}
 }

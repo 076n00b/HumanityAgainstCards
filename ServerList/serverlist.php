@@ -9,7 +9,7 @@ require_once("mysql.php");
 class ServerList
 {
 	const ErrorSuccess		= 0;
-	const ErrorNameTaken 		= 1;
+	const ErrorNameTaken 	= 1;
 	const ErrorDatabase		= 2;
 	const ErrorNoServer		= 3;
 	
@@ -25,69 +25,93 @@ class ServerList
 		// Clean server list
 		$this->CleanServerList();
 		
-		$statement = $this->database->prepare("SELECT `name`, `ipAddress` FROM `servers`");
+		$statement = $this->database->prepare("SELECT `name`, `ipAddress`, `playerCount`, `passwordProtected` FROM `servers`");
 		$statement->execute();
 		
 		if($statement->rowCount() == 0)
-		{
 			return array();
-		}
-		
+
 		$servers = $statement->fetchAll(PDO::FETCH_ASSOC);
 		$result = array();
 		
 		foreach($servers as $server)
 		{
 			$result[] = array(
-				"name"		=> $server["name"],
-				"ipAddress"	=> $server["ipAddress"]
+				"name"				=> $server["name"],
+				"ipAddress"			=> $server["ipAddress"],
+				"playerCount"		=> (int)$server["playerCount"],
+				"passwordProtected"	=> (boolean)$server["passwordProtected"]
 			);
 		}
 		
 		return $result;
 	}
 	
-	public function Add($name, $ipAddress)
-	{
+	public function Add($name, $ipAddress, $passwordProtected)
+	{	
+		$token = $this->GenerateToken();
+		
+		$this->CleanServerList();
+		
 		$statement = $this->database->prepare("SELECT * FROM `servers` WHERE `name` = :Name");
 		$statement->execute(array(":Name" => $name));
 		
 		if($statement->rowCount() > 0)
-		{
-			return ServerList::ErrorNameTaken;
-		}
+			return array('errorCode' => ServerList::ErrorNameTaken);
 		
-		$statement = $this->database->prepare("INSERT INTO `servers` (`name`, `ipAddress`, `lastHeartbeat`) VALUES (:Name, :Ip, :Time)");
-		$result = $statement->execute(array(":Name" => $name, ":Ip" => $ipAddress, ":Time" => time()));
+		$statement = $this->database->prepare(
+			"INSERT INTO `servers` (`name`, `ipAddress`, `lastHeartbeat`, `passwordProtected`, `playerCount`, `token`) " .
+			"VALUES (:Name, :Ip, :Time, :PasswordProtected, 1, :Token)"
+		);
+		
+		$result = $statement->execute(
+			array(
+				":Name" 				=> $name,
+				":Ip" 					=> $ipAddress,
+				":Time" 				=> time(),
+				":PasswordProtected"	=> $passwordProtected,
+				":Token"				=> $token
+			)
+		);
+		
+		return array(
+			"errorCode"		=> $result ? ServerList::ErrorSuccess : ServerList::ErrorDatabase,
+			"token"			=> $token
+		);
+	}
+	
+	public function Remove($token)
+	{
+		$statement = $this->database->prepare("DELETE FROM `servers` WHERE `token` = :Token LIMIT 1");
+		$result = $statement->execute(array(":Token" => $token));
+		
+		if($result === true && $statement->rowCount() == 0)
+			return ServerList::ErrorNoServer;
 		
 		return $result ? ServerList::ErrorSuccess : ServerList::ErrorDatabase;
 	}
 	
-	public function Remove($name)
+	public function Heartbeat($token)
 	{
-		$statement = $this->database->prepare("DELETE FROM `servers` WHERE `name` = :Name LIMIT 1");
-		$result = $statement->execute(array(":Name" => $name));
+		$statement = $this->database->prepare("SELECT * FROM `servers` WHERE `token` = :Token");
+		$result = $statement->execute(array(":Token" => $token));
+		
+		$statement = $this->database->prepare("UPDATE `servers` SET `lastHeartbeat` = :Time WHERE `token` = :Token");
+		$result = $statement->execute(array(":Time" => time(), ":Token" => $token));
 		
 		if($result === true && $statement->rowCount() == 0)
-		{
 			return ServerList::ErrorNoServer;
-		}
 		
 		return $result ? ServerList::ErrorSuccess : ServerList::ErrorDatabase;
 	}
 	
-	public function Heartbeat($name)
+	public function Update($token, $playerCount)
 	{
-		$statement = $this->database->prepare("SELECT * FROM `servers` WHERE `name` = :Name");
-		$result = $statement->execute(array(":Name" => $name));
-		
-		$statement = $this->database->prepare("UPDATE `servers` SET `lastHeartbeat` = :Time WHERE `name` = :Name");
-		$result = $statement->execute(array(":Time" => time(), ":Name" => $name));
+		$statement = $this->database->prepare("UPDATE `servers` SET `playerCount` = :PlayerCount WHERE `token` = :Token");
+		$result = $statement->execute(array(":PlayerCount" => $playerCount, ":Token" => $token));
 		
 		if($result === true && $statement->rowCount() == 0)
-		{
 			return ServerList::ErrorNoServer;
-		}
 		
 		return $result ? ServerList::ErrorSuccess : ServerList::ErrorDatabase;
 	}
@@ -98,5 +122,11 @@ class ServerList
 		$result = $statement->execute();
 		
 		return $result ? ServerList::ErrorDatabase : ServerList::ErrorSuccess;
+	}
+	
+	private function GenerateToken()
+	{
+		// TODO Should make this a bit more unique
+		return sha1(time());
 	}
 }

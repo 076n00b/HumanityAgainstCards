@@ -41,10 +41,11 @@ namespace ManateesAgainstCards.States
 			{
 				listOffset += args.Delta;
 
+				if (listOffset >= servers.Count)
+					listOffset = servers.Count - 1;
+
 				if (listOffset < 0)
 					listOffset = 0;
-				else if (listOffset >= servers.Count)
-					listOffset = servers.Count - 1;
 
 				return true;
 			};
@@ -185,6 +186,26 @@ namespace ManateesAgainstCards.States
 					serverLabel.Round();
 					rt.Draw(serverLabel);
 
+					// Draw player count
+					Sprite playerAvatar = new Sprite(Assets.LoadTexture("Avatar.png"))
+					{
+						Position = new Vector2f(boundingX + GameOptions.Width - boundingX * 2.0f - 128.0f, boundingY + yy + 32.0f),
+						Scale = new Vector2f(0.5f, 0.5f)
+					};
+
+					playerAvatar.Origin = new Vector2f(playerAvatar.TextureRect.Width / 2.0f, playerAvatar.TextureRect.Height / 2.0f);
+					rt.Draw(playerAvatar);
+
+					Text playerCountLabel = new Text(server.PlayerCount.ToString("G") + "/" + Constants.MaxPlayerCount.ToString("G"), Assets.LoadFont(Program.DefaultFont), 36)
+					{
+						Position = new Vector2f(boundingX + GameOptions.Width - boundingX * 2.0f - 128.0f + 32.0f, boundingY + yy + 32.0f),
+						Color = Color.White
+					};
+
+					playerCountLabel.Center(false);
+					playerCountLabel.Round();
+					rt.Draw(playerCountLabel);
+
 					yy += 64.0f;
 				}
 			}
@@ -243,11 +264,15 @@ namespace ManateesAgainstCards.States
 		{
 			public string Name;
 			public string IpAddress;
+			public int PlayerCount;
+			public bool PasswordProtected;
 
 			public Server()
 			{
 				Name = "";
 				IpAddress = "";
+				PlayerCount = 0;
+				PasswordProtected = false;
 			}
 		}
 	}

@@ -253,7 +253,7 @@ namespace ManateesAgainstCards.Network
 					}
 
 				case PacketType.LobbyBeginGame:
-					Game.SetState(new InGame(((Lobby)Game.PeekState()).Players));
+					Game.SetState(new InGame(((Lobby)Game.PeekFirstState()).Players));
 					InMatch = true;
 					break;
 
@@ -279,8 +279,8 @@ namespace ManateesAgainstCards.Network
 				case PacketType.ChatMessage:
 					{
 						ChatMessage chatMessage = (ChatMessage)packet;
-						if (Game.PeekState().GetType() == typeof(Lobby))
-							((Lobby)Game.PeekState()).ChatBacklog.Add(chatMessage.Value);
+						if (Game.PeekFirstState().GetType() == typeof(Lobby))
+							((Lobby)Game.PeekFirstState()).ChatBacklog.Add(chatMessage.Value);
 						else
 							((InGame)Game.PeekFirstState()).ChatBacklog.Add(chatMessage.Value);
 
