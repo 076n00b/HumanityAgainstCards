@@ -44,7 +44,7 @@ namespace ManateesAgainstCards.Network
 
 		public static void Remove()
 		{
-			new Thread(ServerListCommand).Start("remove");
+			new Thread(ServerListCommand).Start(new ServerListRequest("remove"));
 		}
 
 		public static void Update()
@@ -84,16 +84,12 @@ namespace ManateesAgainstCards.Network
 		internal class ServerListRequest
 		{
 			public string Command { get; private set; }
-			//public string Name { get; private set; }
-			//public string Token { get; private set; }
 			public bool PasswordProtected { get; private set; }
 			public int PlayerCount { get; private set; }
 
 			public ServerListRequest(string command)
 			{
 				Command = command;
-				//Name = name;
-				//Token = null;
 			}
 
 			public ServerListRequest(string command, bool passwordProtected)
@@ -105,8 +101,6 @@ namespace ManateesAgainstCards.Network
 			public ServerListRequest(string command, int playerCount)
 			{
 				Command = command;
-				//Token = token;
-				//PasswordProtected = passwordProtected;
 				PlayerCount = playerCount;
 			}
 

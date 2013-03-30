@@ -70,8 +70,6 @@ namespace ManateesAgainstCards.States
 			// Play match start sound
 			string startSoundFilename = "Start" + new Random().Next(5).ToString("G") + ".wav";
 			Timer.NextFrame(() => Assets.PlaySound(startSoundFilename));
-
-			ServerList.Remove();
 		}
 
 		public override void Enter()
@@ -147,12 +145,12 @@ namespace ManateesAgainstCards.States
 			Text text = new Text(timerValue, Assets.LoadFont("QuartzMS.ttf"))
 			{
 				Position = new Vector2f(GameOptions.Width - 128.0f - 8.0f, 40.0f),
+				Color = Color.White,
 				CharacterSize = 48
 			};
 
 			text.Center();
 			text.Round();
-			text.Color = Color.White;
 			rt.Draw(text);
 
 			// Draw decks

@@ -179,6 +179,8 @@ namespace ManateesAgainstCards.Network
 											if (State == States.Lobby)
 												ServerList.Update();
 										}
+										else
+											Clients.Remove((ServerClient)msg.SenderConnection.Tag);
 										break;
 									}
 							}

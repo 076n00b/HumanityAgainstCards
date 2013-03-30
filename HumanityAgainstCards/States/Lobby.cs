@@ -131,6 +131,7 @@ namespace ManateesAgainstCards.States
 				Color = Color.White
 			};
 
+			messageText.Round();
 			rt.Draw(messageText);
 
 			// Draw chat backlog
@@ -251,6 +252,7 @@ namespace ManateesAgainstCards.States
 						Button settingsButton = new Button(new Vector2f(GameOptions.Width - Button.Width / 2.0f - 8.0f - 64.0f + 8.0f - Button.Width - 4.0f, Button.Height / 2.0f + 8.0f + 32.0f + 8.0f), "Settings");
 						settingsButton.OnClick += () =>
 						{
+							ServerList.Remove();
 							Game.PushState(new HostSettingsOverlay());
 							return true;
 						};

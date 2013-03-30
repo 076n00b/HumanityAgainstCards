@@ -90,7 +90,7 @@ namespace ManateesAgainstCards.Entities.Ui
 					Position = Position + new Vector2f(4f, 4f),
 					FillColor = Color.Black,
 					OutlineColor = Color.White,
-					OutlineThickness = 2f
+					OutlineThickness = 2.0f
 				};
 
 				rt.Draw(buttonHover);
