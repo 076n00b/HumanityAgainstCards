@@ -25,6 +25,7 @@
 		DeclareWinner,
 		SetStatus,
 		ServerTime,
+		Voice,
 
 		Invalid = 255
 	}

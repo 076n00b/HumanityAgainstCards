@@ -6,12 +6,16 @@ using Lidgren.Network;
 using ManateesAgainstCards.Entities;
 using ManateesAgainstCards.Network.Packets;
 using ManateesAgainstCards.States;
+using NSpeex;
+using SFML.Audio;
 using SFML.Window;
 
 namespace ManateesAgainstCards.Network
 {
 	class Client
 	{
+		public static VoIp VoIp { get; private set; }
+
 		public static List<Card> Hand { get; private set; }
 		public static Card CurrentBlackCard { get; private set; }
 		public static bool InMatch;
@@ -36,6 +40,7 @@ namespace ManateesAgainstCards.Network
 			Name = "Missingno";
 			client = null;
 
+			VoIp = new VoIp();
 			random = new Random();
 		}
 
@@ -64,6 +69,8 @@ namespace ManateesAgainstCards.Network
 			InMatch = false;
 
 			Console.WriteLine("Client running...");
+
+			//VoIp.Start();
 		}
 
 		public static void Disconnect()
@@ -147,6 +154,20 @@ namespace ManateesAgainstCards.Network
 
 			switch (packet.Type)
 			{
+				case PacketType.Voice:
+				{
+					byte[ ] rawData = ((Voice)packet).VoiceData;
+					short[] decodedData = new short[rawData.Length * 2];
+					SpeexDecoder decoder = new SpeexDecoder(BandMode.Wide);
+					if (decoder.Decode(rawData, 0, rawData.Length, decodedData, 0, false) != 0)
+					{
+						SoundBuffer buffer = new SoundBuffer(decodedData, 1, 41100);
+						new Sound(buffer).Play();
+					}
+
+					break;
+				}
+
 				case PacketType.ServerTime:
 					SecondsLeft = ((ServerTime)packet).Seconds;
 					break;

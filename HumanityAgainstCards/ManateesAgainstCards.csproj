@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{25E0AC52-EC52-4463-9A08-CA42AF91231E}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ManateesAgainstCards</RootNamespace>
     <AssemblyName>ManateesAgainstCards</AssemblyName>
@@ -61,6 +61,10 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NSpeex">
+      <HintPath>..\NSpeex.dll</HintPath>
+    </Reference>
+    <Reference Include="sfmlnet-audio-2, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86" />
     <Reference Include="sfmlnet-graphics-2">
       <HintPath>..\SFML\sfmlnet-graphics-2.dll</HintPath>
     </Reference>
@@ -106,9 +110,11 @@
     <Compile Include="Network\Packets\ServerJoin.cs" />
     <Compile Include="Network\Packets\ServerTime.cs" />
     <Compile Include="Network\Packets\SetStatus.cs" />
+    <Compile Include="Network\Packets\Voice.cs" />
     <Compile Include="Network\Packets\WhiteCard.cs" />
     <Compile Include="Network\Packets\WinnerPicked.cs" />
     <Compile Include="Network\ServerList.cs" />
+    <Compile Include="Network\VoIP.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Network\Server.cs" />
     <Compile Include="Network\ServerClient.cs" />

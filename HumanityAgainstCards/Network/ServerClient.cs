@@ -32,24 +32,28 @@ namespace ManateesAgainstCards.Network
 		{
 			switch (msg.Type)
 			{
+				case PacketType.Voice:
+					Server.SendMessageToAll(msg);
+					break;
+
 				case PacketType.DeclareWinner:
 					Server.DeclareWinner(((DeclareWinner)msg).Id);
 					Server.StartMatch(true);
 					break;
 
 				case PacketType.EndTurn:
-				{
-					EndTurn endTurn = (EndTurn) msg;
-					SelectedCards.Clear();
-					foreach(CardInfo info in endTurn.Cards)
-						SelectedCards.Add(info.Value);
-					
-					CardCount -= endTurn.Cards.Count;
-					Ready = true;
+					{
+						EndTurn endTurn = (EndTurn)msg;
+						SelectedCards.Clear();
+						foreach (CardInfo info in endTurn.Cards)
+							SelectedCards.Add(info.Value);
 
-					Server.SendMessageToAllExcept(new SetStatus(Id, false), Id);
-					break;
-				}
+						CardCount -= endTurn.Cards.Count;
+						Ready = true;
+
+						Server.SendMessageToAllExcept(new SetStatus(Id, false), Id);
+						break;
+					}
 
 				case PacketType.LobbyBeginGame:
 					Server.SendMessageToAll(new BeginGame());
@@ -84,12 +88,12 @@ namespace ManateesAgainstCards.Network
 					}
 
 				case PacketType.ChatMessage:
-				{
-					ChatMessage chatMessage = (ChatMessage) msg;
+					{
+						ChatMessage chatMessage = (ChatMessage)msg;
 
-					Server.SendMessageToAllExcept(new ChatMessage(chatMessage.Value), Id);
-					break;
-				}
+						Server.SendMessageToAllExcept(new ChatMessage(chatMessage.Value), Id);
+						break;
+					}
 
 				default:
 					Console.WriteLine("Unhandled packet {0}", msg.Type.ToString());
