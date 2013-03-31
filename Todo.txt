@@ -24,7 +24,7 @@
 	[X] Missing IP
 	[X] No decks selected
 	[-] Lost connection to server?
-	[ ] When idiots don't select multiple cards on pick 2/3 cards
+	[X] When idiots don't select multiple cards on pick 2/3 cards
 [X] Fix that god damn uneven vert centering on text
 [X] AoE style taunts
 [X] Refactor packets & MainMenu
@@ -37,3 +37,4 @@
 [X] Let hosts know what port the server will listen on somehow
 [X] Control + V for all text boxes
 [X] Let people know when players join via lobby message
+[X] Fix selecting random winners when no one played

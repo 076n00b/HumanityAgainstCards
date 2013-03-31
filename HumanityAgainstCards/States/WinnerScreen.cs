@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Californium;
+using ManateesAgainstCards.Entities;
 using SFML.Graphics;
 using SFML.Window;
 
@@ -16,6 +18,9 @@ namespace ManateesAgainstCards.States
 
 			if (Game.PeekState().GetType() == typeof(SelectionScreen))
 				Game.PopState();
+
+			foreach (Card card in Game.PeekFirstState().Entities.OfType<Card>())
+				card.Selected = false;
 
 			winnerCombo = blackCard;
 			if (whiteCards.Count > 0)

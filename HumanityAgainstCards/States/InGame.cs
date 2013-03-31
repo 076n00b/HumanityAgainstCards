@@ -77,7 +77,18 @@ namespace ManateesAgainstCards.States
 			endTurnButton = new Button(new Vector2f(GameOptions.Width - 132.0f, GameOptions.Height - 244.0f), "End Turn");
 			endTurnButton.OnClick += () =>
 			{
-				if (SelectedCards.Count != Client.CurrentBlackCard.Info.PickCount || !Client.InMatch)
+				if (Client.InMatch && SelectedCards.Count != Client.CurrentBlackCard.Info.PickCount)
+				{
+					string errorMessage = String.Format("Select {0} {1} before ending turn, moron.",
+														Client.CurrentBlackCard.Info.PickCount,
+														Client.CurrentBlackCard.Info.PickCount == 1 ? "card" : "cards");
+
+					Game.PushState(new PopupOverlay(errorMessage));
+
+					return false;
+				}
+
+				if (!Client.InMatch)
 					return false;
 
 				LocalPlayer.Thinking = false;

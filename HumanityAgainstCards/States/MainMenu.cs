@@ -21,7 +21,8 @@ namespace ManateesAgainstCards.States
 			"Facepunch",
 			"people with monochrome displays",
 			"Recreationists",
-			"Justin Bieber Fangirls"
+			"Justin Bieber Fangirls",
+			"White America"
 		};
 
 		private readonly string personValue;

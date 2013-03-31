@@ -97,7 +97,7 @@ namespace ManateesAgainstCards.Network
 			if (server == null)
 				return;
 
-			foreach(ServerClient c in Clients)
+			foreach (ServerClient c in Clients)
 				c.Disconnect("Host shutting down");
 
 			server.Shutdown("Fuck this shit, I'm out of this bitch.");
@@ -256,7 +256,7 @@ namespace ManateesAgainstCards.Network
 				return;
 
 			// Kill games that only have a single player
-			if (Clients.Count < 2)
+			if (Clients.Count < Constants.MinimalPlayerCount)
 			{
 				SendMessageToAll(new GameOver());
 				return;
@@ -371,18 +371,21 @@ namespace ManateesAgainstCards.Network
 		{
 			// Check if they're still in game
 			if (Clients.Count(c => c.Id == id) == 0)
-				id = Clients[random.Next(Clients.Count)].Id;
-
-			List<string> cards = new List<string>();
-			foreach (ServerClient c in Clients.Where(c => c.Id == id))
+				SendMessageToAll(new WinnerPicked(0, new List<string>()));
+			else
 			{
-				++c.Points;
-				cards = c.SelectedCards;
-				break;
+				List<string> cards = new List<string>();
+				foreach (ServerClient c in Clients.Where(c => c.Id == id))
+				{
+					++c.Points;
+					cards = c.SelectedCards;
+					break;
+				}
+
+				// Pick random winner
+				SendMessageToAll(new WinnerPicked(id, cards));
 			}
 
-			// Pick random winner
-			SendMessageToAll(new WinnerPicked(id, cards));
 			canDeal = true;
 
 			foreach (ServerClient c in Clients)
