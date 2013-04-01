@@ -38,3 +38,4 @@
 [X] Control + V for all text boxes
 [X] Let people know when players join via lobby message
 [X] Fix selecting random winners when no one played
+[X] Trim control characters

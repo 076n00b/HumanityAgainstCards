@@ -117,7 +117,7 @@ namespace ManateesAgainstCards.Entities.Ui
 
 				if (Char.IsDigit(args.Text[0]))
 				{
-					stringValue += args.Text;
+					stringValue += args.Text.Trim();
 
 					if (Value > maxValue && stringValue.Length != 0)
 						stringValue = stringValue.Remove(stringValue.Length - 1);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Californium;
 using SFML.Graphics;
 using SFML.Window;
@@ -108,7 +109,7 @@ namespace ManateesAgainstCards.Entities.Ui
 				}
 
 				if (!Char.IsControl(args.Text[0]) && Value.Length < 36)
-					Value += args.Text;
+					Value += Regex.Replace(args.Text, "[\x01-\x1F]", "");
 
 				return true;
 			};

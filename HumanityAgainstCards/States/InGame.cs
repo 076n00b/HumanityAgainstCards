@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Californium;
 using ManateesAgainstCards.Entities;
 using ManateesAgainstCards.Entities.Ui;
@@ -254,7 +255,7 @@ namespace ManateesAgainstCards.States
 			}
 
 			if (chatValue.Length < 80)
-				chatValue += args.Text;
+				chatValue += Regex.Replace(args.Text, "[\x01-\x1F]", "");
 
 			return true;
 		}
