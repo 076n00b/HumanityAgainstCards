@@ -106,7 +106,7 @@ namespace ManateesAgainstCards.States
 			labelDecks.Round();
 			rt.Draw(labelDecks);
 
-			Text portLabel = new Text("Forward port 1890.", Assets.LoadFont(Program.DefaultFont))
+			Text portLabel = new Text("Hosts should forward port 1890 to allow players to connect over the internet.", Assets.LoadFont(Program.DefaultFont))
 			{
 				Position = new Vector2f(GameOptions.Width / 2.0f,
 					GameOptions.Height * (1.0f - PaddingVertical * 2.0f) + GameOptions.Height * PaddingVertical - 20.0f),

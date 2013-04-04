@@ -20,6 +20,7 @@ namespace ManateesAgainstCards.States
 		private string chatValue;
 		private readonly string sessionIp;
 		private readonly SessionRole sessionRole;
+		private bool cursorVisible;
 
 		public List<Player> Players
 		{
@@ -48,6 +49,14 @@ namespace ManateesAgainstCards.States
 			Client.Name = username;
 			sessionRole = role;
 			sessionIp = ip;
+
+			cursorVisible = true;
+
+			Timer.Every(0.65f, () =>
+			{
+				cursorVisible = !cursorVisible;
+				return false;
+			});
 		}
 
 		public override void Enter()
@@ -124,7 +133,7 @@ namespace ManateesAgainstCards.States
 
 			rt.Draw(chatBarArea);
 
-			Text messageText = new Text(chatValue + "|", Assets.LoadFont(Program.DefaultFont))
+			Text messageText = new Text(chatValue, Assets.LoadFont(Program.DefaultFont))
 			{
 				Position =
 					new Vector2f(GameOptions.Width / 3.0f + 8.0f, GameOptions.Height - 64.0f - 48.0f + 8.0f + 4.0f),
@@ -135,18 +144,28 @@ namespace ManateesAgainstCards.States
 			messageText.Round();
 			rt.Draw(messageText);
 
+			if (cursorVisible)
+			{
+				RectangleShape cursor = new RectangleShape(new Vector2f(2.0f, 24.0f))
+				{
+					Position = messageText.Position + new Vector2f(messageText.GetGlobalBounds().Width + 2.0f, 2.0f),
+					FillColor = Color.White
+				};
+
+				cursor.Round();
+				rt.Draw(cursor);
+			}
+
 			// Draw chat backlog
 			float y = 0.0f;
 			for (int i = ChatBacklog.Count - 1; i > ChatBacklog.Count - ChatBacklogItems && i != -1; --i)
 			{
-				Text itemText = new Text(ChatBacklog[i], Assets.LoadFont(Program.DefaultFont))
-				{
-					Position = new Vector2f((float)Math.Floor(GameOptions.Width / 3.0f + 8.0f), GameOptions.Height - 144.0f + y),
-					CharacterSize = 22,
-					Color = Color.White
-				};
+				Text itemText = GameUtility.Wrap(ChatBacklog[i], Assets.LoadFont(Program.DefaultFont), 22,
+					(GameOptions.Width / 3.0f) * 2.0f - 64.0f - 32.0f);
 
-				y -= 24.0f;
+				y -= 24.0f * itemText.DisplayedString.Count(c => c == '\n');
+				itemText.Position = new Vector2f((float)Math.Floor(GameOptions.Width / 3.0f + 8.0f), GameOptions.Height - 144.0f + y + 24.0f);
+				itemText.Color = Color.White;
 
 				rt.Draw(itemText);
 			}
@@ -195,7 +214,7 @@ namespace ManateesAgainstCards.States
 
 			if (chatValue.Length < 80)
 				chatValue += Regex.Replace(args.Text, "[\x01-\x1F]", "");
-			
+
 			return true;
 		}
 
@@ -243,7 +262,7 @@ namespace ManateesAgainstCards.States
 
 							// Begin game
 							Client.SendMessage(new BeginGame());
-							
+
 							return true;
 						};
 
