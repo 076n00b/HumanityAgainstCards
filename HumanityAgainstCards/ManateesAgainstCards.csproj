@@ -130,9 +130,7 @@
     <Compile Include="States\WinnerScreen.cs" />
     <Compile Include="States\WrapTest.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\Music\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Assets\Font\arial.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -193,13 +191,13 @@
     <Content Include="Assets\Sound\Taunt\01 Yeah That%27s Ok.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Sound\Taunt\02 Zach.wav">
+    <Content Include="Assets\Sound\Taunt\02 No.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Sound\Taunt\03 Nicks Mom.wav">
+    <Content Include="Assets\Sound\Taunt\03 Zach.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Sound\Taunt\04 Alert.wav">
+    <Content Include="Assets\Sound\Taunt\04 Nicks Mom.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Sound\Taunt\05 Get your bitch ass out of here.wav">
@@ -208,7 +206,7 @@
     <Content Include="Assets\Sound\Taunt\06 Get good kid.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Sound\Taunt\07 Blame it On your ISP.wav">
+    <Content Include="Assets\Sound\Taunt\07 Blame it on your ISP.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Sound\Taunt\08 Cards Please.wav">
@@ -229,10 +227,10 @@
     <Content Include="Assets\Sound\Taunt\13 LMAO.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Sound\Taunt\14 LolLiterally.wav">
+    <Content Include="Assets\Sound\Taunt\14 Lol.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Sound\Taunt\15 RoflLiterally.wav">
+    <Content Include="Assets\Sound\Taunt\15 Rofl.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Sound\Taunt\16 Out of Cards.wav">
@@ -253,25 +251,22 @@
     <Content Include="Assets\Sound\Taunt\21 Get Fucked.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Sound\Taunt\22 No.wav">
+    <Content Include="Assets\Sound\Taunt\22 Cheater.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Sound\Taunt\23 Cheater.wav">
+    <Content Include="Assets\Sound\Taunt\23 Rogan.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Sound\Taunt\24 Rogan.wav">
+    <Content Include="Assets\Sound\Taunt\24 Rude.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Sound\Taunt\25 Rude.wav">
+    <Content Include="Assets\Sound\Taunt\25 Gtfo.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Sound\Taunt\26 Gtfo.wav">
+    <Content Include="Assets\Sound\Taunt\26 Wololol.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Sound\Taunt\27 Wololol.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Sound\Taunt\28 Zach Im Gonna Rape You.wav">
+    <Content Include="Assets\Sound\Taunt\27 Zach Im Gonna Rape You.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Texture\Avatar.png">
