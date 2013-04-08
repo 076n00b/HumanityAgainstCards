@@ -22,7 +22,8 @@ namespace ManateesAgainstCards.States
 			"people with monochrome displays",
 			"Recreationists",
 			"Justin Bieber Fangirls",
-			"White America"
+			"White America",
+			"the Internet Hate Machine"
 		};
 
 		private readonly string personValue;
@@ -191,21 +192,15 @@ namespace ManateesAgainstCards.States
 				Selected = true
 			};
 
+			nameTextbox.OnReturn += JoinNext;
+
 			Entities.Add(nameTextbox);
 
 			// Next button
 			AddButton(new Vector2f(GameOptions.Width / 2.0f, 250.0f + 128.0f + 84.0f + 16.0f + 96.0f), "Next",
 				() =>
 				{
-					if (String.IsNullOrEmpty(nameTextbox.Value))
-					{
-						Game.PushState(new PopupOverlay("You must enter a name before joining a game."));
-						return true;
-					}
-
-					Client.Name = nameTextbox.Value;
-					Game.PushState(new ServerListOverlay());
-
+					JoinNext(nameTextbox.Value);
 					return true;
 				}
 			);
@@ -227,6 +222,18 @@ namespace ManateesAgainstCards.States
 				Game.SetState(new Lobby(SessionRole.Server, "", name));
 			else
 				Game.PushState(new PopupOverlay("You must enter a name before hosting a game."));
+		}
+
+		private void JoinNext(string name)
+		{
+			if (String.IsNullOrEmpty(name))
+			{
+				Game.PushState(new PopupOverlay("You must enter a name before joining a game."));
+				return;
+			}
+
+			Client.Name = name;
+			Game.PushState(new ServerListOverlay());
 		}
 	}
 }

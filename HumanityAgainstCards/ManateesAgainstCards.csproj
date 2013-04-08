@@ -61,9 +61,6 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NSpeex">
-      <HintPath>..\NSpeex.dll</HintPath>
-    </Reference>
     <Reference Include="sfmlnet-audio-2, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86" />
     <Reference Include="sfmlnet-graphics-2">
       <HintPath>..\SFML\sfmlnet-graphics-2.dll</HintPath>
@@ -114,7 +111,6 @@
     <Compile Include="Network\Packets\WhiteCard.cs" />
     <Compile Include="Network\Packets\WinnerPicked.cs" />
     <Compile Include="Network\ServerList.cs" />
-    <Compile Include="Network\VoIP.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Network\Server.cs" />
     <Compile Include="Network\ServerClient.cs" />

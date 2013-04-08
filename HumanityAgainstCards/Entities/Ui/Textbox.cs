@@ -17,6 +17,7 @@ namespace ManateesAgainstCards.Entities.Ui
 
 		private readonly string label;
 		private bool mouseIn, cursorVisible;
+		private readonly State myState;
 
 		public Textbox(string label)
 		{
@@ -28,6 +29,8 @@ namespace ManateesAgainstCards.Entities.Ui
 			Value = "";
 
 			this.label = label;
+
+			myState = Game.PeekState();
 
 			Size = new Vector2f((GameOptions.Width / 3.0f) * 2.0f - 64.0f, 48.0f);
 
@@ -66,7 +69,7 @@ namespace ManateesAgainstCards.Entities.Ui
 
 			Input.Text = args =>
 			{
-				if (!Selected)
+				if (!Selected || !myState.Equals(Game.PeekState()))
 					return false;
 
 				// 0x16 is Control + V
