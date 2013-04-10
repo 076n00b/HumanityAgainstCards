@@ -8,7 +8,15 @@ namespace Californium
 {
     public static class Utility
     {
-        public static float Clamp(float value, float min, float max)
+		public static float GetWidth(this Text text)
+		{
+			float spaceWidth = text.Font.GetGlyph((uint)Char.ConvertToUtf32(" ", 0), text.CharacterSize, false).Advance;
+			int i = text.DisplayedString.Reverse().TakeWhile(c => c == ' ').Count();
+
+			return text.GetGlobalBounds().Width + i * spaceWidth;
+		}
+
+	    public static float Clamp(float value, float min, float max)
         {
             return (value < min) ? min : ((value > max) ? max : value);
         }

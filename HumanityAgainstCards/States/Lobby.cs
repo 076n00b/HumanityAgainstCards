@@ -148,7 +148,7 @@ namespace ManateesAgainstCards.States
 			{
 				RectangleShape cursor = new RectangleShape(new Vector2f(2.0f, 24.0f))
 				{
-					Position = messageText.Position + new Vector2f(messageText.GetGlobalBounds().Width + 2.0f, 2.0f),
+					Position = messageText.Position + new Vector2f(messageText.GetWidth() + 2.0f, 2.0f),
 					FillColor = Color.White
 				};
 
@@ -161,7 +161,7 @@ namespace ManateesAgainstCards.States
 			for (int i = ChatBacklog.Count - 1; i > ChatBacklog.Count - ChatBacklogItems && i != -1; --i)
 			{
 				Text itemText = GameUtility.Wrap(ChatBacklog[i], Assets.LoadFont(Program.DefaultFont), 22,
-					(GameOptions.Width / 3.0f) * 2.0f - 64.0f - 32.0f);
+					(GameOptions.Width / 3.0f) * 2.0f - 64.0f - 32.0f - 48.0f);
 
 				y -= 24.0f * itemText.DisplayedString.Count(c => c == '\n');
 				itemText.Position = new Vector2f((float)Math.Floor(GameOptions.Width / 3.0f + 8.0f), GameOptions.Height - 144.0f + y + 24.0f);

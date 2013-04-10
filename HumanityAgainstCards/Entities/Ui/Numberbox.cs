@@ -167,7 +167,7 @@ namespace ManateesAgainstCards.Entities.Ui
 			{
 				RectangleShape cursor = new RectangleShape(new Vector2f(2.0f, Size.Y - 16.0f))
 				{
-					Position = Position + new Vector2f(valueText.GetGlobalBounds().Width + 8.0f + 2.0f, 8.0f),
+					Position = Position + new Vector2f(valueText.GetWidth() + 8.0f + 2.0f, 8.0f),
 					FillColor = Color.White
 				};
 

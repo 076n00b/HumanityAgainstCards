@@ -64,8 +64,6 @@ namespace ManateesAgainstCards.Network
 			InMatch = false;
 
 			Console.WriteLine("Client running...");
-
-			//VoIp.Start();
 		}
 
 		public static void Disconnect()

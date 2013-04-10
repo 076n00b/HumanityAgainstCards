@@ -165,7 +165,7 @@ namespace ManateesAgainstCards.States
 			{
 				RectangleShape cursor = new RectangleShape(new Vector2f(2.0f, 24.0f))
 				{
-					Position = chatMessageText.Position + new Vector2f(chatMessageText.GetGlobalBounds().Width + 2.0f, 2.0f),
+					Position = chatMessageText.Position + new Vector2f(chatMessageText.GetWidth() + 2.0f, 2.0f),
 					FillColor = Color.Black
 				};
 

@@ -144,7 +144,7 @@ namespace ManateesAgainstCards.Entities.Ui
 				CharacterSize = 28,
 				Color = Color.White
 			};
-
+			
 			messageText.Round();
 			rt.Draw(messageText);
 
@@ -152,7 +152,7 @@ namespace ManateesAgainstCards.Entities.Ui
 			{
 				RectangleShape cursor = new RectangleShape(new Vector2f(2.0f, Size.Y - 16.0f))
 				{
-					Position = Position + new Vector2f(messageText.GetGlobalBounds().Width + 8.0f + 2.0f, 8.0f),
+					Position = Position + new Vector2f(messageText.GetWidth() + 8.0f + 2.0f, 8.0f),
 					FillColor = Color.White
 				};
 

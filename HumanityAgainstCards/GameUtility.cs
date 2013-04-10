@@ -91,7 +91,7 @@ namespace ManateesAgainstCards
 
 		public static Text Wrap(string value, Font font, uint characterSize, double width)
 		{
-			float spaceWidth = font.GetGlyph((uint)Char.ConvertToUtf32("_", 0), characterSize, false).Advance;
+			float spaceWidth = font.GetGlyph((uint)Char.ConvertToUtf32(" ", 0), characterSize, false).Advance;
 
 			string[] originalLines = Regex.Split(value, "(?<=[ \n])");
 			List<string> wrappedLines = new List<string>();
