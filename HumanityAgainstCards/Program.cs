@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using System.Windows.Forms;
 using Californium;
 
 namespace ManateesAgainstCards
@@ -6,7 +8,7 @@ namespace ManateesAgainstCards
 	class Program
 	{
 		public const string DefaultFont = "arial.ttf";
-		public const string Version = "1.99b";
+		public const string Version = "1.99d";
 		public static bool HandleNetworking;
 
 		public static void Main(string[] args)
@@ -23,7 +25,7 @@ namespace ManateesAgainstCards
 			GameOptions.Resizable = false;
 
 			// Prepare network loop
-			Timer.EveryFrame(() =>
+			Californium.Timer.EveryFrame(() =>
 			{
 				if (HandleNetworking)
 				{
@@ -34,12 +36,33 @@ namespace ManateesAgainstCards
 				return false;
 			});
 
-			Console.WriteLine("Initializing engine...");
-			Game.Initialize();
+#if !DEBUG
+			try
+			{
+#endif
+				// Initialize engine
+				Console.Write("Initializing engine... ");
+				Game.Initialize();
+				Console.WriteLine("Done!");
 
-			Console.WriteLine("Running...");
-			Game.SetState(new States.MainMenu());
-			Game.Run();
+				// Set main state
+				Console.WriteLine("Initializing MainMenu state...");
+				Game.SetState(new States.MainMenu());
+
+				Console.WriteLine("Entering main loop!");
+				Game.Run();
+#if !DEBUG
+			}
+			catch(Exception e)
+			{
+				StringBuilder formattedException = new StringBuilder();
+				formattedException.AppendLine(e.Message);
+				formattedException.AppendLine("");
+				formattedException.AppendLine(e.StackTrace);
+
+				MessageBox.Show(formattedException.ToString(), "An error occurred!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+#endif
 		}
 	}
 }

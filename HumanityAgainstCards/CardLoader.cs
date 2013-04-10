@@ -26,7 +26,7 @@ namespace ManateesAgainstCards
 
 		public static void LoadDecks()
 		{
-			Console.WriteLine("Loading decks...");
+			Console.Write("Loading decks... ");
 
 			try
 			{
@@ -42,9 +42,12 @@ namespace ManateesAgainstCards
 			catch (Exception)
 			{
 				Console.WriteLine("Empty deck!");
+				return;
 			}
 
 			Decks.First().Include = true;
+
+			Console.WriteLine("Done!");
 		}
 
 		public static void LoadCards()

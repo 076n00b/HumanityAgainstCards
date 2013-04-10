@@ -147,7 +147,12 @@ namespace ManateesAgainstCards.States
 				Value = persistentDisplayName
 			};
 
-			nameTextbox.OnReturn += value => HostNext(nameTextbox.Value);
+			nameTextbox.OnReturn += value =>
+			{
+				HostNext(nameTextbox.Value);
+				return false;
+			};
+
 			Entities.Add(nameTextbox);
 
 			AddButton(new Vector2f(GameOptions.Width / 2.0f, 350.0f + 128.0f + 12.0f), "Settings",
@@ -192,7 +197,11 @@ namespace ManateesAgainstCards.States
 				Selected = true
 			};
 
-			nameTextbox.OnReturn += JoinNext;
+			nameTextbox.OnReturn += values =>
+			{
+				JoinNext(values);
+				return false;
+			};
 
 			Entities.Add(nameTextbox);
 

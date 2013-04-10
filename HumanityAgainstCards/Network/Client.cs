@@ -6,7 +6,6 @@ using Lidgren.Network;
 using ManateesAgainstCards.Entities;
 using ManateesAgainstCards.Network.Packets;
 using ManateesAgainstCards.States;
-using SFML.Audio;
 using SFML.Window;
 
 namespace ManateesAgainstCards.Network

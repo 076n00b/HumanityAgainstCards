@@ -9,7 +9,7 @@ namespace ManateesAgainstCards.Entities.Ui
 {
 	class Textbox : Entity
 	{
-		public delegate void OnReturnHandler(string value);
+		public delegate bool OnReturnHandler(string value);
 		public event OnReturnHandler OnReturn;
 
 		public string Value;
@@ -104,8 +104,8 @@ namespace ManateesAgainstCards.Entities.Ui
 					if (OnReturn != null && Selected)
 					{
 						Assets.PlaySound("Click.wav");
-						OnReturn(Value);
-						Value = "";
+						if (OnReturn(Value))
+							Value = "";
 					}
 
 					return true;
@@ -152,7 +152,7 @@ namespace ManateesAgainstCards.Entities.Ui
 			{
 				RectangleShape cursor = new RectangleShape(new Vector2f(2.0f, Size.Y - 16.0f))
 				{
-					Position = Position + new Vector2f(messageText.GetGlobalBounds().Width + 8.0f + 4.0f, 8.0f),
+					Position = Position + new Vector2f(messageText.GetGlobalBounds().Width + 8.0f + 2.0f, 8.0f),
 					FillColor = Color.White
 				};
 
