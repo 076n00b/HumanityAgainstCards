@@ -161,7 +161,7 @@ namespace ManateesAgainstCards.States
 			for (int i = ChatBacklog.Count - 1; i > ChatBacklog.Count - ChatBacklogItems && i != -1; --i)
 			{
 				Text itemText = GameUtility.Wrap(ChatBacklog[i], Assets.LoadFont(Program.DefaultFont), 22,
-					(GameOptions.Width / 3.0f) * 2.0f - 64.0f - 32.0f - 48.0f);
+					(GameOptions.Width / 3.0f) * 2.0f - 64.0f - 32.0f - 48.0f, false);
 
 				y -= 24.0f * itemText.DisplayedString.Count(c => c == '\n');
 				itemText.Position = new Vector2f((float)Math.Floor(GameOptions.Width / 3.0f + 8.0f), GameOptions.Height - 144.0f + y + 24.0f);
@@ -198,15 +198,19 @@ namespace ManateesAgainstCards.States
 			{
 				if (chatValue != "")
 				{
-					string value = LocalPlayer.Name + ": " + chatValue;
-					ChatMessage message = new ChatMessage(value);
-					Client.SendMessage(message);
+					if (!ParseCommand(chatValue))
+					{
+						string value = LocalPlayer.Name + ": " + chatValue;
+						ChatMessage message = new ChatMessage(value);
+						Client.SendMessage(message);
 
-					ChatBacklog.Add(value);
-					GameUtility.PlayTaunt(value);
+						ChatBacklog.Add(value);
+
+						if (!GameUtility.PlayTaunt(value))
+							Assets.PlaySound("Bubble.wav");
+					}
+
 					chatValue = "";
-
-					Assets.PlaySound("Bubble.wav");
 				}
 
 				return true;
@@ -294,6 +298,47 @@ namespace ManateesAgainstCards.States
 						Timer.NextFrame(() => Game.SetState(new ErrorMessageScreen("Cannot connect to host!")));
 					}
 					break;
+			}
+		}
+
+		private bool ParseCommand(string value)
+		{
+			string[] values = value.Split(new [] { ' ' });
+			if (value.Length < 2)
+				return false;
+
+			switch(values[0])
+			{
+				case "/kick":
+					KickCommand(values[1]);
+					return true;
+
+				case "/mute":
+					ChatBacklog.Add("Muted sounds!");
+					GameOptions.SoundVolume = 0;
+					return true;
+
+				case "/unmute":
+					ChatBacklog.Add("Unmuted sounds!");
+					GameOptions.SoundVolume = 100;
+					return true;
+			}
+
+			return false;
+		}
+
+		private void KickCommand(string value)
+		{
+			if (Server.State == Server.States.NotRunning)
+			{
+				ChatBacklog.Add("You are not host, you cannot kick.");
+				return;
+			}
+
+			foreach (ServerClient sc in Server.Clients.Where(sc => sc.Name.ToLower() == value.ToLower()))
+			{
+				ChatBacklog.Add("Kicked player!");
+				sc.Disconnect("Fuck off");
 			}
 		}
 	}

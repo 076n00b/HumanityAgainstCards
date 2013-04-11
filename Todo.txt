@@ -39,3 +39,7 @@
 [X] Let people know when players join via lobby message
 [X] Fix selecting random winners when no one played
 [X] Trim control characters
+[X] Fix server list items getting removed when a full party is achieved
+[X] Kick feature
+[X] Mute/unmute feature
+[X] Fix _ expanding

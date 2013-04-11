@@ -23,6 +23,7 @@ namespace ManateesAgainstCards.Network
 
 		public enum States
 		{
+			NotRunning,
 			Lobby,
 			InGame
 		}
@@ -56,6 +57,8 @@ namespace ManateesAgainstCards.Network
 
 		static Server()
 		{
+			State = States.NotRunning;
+
 			whiteDeck = new Deck(CardType.White);
 			blackDeck = new Deck(CardType.Black);
 

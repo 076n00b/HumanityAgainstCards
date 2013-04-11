@@ -39,12 +39,12 @@ namespace ManateesAgainstCards
 			return value;
 		}
 
-		public static void PlayTaunt(string value)
+		public static bool PlayTaunt(string value)
 		{
 			string[] values = value.Split(new[] { ' ' });
 
 			if (values.Length == 0 || !values[0].Contains(":"))
-				return;
+				return false;
 
 			foreach (string v in values)
 			{
@@ -64,9 +64,11 @@ namespace ManateesAgainstCards
 						continue;
 
 					Assets.PlaySound("Taunt\\" + file);
-					return;
+					return true;
 				}
 			}
+
+			return false;
 		}
 
 		public static void Shuffle<T>(List<T> set)
@@ -89,7 +91,7 @@ namespace ManateesAgainstCards
 			return pos < 0 ? text : text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
 		}
 
-		public static Text Wrap(string value, Font font, uint characterSize, double width)
+		public static Text Wrap(string value, Font font, uint characterSize, double width, bool expandUnderscores = true)
 		{
 			float spaceWidth = font.GetGlyph((uint)Char.ConvertToUtf32(" ", 0), characterSize, false).Advance;
 
@@ -102,7 +104,8 @@ namespace ManateesAgainstCards
 			foreach (var tmpItem in originalLines)
 			{
 				string item = tmpItem;
-				item = item.Replace("_", "______________");
+				if (expandUnderscores)
+					item = item.Replace("_", "______________");
 
 				Text formatted = new Text(item, font) { CharacterSize = characterSize };
 				double tmpWidth = formatted.GetGlobalBounds().Width + spaceWidth;
