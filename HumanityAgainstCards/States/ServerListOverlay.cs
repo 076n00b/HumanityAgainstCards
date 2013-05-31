@@ -100,6 +100,16 @@ namespace ManateesAgainstCards.States
 
 			Entities.Add(backButton);
 
+			Button joinByIpButton =
+				new Button(new Vector2f(GameOptions.Width / 2.0f, GameOptions.Height / 2.0f + GameOptions.Height / 3.0f + 16.0f), "Join by IP");
+			joinByIpButton.OnClick += () =>
+			{
+				Game.PushState(new JoinByIpOverlay());
+				return true;
+			};
+
+			Entities.Add(joinByIpButton);
+
 			base.Enter();
 		}
 

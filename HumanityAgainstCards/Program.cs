@@ -8,7 +8,7 @@ namespace ManateesAgainstCards
 	class Program
 	{
 		public const string DefaultFont = "arial.ttf";
-		public const string Version = "2.0";
+		public const string Version = "2.1";
 		public static bool HandleNetworking;
 
 		public static void Main(string[] args)
