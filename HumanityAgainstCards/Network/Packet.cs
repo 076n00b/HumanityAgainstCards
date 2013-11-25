@@ -16,19 +16,19 @@ namespace ManateesAgainstCards.Network
 		public abstract void Write(NetOutgoingMessage msg);
 		public abstract void Read(NetIncomingMessage msg);
 
-		private static readonly Dictionary<PacketType, Type> packetTypes;
+		private static readonly Dictionary<PacketType, Type> PacketTypes;
 
 		static Packet()
 		{
-			packetTypes = new Dictionary<PacketType, Type>();
+			PacketTypes = new Dictionary<PacketType, Type>();
 
 			Assembly assembly = Assembly.GetCallingAssembly();
 			var types = assembly.GetExportedTypes().Where(type => type.IsSubclassOf(typeof(Packet)));
 
-			foreach(var type in types)
+			foreach (Type type in types)
 			{
-				Packet instance = (Packet) Activator.CreateInstance(type);
-				packetTypes[instance.Type] = type;
+				Packet instance = (Packet)Activator.CreateInstance(type);
+				PacketTypes[instance.Type] = type;
 			}
 		}
 
@@ -40,8 +40,8 @@ namespace ManateesAgainstCards.Network
 
 		public static Packet ReadFromMessage(NetIncomingMessage msg)
 		{
-			PacketType type = (PacketType) msg.ReadByte();
-			Packet packet = (Packet) Activator.CreateInstance(packetTypes[type]);
+			PacketType type = (PacketType)msg.ReadByte();
+			Packet packet = (Packet)Activator.CreateInstance(PacketTypes[type]);
 			packet.Read(msg);
 
 			return packet;

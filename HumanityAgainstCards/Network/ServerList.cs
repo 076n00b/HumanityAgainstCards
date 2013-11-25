@@ -58,13 +58,13 @@ namespace ManateesAgainstCards.Network
 			ServerListResponse response = new ServerListResponse();
 			string address = request.GetAddress();
 
-			WebClient client = new WebClient();
-			string jsonStream = Encoding.ASCII.GetString(client.DownloadData(address));
-			client.Dispose();
-
 			// Decode JSON stream
 			try
 			{
+				string jsonStream;
+				using (WebClient client = new WebClient())
+					jsonStream = Encoding.ASCII.GetString(client.DownloadData(address));
+
 				response = Json.LoadStream<ServerListResponse>(jsonStream);
 			}
 			catch (Exception e)

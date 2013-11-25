@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace ManateesAgainstCards
 {
 	class CardLoader
 	{
-		private const string JsonCards = "Decks";
-
 		public static List<CardDeck> Decks { get; private set; }
 		public static List<CardInfo> Cards { get; private set; }
 
@@ -30,9 +29,12 @@ namespace ManateesAgainstCards
 
 			try
 			{
-				List<string> decks = Json.Load<List<string>>(JsonCards);
-				foreach (string deckName in decks)
+				DirectoryInfo directoryInfo = new DirectoryInfo(Json.JsonLocation);
+				var decks = directoryInfo.GetFiles("*.json", SearchOption.AllDirectories);
+
+				foreach (FileInfo deck in decks)
 				{
+					string deckName = Path.GetFileNameWithoutExtension(deck.Name);
 					CardDeck cardDeck = Json.Load<CardDeck>(deckName);
 					cardDeck.Name = deckName;
 

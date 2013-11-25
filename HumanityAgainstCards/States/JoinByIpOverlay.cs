@@ -12,7 +12,6 @@ namespace ManateesAgainstCards.States
 		private const float PaddingHorizontal = 0.25f;
 		private const float PaddingVertical = 0.2f;
 
-		public string Value { get; private set; }
 		private Textbox ipAddressTextbox;
 
 		public JoinByIpOverlay()

@@ -39,15 +39,8 @@ namespace ManateesAgainstCards.Entities.Ui
 
 			Input.MouseMove = args =>
 			{
-				if (!BoundingBox.Contains(args.Position.X, args.Position.Y))
-				{
-					mouseIn = false;
-
-					return false;
-				}
-
-				mouseIn = true;
-				return false;
+				mouseIn = BoundingBox.Contains(args.Position.X, args.Position.Y);
+				return mouseIn;
 			};
 
 			Input.MouseButton[Mouse.Button.Left] = args =>
@@ -55,11 +48,8 @@ namespace ManateesAgainstCards.Entities.Ui
 				if (!mouseIn || !args.Pressed || !Clickable)
 					return false;
 
-				if (OnClick != null)
-				{
-					if (OnClick())
-						Assets.PlaySound("Click.wav");
-				}
+				if (OnClick != null && OnClick())
+					Assets.PlaySound("Click.wav");
 
 				return true;
 			};
@@ -87,7 +77,7 @@ namespace ManateesAgainstCards.Entities.Ui
 			{
 				RectangleShape buttonHover = new RectangleShape(new Vector2f(Width - 8, Height - 8))
 				{
-					Position = Position + new Vector2f(4f, 4f),
+					Position = Position + new Vector2f(4.0f, 4.0f),
 					FillColor = Color.Black,
 					OutlineColor = Color.White,
 					OutlineThickness = 2.0f

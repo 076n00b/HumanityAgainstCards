@@ -121,7 +121,7 @@ namespace ManateesAgainstCards.States
 			base.Draw(rt);
 		}
 
-		private void Apply(List<Checkbox> decks, Numberbox numberboxPointCap, Numberbox numberSecondsPerTurn)
+		private static void Apply(List<Checkbox> decks, Numberbox numberboxPointCap, Numberbox numberSecondsPerTurn)
 		{
 			if (decks.Count(d => d.Value) == 0)
 			{

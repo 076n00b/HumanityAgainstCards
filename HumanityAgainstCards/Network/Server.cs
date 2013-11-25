@@ -16,7 +16,7 @@ namespace ManateesAgainstCards.Network
 		// TODO Fix late joining someday
 		public static bool AllowLateJoins = false;
 
-		private static readonly Random random;
+		private static readonly Random Random;
 
 		public static List<ServerClient> Clients { get; private set; }
 		private static NetServer server;
@@ -36,11 +36,11 @@ namespace ManateesAgainstCards.Network
 		private static Deck whiteDeck;
 		private static Deck blackDeck;
 
-		private static readonly Stopwatch timer;
+		private static readonly Stopwatch Timer;
 		private static int secondsLeft;
 		private static bool inMatch;
 
-		private static readonly List<string> greetings = new List<string>
+		private static readonly List<string> Greetings = new List<string>
 		{
 			"{0} is a special fucking snowflake, I hope they win.",
 			"Fuck you, {0}. I hope you lose.",
@@ -62,13 +62,13 @@ namespace ManateesAgainstCards.Network
 			whiteDeck = new Deck(CardType.White);
 			blackDeck = new Deck(CardType.Black);
 
-			timer = new Stopwatch();
-			random = new Random();
+			Timer = new Stopwatch();
+			Random = new Random(Environment.TickCount % 1234565432);
 			server = null;
 
 			inMatch = false;
 			secondsLeft = 0;
-			timer.Start();
+			Timer.Start();
 		}
 
 		public static void Initialize(int port)
@@ -177,7 +177,7 @@ namespace ManateesAgainstCards.Network
 
 											// Card Czar left like the asshole he is
 											if (serverClient.Id == currentCardCzar)
-												DeclareWinner(Clients[random.Next(Clients.Count)].Id);
+												DeclareWinner(Clients[Random.Next(Clients.Count)].Id);
 
 											if (State == States.Lobby)
 												ServerList.Update();
@@ -247,12 +247,13 @@ namespace ManateesAgainstCards.Network
 
 			do
 			{
-				id = (ushort)random.Next(ushort.MaxValue);
+				id = (ushort)Random.Next(ushort.MaxValue);
 			} while (id == 0 || Clients.Count(c => c.Id == id) != 0);
 
 			return id;
 		}
 
+		// TODO There has to be a better way to write this
 		private static void HandleGame()
 		{
 			if (State != States.InGame)
@@ -275,19 +276,20 @@ namespace ManateesAgainstCards.Network
 			// Select random new card czar
 			if (currentCardCzar == 0)
 			{
+				// TODO Weighted random selection (players picked less have a higher chance of being picked)
 				currentCardCzar = Clients[currentCarzIndex++ % Clients.Count].Id;
 				SendMessageToAll(new SelectCardCzar(currentCardCzar));
 			}
 
 			// Keep games in sync with timer
-			if (timer.ElapsedMilliseconds >= 1000 && inMatch)
+			if (Timer.ElapsedMilliseconds >= 1000 && inMatch)
 			{
 				if (secondsLeft != 0)
 				{
 					if (--secondsLeft <= SecondsPerTurn)
 						SendMessageToAll(new ServerTime(secondsLeft));
 
-					timer.Restart();
+					Timer.Restart();
 				}
 			}
 
@@ -408,7 +410,7 @@ namespace ManateesAgainstCards.Network
 
 			// Restart timer
 			secondsLeft = SecondsPerTurn + (cooldown ? 4 : 0);
-			timer.Restart();
+			Timer.Restart();
 			SendMessageToAll(new ServerTime(SecondsPerTurn));
 		}
 
@@ -419,10 +421,10 @@ namespace ManateesAgainstCards.Network
 								 : new ChatMessage(String.Format("Highest score at the end of {0} rounds wins!",
 																 blackDeck.Cards.Count)));
 
-			int i = random.Next(greetings.Count);
+			int i = Random.Next(Greetings.Count);
 			SendMessageToAll(i < 2
-								 ? new ChatMessage(String.Format(greetings[i], Clients[random.Next(Clients.Count)].Name))
-								 : new ChatMessage(greetings[i]));
+								 ? new ChatMessage(String.Format(Greetings[i], Clients[Random.Next(Clients.Count)].Name))
+								 : new ChatMessage(Greetings[i]));
 		}
 
 		public static void LoadCards()

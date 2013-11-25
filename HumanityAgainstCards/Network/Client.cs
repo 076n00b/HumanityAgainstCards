@@ -19,24 +19,27 @@ namespace ManateesAgainstCards.Network
 		public static string Name;
 		public static int SecondsLeft { get; private set; }
 
-		private static readonly Dictionary<ushort, Player> players;
+		private static readonly Dictionary<ushort, Player> Players;
 		private static NetClient client;
 		private static NetConnectionStatus lastStatus;
-		private static readonly Random random;
+		private static readonly Random Random;
 		private static bool gotBrainTumorOnce;
 
 		public static bool Connected
 		{
-			get { return lastStatus == NetConnectionStatus.Connected; }
+			get
+			{
+				return lastStatus == NetConnectionStatus.Connected;
+			}
 		}
 
 		static Client()
 		{
-			players = new Dictionary<ushort, Player>();
+			Players = new Dictionary<ushort, Player>();
 			Name = "Missingno";
 			client = null;
 
-			random = new Random();
+			Random = new Random(Environment.TickCount % 876543210);
 		}
 
 		public static void Connect(string host, int port)
@@ -45,7 +48,7 @@ namespace ManateesAgainstCards.Network
 				Disconnect();
 
 			lastStatus = NetConnectionStatus.None;
-			players.Clear();
+			Players.Clear();
 
 			NetPeerConfiguration config = new NetPeerConfiguration("HumanityAgainstCards")
 			{
@@ -95,32 +98,32 @@ namespace ManateesAgainstCards.Network
 						break;
 
 					case NetIncomingMessageType.StatusChanged:
+					{
+						NetConnectionStatus status = (NetConnectionStatus)msg.ReadByte();
+						string reason = msg.ReadString();
+
+						Console.WriteLine("StatusChanged: {0}: {1}", status, reason);
+
+						switch (status)
 						{
-							NetConnectionStatus status = (NetConnectionStatus)msg.ReadByte();
-							string reason = msg.ReadString();
+							case NetConnectionStatus.Connected:
+								Console.WriteLine("Connected, sending ServerJoin packet!");
+								SendMessage(new ServerJoin(Name, Program.Version));
+								break;
 
-							Console.WriteLine("StatusChanged: {0}: {1}", status, reason);
+							case NetConnectionStatus.Disconnected:
+								Game.SetState(lastStatus == NetConnectionStatus.Connected
+													? new ErrorMessageScreen(reason)
+													: new ErrorMessageScreen("Cannot connect to host!"));
 
-							switch (status)
-							{
-								case NetConnectionStatus.Connected:
-									Console.WriteLine("Connected, sending ServerJoin packet!");
-									SendMessage(new ServerJoin(Name, Program.Version));
-									break;
-
-								case NetConnectionStatus.Disconnected:
-									Game.SetState(lastStatus == NetConnectionStatus.Connected
-													  ? new ErrorMessageScreen(reason)
-													  : new ErrorMessageScreen("Cannot connect to host!"));
-
-									Console.WriteLine("Disconnected!");
-									break;
-							}
-
-							lastStatus = status;
-
-							break;
+								Console.WriteLine("Disconnected!");
+								break;
 						}
+
+						lastStatus = status;
+
+						break;
+					}
 
 					case NetIncomingMessageType.Data:
 						HandlePacket(Packet.ReadFromMessage(msg));
@@ -152,105 +155,104 @@ namespace ManateesAgainstCards.Network
 					break;
 
 				case PacketType.SetStatus:
-					{
-						SetStatus setStatus = (SetStatus)packet;
-						players[setStatus.Id].Thinking = setStatus.TurnOver;
-						break;
-					}
+				{
+					SetStatus setStatus = (SetStatus)packet;
+					Players[setStatus.Id].Thinking = setStatus.TurnOver;
+					break;
+				}
 
 				case PacketType.GameOver:
 					Game.PushState(new GameOverScreen());
 					break;
 
 				case PacketType.InitSelectionScreen:
-					{
-						InitSelectionScreen initSelectionScreen = (InitSelectionScreen)packet;
-						Game.PushState(new SelectionScreen(initSelectionScreen.Options));
-						InMatch = false;
-						break;
-					}
+				{
+					InitSelectionScreen initSelectionScreen = (InitSelectionScreen)packet;
+					Game.PushState(new SelectionScreen(initSelectionScreen.Options));
+					InMatch = false;
+					break;
+				}
 
 				case PacketType.SelectCardCzar:
-					{
-						SelectCardCzar selectCardCzar = (SelectCardCzar)packet;
-						InGame game = (InGame)Game.PeekFirstState();
+				{
+					SelectCardCzar selectCardCzar = (SelectCardCzar)packet;
+					InGame game = (InGame)Game.PeekFirstState();
 
-						foreach (Player p in game.Players)
-							p.Czar = false;
+					foreach (Player p in game.Players)
+						p.Czar = false;
 
-						if (players.ContainsKey(selectCardCzar.Id))
-							players[selectCardCzar.Id].Czar = true;
-						else
-							game.LocalPlayer.Czar = true;
+					if (Players.ContainsKey(selectCardCzar.Id))
+						Players[selectCardCzar.Id].Czar = true;
+					else
+						game.LocalPlayer.Czar = true;
 
-						foreach (Player p in game.Entities.OfType<Player>())
-							p.Thinking = !p.Czar;
+					foreach (Player p in game.Entities.OfType<Player>())
+						p.Thinking = !p.Czar;
 
-						break;
-					}
+					break;
+				}
 
 				case PacketType.WinnerPicked:
+				{
+					if (Game.PeekState().GetType() != typeof(GameOverScreen))
 					{
-						if (Game.PeekState().GetType() != typeof(GameOverScreen))
+						InMatch = true;
+						Game.PopState();
+
+						WinnerPicked winnerPicked = (WinnerPicked)packet;
+						InGame game = (InGame)Game.PeekState();
+
+						if (winnerPicked.Id != 0)
 						{
-							InMatch = true;
-							Game.PopState();
+							Player player = Players.ContainsKey(winnerPicked.Id) ? Players[winnerPicked.Id] : game.LocalPlayer;
+							++player.Score;
 
-							WinnerPicked winnerPicked = (WinnerPicked)packet;
-							InGame game = (InGame)Game.PeekState();
-
-							if (winnerPicked.Id != 0)
-							{
-								Player player = players.ContainsKey(winnerPicked.Id) ? players[winnerPicked.Id] : game.LocalPlayer;
-								++player.Score;
-
-								Game.PushState(new WinnerScreen(player.Name, CurrentBlackCard.Info.Value, winnerPicked.Cards));
-							}
-							else
-								Game.PushState(new WinnerScreen("No one", CurrentBlackCard.Info.Value, new List<string>()));
+							Game.PushState(new WinnerScreen(player.Name, CurrentBlackCard.Info.Value, winnerPicked.Cards));
 						}
-						break;
+						else
+							Game.PushState(new WinnerScreen("No one", CurrentBlackCard.Info.Value, new List<string>()));
 					}
+					break;
+				}
 
 				case PacketType.WhiteCard:
+				{
+					WhiteCard whiteCards = (WhiteCard)packet;
+
+					foreach (CardInfo c in whiteCards.Cards)
 					{
-						WhiteCard whiteCards = (WhiteCard)packet;
-
-						foreach (CardInfo c in whiteCards.Cards)
+						Card card = new Card(c)
 						{
-							Card card = new Card(c)
-							{
-								Position = new Vector2f(-1024.0f, -1024.0f),
-								Scale = new Vector2f(0.643f * 0.8f, 0.643f * 0.8f)
-							};
+							Position = new Vector2f(-1024.0f, -1024.0f),
+							Scale = new Vector2f(0.643f * 0.8f, 0.643f * 0.8f)
+						};
 
-							Hand.Add(card);
-							Game.PeekFirstState().Entities.Add(card);
-						}
-
-						if (Hand.Any(c => c.Info.Value.Contains("brain")) && !gotBrainTumorOnce)
-						{
-							Assets.PlaySound("BrainTumorCardStart.wav");
-							gotBrainTumorOnce = true;
-						}
-						else if (random.Next(100) < 5)
-							Assets.PlaySound("NoBrainTumorCardStart5.wav");
-
-						break;
+						Hand.Add(card);
+						Game.PeekFirstState().Entities.Add(card);
 					}
+
+					if (Hand.Any(c => c.Info.Value.Contains("brain")) && !gotBrainTumorOnce)
+					{
+						Assets.PlaySound("BrainTumorCardStart.wav");
+						gotBrainTumorOnce = true;
+					}
+					else if (Random.Next(100) < 5)
+						Assets.PlaySound("NoBrainTumorCardStart5.wav");
+
+					break;
+				}
 
 				case PacketType.BlackCard:
-					{
-						BlackCard blackCard = (BlackCard)packet;
+				{
+					BlackCard blackCard = (BlackCard)packet;
 
-						if (CurrentBlackCard != null)
-							Game.PeekFirstState().Entities.Remove(CurrentBlackCard);
+					if (CurrentBlackCard != null)
+						Game.PeekFirstState().Entities.Remove(CurrentBlackCard);
 
-						CurrentBlackCard = new Card(blackCard.Card)
-							{ Position = new Vector2f(GameOptions.Width - 256.0f + 4.0f, 48.0f + 32.0f) };
-						Game.PeekFirstState().Entities.Add(CurrentBlackCard);
-						break;
-					}
+					CurrentBlackCard = new Card(blackCard.Card) { Position = new Vector2f(GameOptions.Width - 256.0f + 4.0f, 48.0f + 32.0f) };
+					Game.PeekFirstState().Entities.Add(CurrentBlackCard);
+					break;
+				}
 
 				case PacketType.LobbyBeginGame:
 					Game.SetState(new InGame(((Lobby)Game.PeekFirstState()).Players));
@@ -258,37 +260,39 @@ namespace ManateesAgainstCards.Network
 					break;
 
 				case PacketType.PlayerDelete:
-					{
-						PlayerDelete playerDelete = (PlayerDelete)packet;
-						Game.PeekFirstState().Entities.Remove(players[playerDelete.Id]);
-						players.Remove(playerDelete.Id);
+				{
+					PlayerDelete playerDelete = (PlayerDelete)packet;
+					Game.PeekFirstState().Entities.Remove(Players[playerDelete.Id]);
+					Players.Remove(playerDelete.Id);
 
-						break;
-					}
+					break;
+				}
 
 				case PacketType.PlayerNew:
-					{
-						PlayerNew playerNew = (PlayerNew)packet;
-						Player player = new Player(playerNew.Name);
-						players.Add(playerNew.Id, player);
+				{
+					PlayerNew playerNew = (PlayerNew)packet;
+					Player player = new Player(playerNew.Name);
+					Players.Add(playerNew.Id, player);
 
-						Game.PeekState().Entities.Add(player);
-						break;
-					}
+					Game.PeekState().Entities.Add(player);
+					break;
+				}
 
 				case PacketType.ChatMessage:
-					{
-						ChatMessage chatMessage = (ChatMessage)packet;
-						if (Game.PeekFirstState().GetType() == typeof(Lobby))
-							((Lobby)Game.PeekFirstState()).ChatBacklog.Add(chatMessage.Value);
-						else
-							((InGame)Game.PeekFirstState()).ChatBacklog.Add(chatMessage.Value);
+				{
+					ChatMessage chatMessage = (ChatMessage)packet;
 
-						GameUtility.PlayTaunt(chatMessage.Value);
+					// TODO Unify chatlogs...
+					if (Game.PeekFirstState().GetType() == typeof(Lobby))
+						((Lobby)Game.PeekFirstState()).ChatBacklog.Add(chatMessage.Value);
+					else
+						((InGame)Game.PeekFirstState()).ChatBacklog.Add(chatMessage.Value);
 
-						Assets.PlaySound("Bubble.wav");
-						break;
-					}
+					GameUtility.PlayTaunt(chatMessage.Value);
+
+					Assets.PlaySound("Bubble.wav");
+					break;
+				}
 
 				default:
 					Console.WriteLine("Unhandled packet!");

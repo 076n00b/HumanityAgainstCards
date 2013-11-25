@@ -42,16 +42,8 @@ namespace ManateesAgainstCards.Entities.Ui
 
 			Input.MouseMove = args =>
 			{
-				if (!BoundingBox.Contains(args.Position.X, args.Position.Y))
-				{
-					if (mouseIn)
-						mouseIn = false;
-
-					return false;
-				}
-
-				mouseIn = true;
-				return true;
+				mouseIn = BoundingBox.Contains(args.Position.X, args.Position.Y);
+				return mouseIn;
 			};
 
 			Input.MouseButton[Mouse.Button.Left] = args =>

@@ -42,18 +42,18 @@ namespace ManateesAgainstCards.Network
 					break;
 
 				case PacketType.EndTurn:
-					{
-						EndTurn endTurn = (EndTurn)msg;
-						SelectedCards.Clear();
-						foreach (CardInfo info in endTurn.Cards)
-							SelectedCards.Add(info.Value);
+				{
+					EndTurn endTurn = (EndTurn)msg;
+					SelectedCards.Clear();
+					foreach (CardInfo info in endTurn.Cards)
+						SelectedCards.Add(info.Value);
 
-						CardCount -= endTurn.Cards.Count;
-						Ready = true;
+					CardCount -= endTurn.Cards.Count;
+					Ready = true;
 
-						Server.SendMessageToAllExcept(new SetStatus(Id, false), Id);
-						break;
-					}
+					Server.SendMessageToAllExcept(new SetStatus(Id, false), Id);
+					break;
+				}
 
 				case PacketType.LobbyBeginGame:
 					Server.SendMessageToAll(new BeginGame());
@@ -64,36 +64,34 @@ namespace ManateesAgainstCards.Network
 					break;
 
 				case PacketType.ServerJoin:
+				{
+					ServerJoin serverJoin = (ServerJoin)msg;
+
+					// Check version
+					if (serverJoin.Version != Program.Version)
 					{
-						ServerJoin serverJoin = (ServerJoin)msg;
-
-						// Check version
-						if (serverJoin.Version != Program.Version)
-						{
-							Connection.Disconnect("Host is running on a different version.");
-							return;
-						}
-
-						Name = serverJoin.Name;
-
-						Server.SendMessageToAllExcept(new PlayerNew(Name, Id), Id);
-						foreach (var c in Server.Clients.Where(a => a.Id != Id))
-							Connection.SendMessage(new PlayerNew(c.Name, c.Id));
-
-						Verified = true;
-
-						Server.SendMessageToAllExcept(new ChatMessage(String.Format("{0} has joined the game!", Name)), Id);
-
-						break;
+						Connection.Disconnect("Host is running on a different version.");
+						return;
 					}
+
+					Name = serverJoin.Name;
+
+					Server.SendMessageToAllExcept(new PlayerNew(Name, Id), Id);
+					foreach (ServerClient c in Server.Clients.Where(a => a.Id != Id))
+						Connection.SendMessage(new PlayerNew(c.Name, c.Id));
+
+					Verified = true;
+
+					Server.SendMessageToAllExcept(new ChatMessage(String.Format("{0} has joined the game!", Name)), Id);
+					break;
+				}
 
 				case PacketType.ChatMessage:
-					{
-						ChatMessage chatMessage = (ChatMessage)msg;
-
-						Server.SendMessageToAllExcept(new ChatMessage(chatMessage.Value), Id);
-						break;
-					}
+				{
+					ChatMessage chatMessage = (ChatMessage)msg;
+					Server.SendMessageToAllExcept(new ChatMessage(chatMessage.Value), Id);
+					break;
+				}
 
 				default:
 					Console.WriteLine("Unhandled packet {0}", msg.Type.ToString());

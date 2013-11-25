@@ -20,16 +20,8 @@ namespace ManateesAgainstCards.Entities.Ui
 
 			Input.MouseMove = args =>
 			{
-				if (!BoundingBox.Contains(args.Position.X, args.Position.Y))
-				{
-					if (mouseIn)
-						mouseIn = false;
-
-					return false;
-				}
-
-				mouseIn = true;
-				return true;
+				mouseIn = BoundingBox.Contains(args.Position.X, args.Position.Y);
+				return mouseIn;
 			};
 
 			Input.MouseButton[Mouse.Button.Left] = args =>
@@ -57,7 +49,7 @@ namespace ManateesAgainstCards.Entities.Ui
 			{
 				RectangleShape checkboxHover = new RectangleShape(new Vector2f(48.0f - 8.0f, 48.0f - 8.0f))
 				{
-					Position = Position + new Vector2f(4f, 4f),
+					Position = Position + new Vector2f(4.0f, 4.0f),
 					FillColor = Color.Black,
 					OutlineColor = Color.White,
 					OutlineThickness = 2f
@@ -98,30 +90,6 @@ namespace ManateesAgainstCards.Entities.Ui
 				};
 
 				rt.Draw(x2);
-
-				/*RectangleShape legLine = new RectangleShape(new Vector2f(2.0f, 38.0f));
-				legLine.Position = Position + new Vector2f(39.0f, 7.0f);
-				legLine.FillColor = Color.White;
-				legLine.Rotation = 35.0f;
-				rt.Draw(legLine);
-
-				RectangleShape footLine = new RectangleShape(new Vector2f(2.0f, 14.0f));
-				footLine.Position = Position + new Vector2f(8.0f, 30.0f);
-				footLine.FillColor = Color.White;
-				footLine.Rotation = -45.0f;
-				rt.Draw(footLine);*/
-
-				/*Text check = new Text("X", Assets.LoadFont(Program.DefaultFont))
-				{
-					Position = Position + Size / 2.0f,
-					CharacterSize = 48,
-					Color = Color.White
-				};
-
-				check.Center();
-				check.Round();
-
-				rt.Draw(check);*/
 			}
 
 			base.Draw(rt);

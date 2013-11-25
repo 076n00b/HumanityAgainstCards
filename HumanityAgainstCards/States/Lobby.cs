@@ -227,66 +227,66 @@ namespace ManateesAgainstCards.States
 			switch (role)
 			{
 				case SessionRole.Server:
+				{
+					// Initialize server
+					try
 					{
-						// Initialize server
-						try
-						{
-							Server.Initialize(Constants.DefaultPort);
-						}
-						catch (Exception)
-						{
-							Timer.NextFrame(() => Game.SetState(new ErrorMessageScreen("You are already hosting in another instance, moron.")));
-							return;
-						}
-
-						// Initialize client frontend
-						try
-						{
-							Client.Connect("localhost", Constants.DefaultPort);
-						}
-						catch (Exception)
-						{
-							Timer.NextFrame(() => Game.SetState(new ErrorMessageScreen("Cannot connect to host!")));
-							return;
-						}
-
-						// Add start button
-						Button startButton = new Button(new Vector2f(GameOptions.Width - 222.0f / 2.0f - 8.0f - 64.0f + 8.0f, Button.Height / 2.0f + 8.0f + 32.0f + 8.0f), "Begin Game");
-						startButton.OnClick += () =>
-						{
-							// Do not start unless we have enough players
-							if (Players.Count < Constants.MinimalPlayerCount)
-							{
-								ChatBacklog.Add(String.Format("Cannot begin game with less than {0} people!", Constants.MinimalPlayerCount));
-								return true;
-							}
-
-							// Load cards if we're the server
-							Server.LoadCards();
-
-							// Begin game
-							Client.SendMessage(new BeginGame());
-
-							return true;
-						};
-
-						Entities.Add(startButton);
-
-						// Add settings button
-						Button settingsButton = new Button(new Vector2f(GameOptions.Width - Button.Width / 2.0f - 8.0f - 64.0f + 8.0f - Button.Width - 4.0f, Button.Height / 2.0f + 8.0f + 32.0f + 8.0f), "Settings");
-						settingsButton.OnClick += () =>
-						{
-							ServerList.Remove();
-							Game.PushState(new HostSettingsOverlay());
-							return true;
-						};
-
-						Entities.Add(settingsButton);
-
-						ServerList.Add();
-
-						break;
+						Server.Initialize(Constants.DefaultPort);
 					}
+					catch (Exception)
+					{
+						Timer.NextFrame(() => Game.SetState(new ErrorMessageScreen("You are already hosting in another instance, moron.")));
+						return;
+					}
+
+					// Initialize client frontend
+					try
+					{
+						Client.Connect("localhost", Constants.DefaultPort);
+					}
+					catch (Exception)
+					{
+						Timer.NextFrame(() => Game.SetState(new ErrorMessageScreen("Cannot connect to host!")));
+						return;
+					}
+
+					// Add start button
+					Button startButton = new Button(new Vector2f(GameOptions.Width - 222.0f / 2.0f - 8.0f - 64.0f + 8.0f, Button.Height / 2.0f + 8.0f + 32.0f + 8.0f), "Begin Game");
+					startButton.OnClick += () =>
+					{
+						// Do not start unless we have enough players
+						if (Players.Count < Constants.MinimalPlayerCount)
+						{
+							ChatBacklog.Add(String.Format("Cannot begin game with less than {0} people!", Constants.MinimalPlayerCount));
+							return true;
+						}
+
+						// Load cards if we're the server
+						Server.LoadCards();
+
+						// Begin game
+						Client.SendMessage(new BeginGame());
+
+						return true;
+					};
+
+					Entities.Add(startButton);
+
+					// Add settings button
+					Button settingsButton = new Button(new Vector2f(GameOptions.Width - Button.Width / 2.0f - 8.0f - 64.0f + 8.0f - Button.Width - 4.0f, Button.Height / 2.0f + 8.0f + 32.0f + 8.0f), "Settings");
+					settingsButton.OnClick += () =>
+					{
+						ServerList.Remove();
+						Game.PushState(new HostSettingsOverlay());
+						return true;
+					};
+
+					Entities.Add(settingsButton);
+
+					ServerList.Add();
+
+					break;
+				}
 
 				case SessionRole.Client:
 					try

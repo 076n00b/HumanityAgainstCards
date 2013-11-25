@@ -6,7 +6,7 @@ namespace ManateesAgainstCards
 {
 	class Json
 	{
-		private const string JsonLocation = "Assets/Json/";
+		public const string JsonLocation = "Assets/Json/";
 		private const string ResourceExt = ".json";
 
 		public static T Load<T>(string name)

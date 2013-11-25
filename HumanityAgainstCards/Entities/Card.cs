@@ -36,7 +36,7 @@ namespace ManateesAgainstCards.Entities
 
 		public override void Draw(RenderTarget rt)
 		{
-			Vector2f actualPosition = Position + ((Selected) ? new Vector2f(0, -12.0f - 5.0f * GetSelectedIndex()) : new Vector2f(0.0f, 0.0f));
+			Vector2f actualPosition = Position + (Selected ? new Vector2f(0, -12.0f - 5.0f * GetSelectedIndex()) : new Vector2f());
 
 			// Draw card
 			Sprite sprite = new Sprite(Assets.LoadTexture(Info.Type == CardType.White ? "CardWhite.png" : "CardBlack.png"));
@@ -53,15 +53,6 @@ namespace ManateesAgainstCards.Entities
 			text.Position = actualPosition + new Vector2f(16.0f * Scale.X, 10.0f * Scale.Y);
 			text.Round();
 			rt.Draw(text);
-
-			// Draw debug info
-			//RectangleShape line = new RectangleShape(new Vector2f((float)Math.Floor(207.0f * Scale.X), 2.0f))
-			//{
-			//    FillColor = Color.Magenta,
-			//    Position = Position + new Vector2f(16.0f * Scale.X, 10.0f * Scale.Y)
-			//};
-
-			//rt.Draw(line);
 
 			// Draw decorations
 			if (Info.PickCount > 1)
